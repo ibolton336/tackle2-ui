@@ -154,19 +154,24 @@ export const IdentityForm: React.FC<IdentityFormProps> = ({
   const handleFileRejected = () => {
     setIsFileRejected(true);
   };
-  const handleFileInputChange = (event, file, fieldName, fieldFileName) => {
+  const handleFileInputChange = (
+    event: any,
+    file: any,
+    fieldName: any,
+    fieldFileName: any
+  ) => {
     formik.handleChange(event);
     formik.setFieldValue(fieldName, file);
     formik.setFieldValue(fieldFileName, file.name);
   };
-  const handleTextOrDataChange = (value, fieldName) => {
+  const handleTextOrDataChange = (value: any, fieldName: any) => {
     formik.setFieldValue(fieldName, value);
   };
 
   const handleFileReadStarted = () => setIsLoading(true);
   const handleFileReadFinished = () => setIsLoading(false);
 
-  const validateXML = (value, filename) => {
+  const validateXML = (value: any, filename: any) => {
     const validationObject = XMLValidator.validate(value, {
       allowBooleanAttributes: true,
     });
@@ -182,7 +187,7 @@ export const IdentityForm: React.FC<IdentityFormProps> = ({
     formik.setFieldValue("settingsFilename", filename); // }
   };
 
-  const validateAgainstSchema = (value, filename, schema?) => {
+  const validateAgainstSchema = (value: any, filename: any, schema?: any) => {
     const currentSchema = formik.values?.schema || schema;
 
     const validationResult = xmllint.xmllint.validateXML({
