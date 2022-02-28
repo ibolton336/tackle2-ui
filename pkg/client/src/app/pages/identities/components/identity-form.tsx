@@ -467,7 +467,7 @@ export const IdentityForm: React.FC<IdentityFormProps> = ({
               fieldId="settings"
               label={"Upload your Settings file or paste its contents below."}
               helperTextInvalid="You should select a valid settings.xml file."
-              // validated={isSettingsFileRejected ? "error" : "default"}
+              validated={isSettingsFileRejected ? "error" : "default"}
             >
               <FileUpload
                 id="file"
@@ -484,7 +484,7 @@ export const IdentityForm: React.FC<IdentityFormProps> = ({
                   accept: ".xml",
                   onDropRejected: handleFileRejected,
                 }}
-                // validated={isSettingsFileRejected ? "error" : "default"}
+                validated={isSettingsFileRejected ? "error" : "default"}
                 filenamePlaceholder="Drag and drop a file or upload one"
                 onFileInputChange={(event, file) =>
                   handleFileInputChange(
