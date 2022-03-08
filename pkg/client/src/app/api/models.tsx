@@ -86,6 +86,15 @@ export interface Application {
   businessService?: Ref;
   tags?: Ref[];
   review?: Review;
+  repository?: Repository;
+}
+
+export interface Repository {
+  branch: string;
+  kind: string;
+  path: string;
+  tag: string;
+  url: string;
 }
 
 export interface Review {

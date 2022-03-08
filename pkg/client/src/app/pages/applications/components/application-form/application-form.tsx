@@ -145,9 +145,9 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
     comments: application?.comments || "",
     businessService: businessServiceInitialValue,
     tags: tagsInitialValue,
-    sourceRepository: "",
-    branch: "",
-    rootPath: "",
+    sourceRepository: application?.repository?.url || "",
+    branch: application?.repository?.branch || "",
+    rootPath: application?.repository?.path || "",
     group: "",
     artifact: "",
     version: "",
@@ -186,6 +186,13 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
         const thisTag = { id: f.id, name: f.name };
         return thisTag;
       }),
+      repository: {
+        branch: formValues.branch || "",
+        kind: "Repo kind",
+        path: formValues.rootPath || "",
+        tag: "",
+        url: formValues.sourceRepository || "",
+      },
       review: undefined, // The review should not updated through this form
     };
 
