@@ -13,27 +13,16 @@ import DelIcon from "@patternfly/react-icons/dist/esm/icons/error-circle-o-icon"
 import spacing from "@patternfly/react-styles/css/utilities/Spacing/spacing";
 
 import "./wizard.css";
+import { useFormContext } from "react-hook-form";
 
-interface ISetScope {
-  withKnown: string;
-  includedPackages: string[];
-  excludedPackages: string[];
-  setWithKnown: (withKnown: string) => void;
-  setIncludedPackages: (packages: string[]) => void;
-  setExcludedPackages: (packages: string[]) => void;
-}
-
-export const SetScope: React.FunctionComponent<ISetScope> = ({
-  withKnown,
-  includedPackages,
-  excludedPackages,
-  setWithKnown,
-  setIncludedPackages,
-  setExcludedPackages,
-}) => {
+export const SetScope: React.FunctionComponent = ({}) => {
   const [excludedSwitch, setExcludedSwitch] = React.useState(false);
   const [packagesToInclude, setPackagesToInclude] = React.useState("");
   const [packagesToExclude, setPackagesToExclude] = React.useState("");
+
+  const { getValues, setValue } = useFormContext(); // retrieve all hook methods
+  const { targets, withKnown, includedPackages, excludedPackages } =
+    getValues();
 
   return (
     <Form>
@@ -48,7 +37,7 @@ export const SetScope: React.FunctionComponent<ISetScope> = ({
         name="deps-only"
         isChecked={withKnown === "depsOnly"}
         onChange={() => {
-          setWithKnown("depsOnly");
+          setValue("withKnown", "depsOnly");
         }}
         label="Application and internal dependencies only"
         className={spacing.mbXs}
@@ -58,7 +47,7 @@ export const SetScope: React.FunctionComponent<ISetScope> = ({
         name="deps-all"
         isChecked={withKnown === "depsAll"}
         onChange={() => {
-          setWithKnown("depsAll");
+          setValue("withKnown", "depsAll");
         }}
         label="Application and all dependencies, including known Open Source libraries"
         className={spacing.mbXs}
@@ -68,7 +57,7 @@ export const SetScope: React.FunctionComponent<ISetScope> = ({
         name="deps-select"
         isChecked={withKnown === "depsSelect"}
         onChange={() => {
-          setWithKnown("depsSelect");
+          setValue("withKnown", "depsSelect");
         }}
         label="Select the list of packages to be analyzed manually"
         className={spacing.mbXs}
@@ -88,7 +77,7 @@ export const SetScope: React.FunctionComponent<ISetScope> = ({
               variant="control"
               onClick={() => {
                 const list = packagesToInclude.split(",");
-                setIncludedPackages([...new Set(list)]);
+                setValue("includedPackages", [...new Set(list)]);
                 setPackagesToInclude("");
               }}
             >
@@ -98,7 +87,7 @@ export const SetScope: React.FunctionComponent<ISetScope> = ({
           {includedPackages && (
             <div className={spacing.plLg}>
               {includedPackages.map(
-                (pkg, index) =>
+                (pkg: any, index: any) =>
                   pkg && (
                     <InputGroup key={index}>
                       <Text className="package">{pkg}</Text>
@@ -108,8 +97,9 @@ export const SetScope: React.FunctionComponent<ISetScope> = ({
                         variant="control"
                         icon={<DelIcon />}
                         onClick={() =>
-                          setIncludedPackages(
-                            includedPackages.filter((p) => p !== pkg)
+                          setValue(
+                            "includedPackages",
+                            includedPackages.filter((p: any) => p !== pkg)
                           )
                         }
                       />
@@ -141,7 +131,7 @@ export const SetScope: React.FunctionComponent<ISetScope> = ({
               variant="control"
               onClick={() => {
                 const list = packagesToExclude.split(",");
-                setExcludedPackages([...new Set(list)]);
+                setValue("excludedPackages", [...new Set(list)]);
                 setPackagesToExclude("");
               }}
             >
@@ -152,7 +142,7 @@ export const SetScope: React.FunctionComponent<ISetScope> = ({
         {excludedPackages && (
           <div className={spacing.plLg}>
             {excludedPackages.map(
-              (pkg, index) =>
+              (pkg: any, index: any) =>
                 pkg && (
                   <div key={index}>
                     <InputGroup key={index}>
@@ -163,8 +153,9 @@ export const SetScope: React.FunctionComponent<ISetScope> = ({
                         variant="control"
                         icon={<DelIcon />}
                         onClick={() =>
-                          setExcludedPackages(
-                            excludedPackages.filter((p) => p !== pkg)
+                          setValue(
+                            "excludedPackages",
+                            excludedPackages.filter((p: any) => p !== pkg)
                           )
                         }
                       />

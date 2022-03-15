@@ -14,6 +14,8 @@ import {
 } from "@patternfly/react-core";
 import DelIcon from "@patternfly/react-icons/dist/esm/icons/error-circle-o-icon";
 import spacing from "@patternfly/react-styles/css/utilities/Spacing/spacing";
+import { useFormContext } from "react-hook-form";
+import { SimpleSelect } from "@app/shared/components";
 
 interface ISetOptions {
   targets: string[];
@@ -97,20 +99,16 @@ const defaultSources = [
   "websphere",
 ];
 
-export const SetOptions: React.FunctionComponent<ISetOptions> = ({
-  targets,
-  sources,
-  setTargets,
-  excludedRulesTags,
-  setExcludedRulesTags,
-  setSources,
-}) => {
+export const SetOptions: React.FunctionComponent = () => {
   React.useState(false);
 
   const [isSelectTargetsOpen, setSelectTargetsOpen] = React.useState(false);
   const [isSelectSourcesOpen, setSelectSourcesOpen] = React.useState(false);
 
   const [rulesToExclude, setRulesToExclude] = React.useState("");
+
+  const { getValues, setValue } = useFormContext(); // retrieve all hook methods
+  const { targets, sources, excludedRulesTags } = getValues();
 
   return (
     <>
@@ -122,52 +120,52 @@ export const SetOptions: React.FunctionComponent<ISetOptions> = ({
       </TextContent>
       <Form isHorizontal>
         <FormGroup label="Targets" fieldId="targets">
-          <Select
+          <SimpleSelect
             variant={SelectVariant.typeaheadMulti}
             aria-label="Select targets"
-            selections={targets}
-            isOpen={isSelectTargetsOpen}
-            onSelect={(_, selection) => {
-              if (!targets.includes(selection as string))
-                setTargets([...targets, selection] as string[]);
-              else setTargets(targets.filter((target) => target !== selection));
-              setSelectTargetsOpen(!isSelectTargetsOpen);
-            }}
-            onToggle={() => {
+            value={targets}
+            onChange={(selection) => {
+              if (!targets.includes(selection as string)) {
+                setValue("targets", [...targets, selection] as string[]);
+              } else {
+                setValue(
+                  "targets",
+                  targets.filter((target: any) => target !== selection)
+                );
+              }
               setSelectTargetsOpen(!isSelectTargetsOpen);
             }}
             onClear={() => {
-              setTargets([]);
+              setValue("targets", []);
             }}
-          >
-            {defaultTargets.map((target, index) => (
+            options={defaultTargets.map((target, index) => (
               <SelectOption key={index} component="button" value={target} />
             ))}
-          </Select>
+          />
         </FormGroup>
         <FormGroup label="Sources" fieldId="sources">
-          <Select
+          <SimpleSelect
             variant={SelectVariant.typeaheadMulti}
             aria-label="Select sources"
-            selections={sources}
-            isOpen={isSelectSourcesOpen}
-            onSelect={(_, selection) => {
-              if (!sources.includes(selection as string))
-                setSources([...sources, selection] as string[]);
-              else setSources(sources.filter((source) => source !== selection));
-              setSelectSourcesOpen(!isSelectSourcesOpen);
-            }}
-            onToggle={() => {
-              setSelectSourcesOpen(!isSelectSourcesOpen);
+            value={sources}
+            onChange={(selection) => {
+              if (!sources.includes(selection)) {
+                setValue("sources", [...sources, selection] as string[]);
+              } else {
+                setValue(
+                  "sources",
+                  sources.filter((source: any) => source !== selection)
+                );
+                setSelectSourcesOpen(!isSelectSourcesOpen);
+              }
             }}
             onClear={() => {
-              setSources([]);
+              setValue("sources", []);
             }}
-          >
-            {defaultSources.map((source, index) => (
+            options={defaultSources.map((source, index) => (
               <SelectOption key={index} component="button" value={source} />
             ))}
-          </Select>
+          />
         </FormGroup>
         <FormGroup label="Excluded rules tags" fieldId="excluded-rules">
           <InputGroup>
@@ -183,7 +181,7 @@ export const SetOptions: React.FunctionComponent<ISetOptions> = ({
               variant="control"
               onClick={() => {
                 const list = rulesToExclude.split(",");
-                setExcludedRulesTags([...new Set(list)]);
+                setValue("excludedRulesTags", [...new Set(list)]);
                 setRulesToExclude("");
               }}
             >
@@ -191,7 +189,7 @@ export const SetOptions: React.FunctionComponent<ISetOptions> = ({
             </Button>
           </InputGroup>
           <div className={spacing.ptMd}>
-            {excludedRulesTags.map((pkg, index) => (
+            {excludedRulesTags.map((pkg: any, index: any) => (
               <div key={index}>
                 <InputGroup key={index}>
                   <Text className="package">{pkg}</Text>
@@ -201,8 +199,9 @@ export const SetOptions: React.FunctionComponent<ISetOptions> = ({
                     variant="control"
                     icon={<DelIcon />}
                     onClick={() =>
-                      setExcludedRulesTags(
-                        excludedRulesTags.filter((p) => p !== pkg)
+                      setValue(
+                        "setExcludedRulesTags",
+                        excludedRulesTags.filter((p: any) => p !== pkg)
                       )
                     }
                   />

@@ -35,20 +35,11 @@ import { NoDataEmptyState } from "@app/shared/components";
 import { IReadFile } from "./components/add-custom-rules";
 
 import "./wizard.css";
+import { useFormContext } from "react-hook-form";
 
-interface ICustomRules {
-  customRulesFiles: IReadFile[];
-  sources: string[];
-  setCustomRulesFiles: (files: IReadFile[]) => void;
-  setSources: (sources: string[]) => void;
-}
-
-export const CustomRules: React.FunctionComponent<ICustomRules> = ({
-  customRulesFiles,
-  sources,
-  setCustomRulesFiles,
-  setSources,
-}) => {
+export const CustomRules: React.FunctionComponent = ({}) => {
+  const { getValues, setValue } = useFormContext(); // retrieve all hook methods
+  const { sources, customRulesFiles } = getValues();
   const [isAddCustomRulesModalOpen, setCustomRulesModalOpen] =
     React.useState(false);
 
@@ -91,18 +82,18 @@ export const CustomRules: React.FunctionComponent<ICustomRules> = ({
         },
       ];
 
-      if (!sources.includes(source)) setSources([...sources, source]);
+      if (!sources.includes(source)) setValue("sources", [...sources, source]);
 
       return rules;
     };
 
     let rules: Rule[] = [];
-    customRulesFiles.forEach((file) => {
+    customRulesFiles.forEach((file: any) => {
       if (file.data) rules = [...rules, ...getRules(file)];
     });
 
     return rules.flat();
-  }, [customRulesFiles, sources, setSources]);
+  }, [customRulesFiles, sources]);
 
   const filterCategories: FilterCategory<Rule>[] = [
     {
@@ -167,9 +158,9 @@ export const CustomRules: React.FunctionComponent<ICustomRules> = ({
                 variant="plain"
                 onClick={() => {
                   const fileList = customRulesFiles.filter(
-                    (file) => file.fileName !== item.name
+                    (file: any) => file.fileName !== item.name
                   );
-                  setCustomRulesFiles(fileList);
+                  setValue("customRulesFiles", fileList);
                 }}
               >
                 <TrashIcon />
@@ -261,10 +252,7 @@ export const CustomRules: React.FunctionComponent<ICustomRules> = ({
             </Button>,
           ]}
         >
-          <AddCustomRules
-            readFileData={customRulesFiles}
-            setReadFileData={setCustomRulesFiles}
-          />
+          <AddCustomRules />
         </Modal>
       )}
     </>

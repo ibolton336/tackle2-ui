@@ -10,14 +10,13 @@ import {
   TextContent,
   Title,
 } from "@patternfly/react-core";
-import { UseFormGetValues } from "react-hook-form";
+import { useFormContext, UseFormGetValues } from "react-hook-form";
 
 import { IFormValues } from "./analysis-wizard";
 import { Application } from "@app/api/models";
 
 interface IReview {
   applications: Application[];
-  getValues: UseFormGetValues<IFormValues>;
 }
 
 const defaultScopes: Map<string, string> = new Map([
@@ -29,10 +28,8 @@ const defaultScopes: Map<string, string> = new Map([
   ["depsSelect", "list of packages to be analyzed manually"],
 ]);
 
-export const Review: React.FunctionComponent<IReview> = ({
-  applications,
-  getValues,
-}) => {
+export const Review: React.FunctionComponent<IReview> = ({ applications }) => {
+  const { getValues, setValue } = useFormContext(); // retrieve all hook methods
   const {
     mode,
     targets,
@@ -75,7 +72,7 @@ export const Review: React.FunctionComponent<IReview> = ({
           </DescriptionListTerm>
           <DescriptionListDescription id="targets">
             <List isPlain>
-              {targets.map((target, index) => (
+              {targets.map((target: any, index: any) => (
                 <ListItem key={index}>{target}</ListItem>
               ))}
             </List>
@@ -87,7 +84,7 @@ export const Review: React.FunctionComponent<IReview> = ({
           </DescriptionListTerm>
           <DescriptionListDescription id="sources">
             <List isPlain>
-              {sources.map((source, index) => (
+              {sources.map((source: any, index: any) => (
                 <ListItem key={index}>{source}</ListItem>
               ))}
             </List>
@@ -103,7 +100,7 @@ export const Review: React.FunctionComponent<IReview> = ({
           <DescriptionListTerm>Included packages</DescriptionListTerm>
           <DescriptionListDescription id="included-packages">
             <List isPlain>
-              {includedPackages.map((pkg, index) => (
+              {includedPackages.map((pkg: any, index: any) => (
                 <ListItem key={index}>{pkg}</ListItem>
               ))}
             </List>
@@ -113,7 +110,7 @@ export const Review: React.FunctionComponent<IReview> = ({
           <DescriptionListTerm>Excluded packages</DescriptionListTerm>
           <DescriptionListDescription id="excluded-packages">
             <List isPlain>
-              {excludedPackages.map((pkg, index) => (
+              {excludedPackages.map((pkg: any, index: any) => (
                 <ListItem key={index}>{pkg}</ListItem>
               ))}
             </List>
@@ -123,7 +120,7 @@ export const Review: React.FunctionComponent<IReview> = ({
           <DescriptionListTerm>Custom rules</DescriptionListTerm>
           <DescriptionListDescription id="rules">
             <List isPlain>
-              {customRulesFiles.map((rule, index) => (
+              {customRulesFiles.map((rule: any, index: any) => (
                 <ListItem key={index}>{rule.fileName}</ListItem>
               ))}
             </List>
@@ -133,7 +130,7 @@ export const Review: React.FunctionComponent<IReview> = ({
           <DescriptionListTerm>Excluded rules tags</DescriptionListTerm>
           <DescriptionListDescription id="excluded-rules-tags">
             <List isPlain>
-              {excludedRulesTags.map((tag, index) => (
+              {excludedRulesTags.map((tag: any, index: any) => (
                 <ListItem key={index}>{tag}</ListItem>
               ))}
             </List>

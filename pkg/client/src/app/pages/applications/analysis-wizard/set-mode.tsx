@@ -1,5 +1,5 @@
 import * as React from "react";
-import { UseFormRegister } from "react-hook-form";
+import { useFormContext, UseFormRegister } from "react-hook-form";
 import {
   FormGroup,
   Text,
@@ -11,6 +11,7 @@ import {
 } from "@patternfly/react-core";
 
 import { IFormValues } from "./analysis-wizard";
+import { SimpleSelect } from "@app/shared/components";
 
 const options = [
   <SelectOption key="binary" component="button" value="Binary" isPlaceholder />,
@@ -22,17 +23,10 @@ const options = [
   />,
 ];
 
-interface ISetMode {
-  register: UseFormRegister<IFormValues>;
-  mode: string;
-  setMode: (mode: string) => void;
-}
+export const SetMode: React.FunctionComponent = ({}) => {
+  const { register, getValues, setValue } = useFormContext(); // retrieve all hook methods
 
-export const SetMode: React.FunctionComponent<ISetMode> = ({
-  register,
-  mode,
-  setMode,
-}) => {
+  const { mode } = getValues();
   const [isOpen, setIsOpen] = React.useState(false);
 
   return (
@@ -44,22 +38,17 @@ export const SetMode: React.FunctionComponent<ISetMode> = ({
         <Text>Review the information below, then run the analysis.</Text>
       </TextContent>
       <FormGroup label="Source for analysis" fieldId="sourceType">
-        <Select
+        <SimpleSelect
           {...register("mode")}
           variant={SelectVariant.single}
           aria-label="Select user perspective"
-          selections={mode}
-          isOpen={isOpen}
-          onSelect={(_, selection) => {
-            setMode(selection as string);
+          value={mode}
+          onChange={(selection) => {
+            setValue("mode", selection);
             setIsOpen(!isOpen);
           }}
-          onToggle={() => {
-            setIsOpen(!isOpen);
-          }}
-        >
-          {options}
-        </Select>
+          options={options}
+        />
       </FormGroup>
     </>
   );
