@@ -362,7 +362,7 @@ export const ApplicationsTableAnalyze: React.FC = () => {
     }
 
     const actions: (IAction | ISeparator)[] = [];
-    //@ts-ignore
+
     const userScopes: string[] = token?.scope.split(" "),
       access = userScopes && checkAccess(userScopes, roles.writeScopes);
     if (access) {

@@ -6,8 +6,8 @@ interface IRBACProps {
 }
 export const RBAC = ({ allowedRoles, children }: IRBACProps) => {
   const token = keycloak.tokenParsed || undefined;
-  //@ts-ignore
-  const userScopes: Array<string> = token?.scope.split(" "),
+
+  const userScopes: string[] = token?.scope.split(" "),
     access = userScopes && checkAccess(userScopes, allowedRoles);
 
   return access && children;

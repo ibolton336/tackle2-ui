@@ -419,8 +419,8 @@ export const ApplicationsTable: React.FC = () => {
         },
       });
     }
-    //@ts-ignore
-    const userScopes: Array<string> = token?.scope.split(" "),
+
+    const userScopes: string[] = token?.scope.split(" "),
       access = userScopes && checkAccess(userScopes, roles.writeScopes);
     if (access) {
       actions.push(
