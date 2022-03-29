@@ -9,7 +9,7 @@ import { RepositoriesSvn } from "./pages/repositories/Svn";
 import { Paths } from "@app/Paths";
 import { ApplicationAssessment } from "./pages/applications/application-assessment/application-assessment";
 import { RouteWrapper } from "./common/RouteWrapper";
-import roles from "./roles";
+import * as roles from "./roles";
 
 const Applications = lazy(() => import("./pages/applications"));
 const ManageImports = lazy(() => import("./pages/applications/manage-imports"));

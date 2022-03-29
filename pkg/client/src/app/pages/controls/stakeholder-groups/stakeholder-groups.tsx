@@ -59,7 +59,7 @@ import {
 import { useFilterState } from "@app/shared/hooks/useFilterState";
 import { useSortState } from "@app/shared/hooks/useSortState";
 import { RBAC } from "@app/rbac";
-import roles from "@app/roles";
+import * as roles from "@app/roles";
 
 const ENTITY_FIELD = "entity";
 

@@ -55,7 +55,7 @@ import { useFilterState } from "@app/shared/hooks/useFilterState";
 import { useSortState } from "@app/shared/hooks/useSortState";
 import { usePaginationState } from "@app/shared/hooks/usePaginationState";
 import { RBAC } from "@app/rbac";
-import roles from "@app/roles";
+import * as roles from "@app/roles";
 
 enum FilterKey {
   NAME = "name",

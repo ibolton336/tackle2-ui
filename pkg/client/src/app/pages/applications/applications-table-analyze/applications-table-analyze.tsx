@@ -62,7 +62,7 @@ import { AnalysisWizard } from "../analysis-wizard/analysis-wizard";
 import { ApplicationIdentityForm } from "../components/application-identity-form/application-identity-form";
 import { useDeleteTaskMutation, useFetchTasks } from "@app/queries/tasks";
 import { RBAC } from "@app/rbac";
-import roles from "@app/roles";
+import * as roles from "@app/roles";
 import { checkAccess } from "@app/common/rbac-utils";
 import keycloak from "@app/keycloak";
 

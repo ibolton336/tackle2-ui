@@ -84,7 +84,7 @@ import { BulkCopyAssessmentReviewForm } from "../components/bulk-copy-assessment
 import { usePaginationState } from "@app/shared/hooks/usePaginationState";
 import { ApplicationIdentityForm } from "../components/application-identity-form/application-identity-form";
 import { RBAC } from "@app/rbac";
-import roles from "@app/roles";
+import * as roles from "@app/roles";
 import { checkAccess } from "@app/common/rbac-utils";
 import keycloak from "@app/keycloak";
 

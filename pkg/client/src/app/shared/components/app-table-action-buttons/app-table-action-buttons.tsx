@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Button, Flex, FlexItem } from "@patternfly/react-core";
-import roles from "@app/roles";
+import * as roles from "@app/roles";
 import { RBAC } from "@app/rbac";
 
 export interface AppTableActionButtonsProps {
