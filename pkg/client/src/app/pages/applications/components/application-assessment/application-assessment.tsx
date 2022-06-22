@@ -40,7 +40,7 @@ export const ApplicationAssessment: React.FC<ApplicationAssessmentProps> = ({
     return <EmptyTextMessage message={t("terms.notAvailable")} />;
   }
   if (isLoading) {
-    return <Spinner size="md" />;
+    return <Spinner size="xl" data-testid="loading-id" />;
   }
 
   return assessment ? (

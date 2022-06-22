@@ -59,7 +59,7 @@ export const AppTable: React.FC<IAppTableProps> = ({
               props: { colSpan: 8 },
               title: (
                 <Bullseye>
-                  <Spinner size="xl" />
+                  <Spinner size="xl" data-testid="loading-id" />
                 </Bullseye>
               ),
             },

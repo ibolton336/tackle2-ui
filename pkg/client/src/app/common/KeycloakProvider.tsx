@@ -36,7 +36,7 @@ export const KeycloakProvider: React.FunctionComponent<
                   textAlign: "center",
                 }}
               >
-                <Spinner>Loading...</Spinner>
+                <Spinner data-testid="loading-id">Loading...</Spinner>
               </FlexItem>
             </Flex>
           }
@@ -75,10 +75,6 @@ export const KeycloakProvider: React.FunctionComponent<
       </>
     );
   } else {
-    return (
-      <>
-        <Suspense fallback={<AppPlaceholder />}>{children}</Suspense>
-      </>
-    );
+    return <>{children}</>;
   }
 };

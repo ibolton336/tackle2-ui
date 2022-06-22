@@ -6,7 +6,7 @@ export const AppPlaceholder: React.FC = () => {
     <Bullseye>
       <div className="pf-u-display-flex pf-u-flex-direction-column">
         <div>
-          <Spinner />
+          <Spinner data-testid="loading-id" />
         </div>
         <div className="pf-c-content">
           <h3>Loading...</h3>

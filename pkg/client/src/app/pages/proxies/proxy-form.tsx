@@ -286,6 +286,7 @@ export const ProxyForm: React.FC<ProxyFormProps> = ({
                 setIsHttpProxy(!isHttpProxy);
               }
             }}
+            data-testid="http-proxy-switch"
           />
         )}
       />
@@ -415,6 +416,7 @@ export const ProxyForm: React.FC<ProxyFormProps> = ({
                 setIsHttpsProxy(!isHttpsProxy);
               }
             }}
+            data-testid="https-proxy-switch"
           />
         )}
       />
