@@ -3,7 +3,7 @@ FROM registry.access.redhat.com/ubi8/nodejs-16 as builder
 USER 0
 COPY . .
 WORKDIR "/opt/app-root/src/pkg/client" 
-RUN npm install && npm run build
+RUN npm install && npm run build -w pkg/client
 WORKDIR "/opt/app-root/src/pkg/server" 
 RUN npm install
 
