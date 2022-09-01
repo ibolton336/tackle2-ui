@@ -10,7 +10,8 @@
     "build:instrumentation": "CYPRESS_INSTRUMENT_PRODUCTION=true react-scripts -r @cypress/instrument-cra build",
     "build": "NODE_ENV=production webpack --config ./config/webpack.prod.js",
     "extract": "i18next --config i18next-parser.config.js",
-    "test": "jest --rootDir=. --config=config/jest.config.js"
+    "test": "jest --rootDir=. --config=config/jest.config.js",
+    "tsc": "tsc -p ./tsconfig.json"
   },
   "dependencies": {
     "@hookform/resolvers": "^2.8.0",

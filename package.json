@@ -23,9 +23,7 @@
     "server": "NODE_ENV=development node ./pkg/server/index.js",
     "start": "node ./pkg/server/index.js -r @cypress/instrument-cra",
     "start:dev": "concurrently -n proxy,server,client -c \"green.bold.inverse,blue.bold.inverse,yellow.bold.inverse\" \"npm:proxy\" \"npm:server\" \"npm:build:dev\"",
-    "build:dev": "GENERATE_SOURCEMAP=true webpack --config ./pkg/client/config/webpack.dev.js",
-
-    "tsc": "tsc -p ./tsconfig.json"
+    "build:dev": "GENERATE_SOURCEMAP=true webpack --config ./pkg/client/config/webpack.dev.js"
   },
   "browserslist": {
     "production": [
