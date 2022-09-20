@@ -3,6 +3,8 @@ import { useHistory } from "react-router-dom";
 import { AxiosError, AxiosResponse } from "axios";
 import { useTranslation, Trans } from "react-i18next";
 
+// import Plugin from "plugin/Plugin";
+import Plugin from "plugin/Plugin";
 import {
   Button,
   ButtonVariant,
@@ -669,6 +671,7 @@ export const ApplicationsTable: React.FC = () => {
 
   return (
     <>
+      <Plugin></Plugin>
       <ConditionalRender
         when={isFetching && !(applications || fetchError)}
         then={<AppPlaceholder />}

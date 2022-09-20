@@ -68,3 +68,9 @@ declare module "*.xsd" {
   const src: string;
   export default src;
 }
+
+declare module "plugin/Plugin" {
+  const CounterAppOne: React.ComponentType;
+
+  export default CounterAppOne;
+}
