@@ -5,6 +5,9 @@ const { stylePaths } = require("./stylePaths");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const helpers = require("../../server/helpers");
 const brandType = process.env["PROFILE"] || "konveyor";
+const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
+const ExternalTemplateRemotesPlugin = require("external-remotes-plugin");
+const deps = require("../../client/package.json").dependencies;
 
 module.exports = merge(common("development"), {
   mode: "development",
@@ -32,6 +35,17 @@ module.exports = merge(common("development"), {
         brandType,
       },
     }),
+    new ModuleFederationPlugin({
+      name: "core",
+      remotes: {
+        plugin: "plugin@http://localhost:3003/remoteEntry.js",
+      },
+      shared: {
+        react: { eager: true, singleton: true },
+        "react-dom": { eager: true, singleton: true },
+      },
+    }),
+    new ExternalTemplateRemotesPlugin(),
   ],
 
   module: {

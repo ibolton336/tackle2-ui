@@ -15,5 +15,8 @@
     "client",
     "server",
     "qa"
-  ]
+  ],
+  "dependencies": {
+    "external-remotes-plugin": "^1.0.0"
+  }
 }

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { AxiosError, AxiosResponse } from "axios";
 import { useTranslation, Trans } from "react-i18next";
+import Plugin from "plugin/Plugin";
 
 import {
   Button,
@@ -640,6 +641,7 @@ export const ApplicationsTable: React.FC = () => {
         when={isFetching && !(applications || fetchError)}
         then={<AppPlaceholder />}
       >
+        <Plugin></Plugin>
         <AppTableWithControls
           paginationProps={paginationProps}
           paginationIdPrefix="app-assessment"
