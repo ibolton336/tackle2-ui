@@ -40,10 +40,10 @@ module.exports = merge(common("development"), {
       remotes: {
         plugin: "plugin@http://localhost:3003/remoteEntry.js",
       },
-      shared: {
-        react: { eager: true, singleton: true },
-        "react-dom": { eager: true, singleton: true },
-      },
+      // shared: {
+      //   react: { eager: true, singleton: true },
+      //   "react-dom": { eager: true, singleton: true },
+      // },
     }),
     new ExternalTemplateRemotesPlugin(),
   ],
