@@ -370,6 +370,11 @@ export interface TaskData {
   };
 }
 
+export interface Addon {
+  name: string;
+  image: string;
+}
+
 interface TaskReport {
   activity: string[];
   completed: number;

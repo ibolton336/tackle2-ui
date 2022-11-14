@@ -29,8 +29,11 @@ const ApplicationsTableAssessment = lazy(
 const ApplicationsTableAnalyze = lazy(
   () => import("./applications-table-analyze")
 );
+const ApplicationsTableExtras = lazy(
+  () => import("./applications-table-extras")
+);
 
-const tabs: string[] = ["applicationsAssessmentTab", "applicationsAnalysisTab"];
+const tabs: string[] = ["applicationsAssessmentTab", "applicationsAnalysisTab", "applicationsExtrasTab"];
 
 export const Applications: React.FC = () => {
   const { t } = useTranslation();
@@ -39,12 +42,17 @@ export const Applications: React.FC = () => {
   const location = useLocation();
 
   useEffect(() => {
-    if (
-      location.pathname === "/applications/assessment-tab" ||
-      location.pathname === "/applications"
-    )
-      setActiveTabKey(0);
-    else setActiveTabKey(1);
+    switch (location.pathname) {
+      case Paths.applicationsAnalysisTab:
+        setActiveTabKey(1);
+        break;
+      case Paths.applicationsExtrasTab:
+        setActiveTabKey(2);
+        break;
+      default:
+        setActiveTabKey(0);
+        break;
+    }
   }, [location.key, location.pathname]);
 
   return (
@@ -73,6 +81,10 @@ export const Applications: React.FC = () => {
             eventKey={1}
             title={<TabTitleText>{t("terms.analysis")}</TabTitleText>}
           />
+          <Tab
+            eventKey={2}
+            title={<TabTitleText>{t("terms.extras")}</TabTitleText>}
+          />
         </Tabs>
       </PageSection>
       <PageSection>
@@ -85,6 +97,10 @@ export const Applications: React.FC = () => {
             <Route
               path={Paths.applicationsAnalysisTab}
               component={ApplicationsTableAnalyze}
+            />
+            <Route
+              path={Paths.applicationsExtrasTab}
+              component={ApplicationsTableExtras}
             />
             <Redirect
               from={Paths.applications}
