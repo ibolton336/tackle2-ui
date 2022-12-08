@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { FormikHelpers, FormikProvider, useFormik } from "formik";
 import { AxiosError } from "axios";
 import {
   Alert,
@@ -42,6 +41,7 @@ import {
   getCommentFieldName,
   getQuestionFieldName,
   IFormValues,
+  IFormValues,
   QUESTIONS_KEY,
   SAVE_ACTION_KEY,
   SAVE_ACTION_VALUE,
@@ -51,6 +51,9 @@ import { getAxiosErrorMessage } from "@app/utils/utils";
 import { ApplicationAssessmentPage } from "./components/application-assessment-page";
 import { WizardStepNavDescription } from "./components/wizard-step-nav-description";
 import { NotificationsContext } from "@app/shared/notifications-context";
+import { FormProvider, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 export const ApplicationAssessment: React.FC = () => {
   const { t } = useTranslation();
@@ -203,29 +206,29 @@ export const ApplicationAssessment: React.FC = () => {
         setSaveError(error);
       });
   };
+  const validationSchema: yup.SchemaOf<IFormValues> = yup.object().shape({});
+  // (values)=>{
+  // // Only validations for Fields that depends on others should go here.
+  // // Individual field's validation should be defined within each Field
+  // if (values.stakeholders.length + values.stakeholderGroups.length <= 0) {
+  //   const errorMsg = t("validation.minOneStakeholderOrGroupRequired");
+  //   return {
+  //     stakeholders: errorMsg,
+  //     stakeholderGroups: errorMsg,
+  //   };
+  // }
+  // return;
 
-  const formik = useFormik({
-    enableReinitialize: true,
-    initialValues: {
+  const methods = useForm({
+    defaultValues: {
       stakeholders: assessment?.stakeholders || [],
       stakeholderGroups: assessment?.stakeholderGroups || [],
       comments: initialComments,
       questions: initialQuestions,
       [SAVE_ACTION_KEY]: SAVE_ACTION_VALUE.SAVE_AS_DRAFT,
     },
-    onSubmit: onSubmit,
-    validate: (values) => {
-      // Only validations for Fields that depends on others should go here.
-      // Individual field's validation should be defined within each Field
-      if (values.stakeholders.length + values.stakeholderGroups.length <= 0) {
-        const errorMsg = t("validation.minOneStakeholderOrGroupRequired");
-        return {
-          stakeholders: errorMsg,
-          stakeholderGroups: errorMsg,
-        };
-      }
-      return;
-    },
+    resolver: yupResolver(validationSchema),
+    mode: "onChange",
   });
 
   const isFirstStepValid = () => {
@@ -280,10 +283,21 @@ export const ApplicationAssessment: React.FC = () => {
 
   const disableNavigation = !formik.isValid || formik.isSubmitting;
 
+  const getStepNavProps = (stepId: StepId, forceBlock = false) => ({
+    enableNext:
+      !forceBlock &&
+      stepIdReached >= stepId &&
+      (firstInvalidStep === null || firstInvalidStep >= stepId + 1),
+    canJumpTo:
+      !forceBlock &&
+      stepIdReached >= stepId &&
+      (firstInvalidStep === null || firstInvalidStep >= stepId),
+  });
+
+
   const wizardSteps: WizardStep[] = [
     {
       id: 0,
-      // t('terms.stakeholders')
       name: t("composed.selectMany", {
         what: t("terms.stakeholders").toLowerCase(),
       }),
@@ -312,7 +326,7 @@ export const ApplicationAssessment: React.FC = () => {
     <CustomWizardFooter
       isFirstStep={currentStep === 0}
       isLastStep={currentStep === sortedCategories.length}
-      isDisabled={formik.isSubmitting || formik.isValidating}
+      isDisabled={methods. || formik.isValidating}
       isFormInvalid={!formik.isValid}
       onSave={(review) => {
         const saveActionValue = review
@@ -360,7 +374,7 @@ export const ApplicationAssessment: React.FC = () => {
           when={isFetchingAssessment}
           then={<AppPlaceholder />}
         >
-          <FormikProvider value={formik}>
+          <FormProvider {...methods}>
             <Wizard
               navAriaLabel="assessment-wizard"
               mainAriaLabel="assesment-wizard"
@@ -371,7 +385,7 @@ export const ApplicationAssessment: React.FC = () => {
               onClose={() => setIsConfirmDialogOpen(true)}
               onGoToStep={(step) => setCurrentStep(step.id as number)}
             />
-          </FormikProvider>
+          </FormProvider>
         </ConditionalRender>
       </ApplicationAssessmentPage>{" "}
       {isConfirmDialogOpen && (
