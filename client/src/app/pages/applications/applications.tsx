@@ -16,6 +16,7 @@ import {
   TabTitleText,
   Title,
 } from "@patternfly/react-core";
+import { useFetchAddons } from "@app/queries/addons";
 import spacing from "@patternfly/react-styles/css/utilities/Spacing/spacing";
 
 import { Paths } from "@app/Paths";
@@ -29,22 +30,32 @@ const ApplicationsTableAssessment = lazy(
 const ApplicationsTableAnalyze = lazy(
   () => import("./applications-table-analyze")
 );
+const ApplicationsTableExtras = lazy(
+  () => import("./applications-table-extras")
+);
 
-const tabs: string[] = ["applicationsAssessmentTab", "applicationsAnalysisTab"];
+const tabs: string[] = ["applicationsAssessmentTab", "applicationsAnalysisTab", "applicationsExtrasTab"];
 
 export const Applications: React.FC = () => {
   const { t } = useTranslation();
   const history = useHistory();
   const [activeTabKey, setActiveTabKey] = React.useState(0);
   const location = useLocation();
+  const { addons } = useFetchAddons({ includeBundled: false });
+  const hasExtraAddons = addons.length > 0;
 
   useEffect(() => {
-    if (
-      location.pathname === "/applications/assessment-tab" ||
-      location.pathname === "/applications"
-    )
-      setActiveTabKey(0);
-    else setActiveTabKey(1);
+    switch (location.pathname) {
+      case Paths.applicationsAnalysisTab:
+        setActiveTabKey(1);
+        break;
+      case Paths.applicationsExtrasTab:
+        setActiveTabKey(2);
+        break;
+      default:
+        setActiveTabKey(0);
+        break;
+    }
   }, [location.key, location.pathname]);
 
   return (
@@ -73,6 +84,12 @@ export const Applications: React.FC = () => {
             eventKey={1}
             title={<TabTitleText>{t("terms.analysis")}</TabTitleText>}
           />
+          {hasExtraAddons &&
+            <Tab
+              eventKey={2}
+              title={<TabTitleText>{t("terms.extras")}</TabTitleText>}
+            />
+          }
         </Tabs>
       </PageSection>
       <PageSection>
@@ -86,6 +103,12 @@ export const Applications: React.FC = () => {
               path={Paths.applicationsAnalysisTab}
               component={ApplicationsTableAnalyze}
             />
+            {hasExtraAddons &&
+              <Route
+                path={Paths.applicationsExtrasTab}
+                component={ApplicationsTableExtras}
+              />
+            }
             <Redirect
               from={Paths.applications}
               to={Paths.applicationsAssessmentTab}
