@@ -18,7 +18,7 @@ export interface IApplicationListExpandedAreaProps {
   tasks: Task[];
 }
 
-export const ApplicationListExpandedAreaExtras: React.FC<
+export const ApplicationListExpandedAreaAddons: React.FC<
   IApplicationListExpandedAreaProps
 > = ({ application, tasks }) => {
   const { t } = useTranslation();
@@ -29,29 +29,29 @@ export const ApplicationListExpandedAreaExtras: React.FC<
       <Tr key="Name">
         <Td dataLabel="Addon">{task.addon}</Td>
         <Td dataLabel="Status">
-          <ApplicationAnalysisStatus state={task.state? task.state : "No task"} />
+          <ApplicationAnalysisStatus state={task.state ? task.state : "No task"} />
         </Td>
       </Tr>
     )
   })
 
-  var tasksGroup;
+  let tasksGroup;
   if (tasks.length > 0) {
     tasksGroup = (
-      <DescriptionListGroup>
+      <DescriptionListDescription>
         <DescriptionListTerm>{t("terms.tasks")}</DescriptionListTerm>
-        <TableComposable aria-label="Simple table">
+        <TableComposable variant="compact" borders={false} aria-label="Simple table">
           <Thead>
             <Tr>
-              <Th>Addon</Th>
-              <Th>Status</Th>
+              <Th>{t("terms.addon")}</Th>
+              <Th>{t("terms.status")}</Th>
             </Tr>
           </Thead>
           <Tbody>
-          {rows}
+            {rows}
           </Tbody>
         </TableComposable>
-      </DescriptionListGroup>
+      </DescriptionListDescription>
     )
   }
 

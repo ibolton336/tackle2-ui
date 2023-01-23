@@ -51,7 +51,7 @@ import { getAxiosErrorMessage } from "@app/utils/utils";
 import { ApplicationForm } from "../components/application-form";
 import { RunAddonModal } from "@app/pages/addons/components/run-addon-form"
 
-import { ApplicationListExpandedAreaExtras } from "../components/application-list-expanded-area/application-list-expanded-area-extras";
+import { ApplicationListExpandedAreaAddons } from "../components/application-list-expanded-area/application-list-expanded-area-addons";
 import { ImportApplicationsForm } from "../components/import-applications-form";
 import {
   applicationsWriteScopes,
@@ -132,7 +132,7 @@ export const ApplicationsTable: React.FC = () => {
     setPageNumber,
   } = useApplicationsFilterValues(
     applications,
-    ApplicationTableType.Extras
+    ApplicationTableType.Addons
   );
 
   // Create and update modal
@@ -322,7 +322,7 @@ export const ApplicationsTable: React.FC = () => {
       fullWidth: false,
       cells: [
         <div className="pf-c-table__expandable-row-content">
-          <ApplicationListExpandedAreaExtras
+          <ApplicationListExpandedAreaAddons
             application={item}
             tasks={getTasksForApplication(item)}
           />
@@ -451,7 +451,7 @@ export const ApplicationsTable: React.FC = () => {
       >
         <AppTableWithControls
           paginationProps={paginationProps}
-          paginationIdPrefix="app-extras"
+          paginationIdPrefix="app-addons"
           count={applications ? applications.length : 0}
           sortBy={sortBy}
           onSort={onSort}

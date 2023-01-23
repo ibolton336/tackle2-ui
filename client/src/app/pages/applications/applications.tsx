@@ -30,11 +30,11 @@ const ApplicationsTableAssessment = lazy(
 const ApplicationsTableAnalyze = lazy(
   () => import("./applications-table-analyze")
 );
-const ApplicationsTableExtras = lazy(
-  () => import("./applications-table-extras")
+const ApplicationsTableAddons = lazy(
+  () => import("./applications-table-addons")
 );
 
-const tabs: string[] = ["applicationsAssessmentTab", "applicationsAnalysisTab", "applicationsExtrasTab"];
+const tabs: string[] = ["applicationsAssessmentTab", "applicationsAnalysisTab", "applicationsAddonsTab"];
 
 export const Applications: React.FC = () => {
   const { t } = useTranslation();
@@ -49,7 +49,7 @@ export const Applications: React.FC = () => {
       case Paths.applicationsAnalysisTab:
         setActiveTabKey(1);
         break;
-      case Paths.applicationsExtrasTab:
+      case Paths.applicationsAddonsTab:
         setActiveTabKey(2);
         break;
       default:
@@ -87,7 +87,7 @@ export const Applications: React.FC = () => {
           {hasExtraAddons &&
             <Tab
               eventKey={2}
-              title={<TabTitleText>{t("terms.extras")}</TabTitleText>}
+              title={<TabTitleText>{t("terms.addons")}</TabTitleText>}
             />
           }
         </Tabs>
@@ -105,8 +105,8 @@ export const Applications: React.FC = () => {
             />
             {hasExtraAddons &&
               <Route
-                path={Paths.applicationsExtrasTab}
-                component={ApplicationsTableExtras}
+                path={Paths.applicationsAddonsTab}
+                component={ApplicationsTableAddons}
               />
             }
             <Redirect
