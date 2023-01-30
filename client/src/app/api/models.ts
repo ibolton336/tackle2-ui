@@ -477,6 +477,7 @@ export interface TagRef extends Ref {
 
 export interface Wave {
   name: string;
+  id?: number;
   startDate: string;
   endDate: string;
   applications: Application[];
