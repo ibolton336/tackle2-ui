@@ -2,18 +2,14 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { AxiosError, AxiosResponse } from "axios";
 import { useTranslation, Trans } from "react-i18next";
-import WarningTriangleIcon from "@patternfly/react-icons/dist/esm/icons/warning-triangle-icon";
 import { ApplicationAnalysisStatus } from "../components/application-analysis-status";
 import {
   Button,
   ButtonVariant,
   DropdownItem,
-  Dropdown,
-  DropdownToggle,
   Modal,
   ToolbarGroup,
   ToolbarItem,
-  InputGroup,
 } from "@patternfly/react-core";
 import {
   cellWidth,
@@ -35,21 +31,19 @@ import {
   AppTableWithControls,
   ConditionalRender,
   NoDataEmptyState,
-  StatusIcon,
   KebabDropdown,
-  SimpleFilterDropdown,
   ToolbarBulkSelector,
   ConfirmDialog,
 } from "@app/shared/components";
 import { ApplicationDependenciesFormContainer } from "@app/shared/containers";
 
-import { formatPath, Paths } from "@app/Paths";
+import { Paths } from "@app/Paths";
 
 import { Application, Task } from "@app/api/models";
 import { getAxiosErrorMessage } from "@app/utils/utils";
 
 import { ApplicationForm } from "../components/application-form";
-import { RunAddonModal } from "@app/pages/addons/components/run-addon-form"
+import { RunAddonModal } from "@app/pages/addons/components/run-addon-form";
 
 import { ApplicationListExpandedAreaAddons } from "../components/application-list-expanded-area/application-list-expanded-area-addons";
 import { ImportApplicationsForm } from "../components/import-applications-form";
@@ -61,7 +55,7 @@ import {
   RBAC,
   RBAC_TYPE,
 } from "@app/rbac";
-import { checkAccess, checkAccessAll } from "@app/common/rbac-utils";
+import { checkAccess } from "@app/common/rbac-utils";
 import keycloak from "@app/keycloak";
 import {
   useBulkDeleteApplicationMutation,
@@ -85,7 +79,7 @@ const getRow = (rowData: IRowData): Application => {
   return rowData[ENTITY_FIELD];
 };
 
-export const ApplicationsTable: React.FC = () => {
+export const ApplicationsTableAddons: React.FC = () => {
   //RBAC
   const token = keycloak.tokenParsed;
   // i18
@@ -130,10 +124,7 @@ export const ApplicationsTable: React.FC = () => {
     expandAll,
     areAllExpanded,
     setPageNumber,
-  } = useApplicationsFilterValues(
-    applications,
-    ApplicationTableType.Addons
-  );
+  } = useApplicationsFilterValues(applications, ApplicationTableType.Addons);
 
   // Create and update modal
   const {
@@ -144,20 +135,19 @@ export const ApplicationsTable: React.FC = () => {
     close: closeApplicationModal,
   } = useEntityModal<Application>();
 
-
   // Here we want all tasks that don't belong to admin/windup
   const { tasks } = useFetchAllTasks({ notAddons: ["admin", "windup"] });
   const getTasksForApplication = (application: Application) => {
     tasks.filter((task: Task) => {
-      task.application?.id === application.id
+      task.application?.id === application.id;
     });
     return tasks.sort((a, b) => {
       if (a?.createTime && b?.createTime) {
-        return (a.createTime > b.createTime) ? 1 : -1;
+        return a.createTime > b.createTime ? 1 : -1;
       }
-      return 0
+      return 0;
     });
-  }
+  };
 
   const { addons } = useFetchAddons({ includeBundled: false });
 
@@ -205,7 +195,7 @@ export const ApplicationsTable: React.FC = () => {
     {
       key: "item1",
       name: "item1",
-    }
+    },
   ];
 
   // Run addon modal
@@ -248,11 +238,15 @@ export const ApplicationsTable: React.FC = () => {
 
   // Table
   const columns: ICell[] = [
-    { title: t("terms.name"), transforms: [sortable, cellWidth(20)], cellFormatters: [expandable] },
+    {
+      title: t("terms.name"),
+      transforms: [sortable, cellWidth(20)],
+      cellFormatters: [expandable],
+    },
     { title: t("terms.description"), transforms: [cellWidth(25)] },
     { title: t("terms.lastRun"), transforms: [cellWidth(10)] },
     { title: t("terms.tagCount"), transforms: [sortable, cellWidth(10)] },
-    { title: "", props: { className: "pf-c-table__inline-edit-action", }, },
+    { title: "", props: { className: "pf-c-table__inline-edit-action" } },
   ];
 
   const rows: IRow[] = [];
@@ -261,15 +255,14 @@ export const ApplicationsTable: React.FC = () => {
     const isSelected = isRowSelected(item);
     const appTasks = getTasksForApplication(item);
 
-
     const lastRunState = (application: Application) => {
       const t = getTasksForApplication(application);
-      if (t.length === 0) return "No task"
+      if (t.length === 0) return "No task";
       const task = t[0];
       if (task && task.state) return task.state;
 
       return "No task";
-    }
+    };
 
     rows.push({
       [ENTITY_FIELD]: item,
@@ -285,9 +278,7 @@ export const ApplicationsTable: React.FC = () => {
           ),
         },
         {
-          title: (
-            <ApplicationAnalysisStatus state={lastRunState(item)} />
-          ),
+          title: <ApplicationAnalysisStatus state={lastRunState(item)} />,
         },
         {
           title: (
@@ -336,7 +327,6 @@ export const ApplicationsTable: React.FC = () => {
     if (!row) {
       return [];
     }
-
 
     const userScopes: string[] = token?.scope.split(" ") || [],
       dependenciesWriteAccess = checkAccess(
@@ -411,35 +401,35 @@ export const ApplicationsTable: React.FC = () => {
 
   const importDropdownItems = importWriteAccess
     ? [
-      <DropdownItem
-        key="import-applications"
-        component="button"
-        onClick={() => setIsApplicationImportModalOpen(true)}
-      >
-        {t("actions.import")}
-      </DropdownItem>,
-      <DropdownItem
-        key="manage-import-applications"
-        onClick={() => {
-          history.push(Paths.applicationsImports);
-        }}
-      >
-        {t("actions.manageImports")}
-      </DropdownItem>,
-    ]
+        <DropdownItem
+          key="import-applications"
+          component="button"
+          onClick={() => setIsApplicationImportModalOpen(true)}
+        >
+          {t("actions.import")}
+        </DropdownItem>,
+        <DropdownItem
+          key="manage-import-applications"
+          onClick={() => {
+            history.push(Paths.applicationsImports);
+          }}
+        >
+          {t("actions.manageImports")}
+        </DropdownItem>,
+      ]
     : [];
   const applicationDeleteDropdown = applicationWriteAccess
     ? [
-      <DropdownItem
-        key="manage-applications-bulk-delete"
-        isDisabled={selectedRows.length < 1}
-        onClick={() => {
-          openBulkDeleteModal(selectedRows);
-        }}
-      >
-        {t("actions.delete")}
-      </DropdownItem>,
-    ]
+        <DropdownItem
+          key="manage-applications-bulk-delete"
+          isDisabled={selectedRows.length < 1}
+          onClick={() => {
+            openBulkDeleteModal(selectedRows);
+          }}
+        >
+          {t("actions.delete")}
+        </DropdownItem>,
+      ]
     : [];
   const dropdownItems = [...importDropdownItems, ...applicationDeleteDropdown];
 

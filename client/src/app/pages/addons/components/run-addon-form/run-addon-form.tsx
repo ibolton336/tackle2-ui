@@ -1,18 +1,15 @@
-import React, { useEffect, useState } from "react";
-import YAML from 'yaml'
-import { CodeEditor, Language } from '@patternfly/react-code-editor';
+import React from "react";
+import YAML from "yaml";
+import { CodeEditor, Language } from "@patternfly/react-code-editor";
 import { useTranslation } from "react-i18next";
-import { AxiosError, AxiosResponse } from "axios";
 import * as yup from "yup";
 import {
   ActionGroup,
-  Alert,
   Button,
   ButtonVariant,
-  FileUpload,
   Form,
 } from "@patternfly/react-core";
-import { FormState, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import {
@@ -21,7 +18,7 @@ import {
 } from "@app/queries/taskgroups";
 import { SimpleSelect } from "@app/shared/components";
 import { Application, Addon, Taskgroup, TaskgroupTask } from "@app/api/models";
-import { getAxiosErrorMessage, getValidatedFromErrorTouched } from "@app/utils/utils";
+import { getValidatedFromErrorTouched } from "@app/utils/utils";
 import { toAddonDropdownOptionWithValue } from "@app/utils/model-utils";
 import { NotificationsContext } from "@app/shared/notifications-context";
 import { HookFormPFGroupController } from "@app/shared/components/hook-form-pf-fields";
@@ -74,14 +71,14 @@ export const RunAddonForm: React.FC<RunAddonFormProps> = ({
       variant: "info",
     });
     onSaved();
-  }
+  };
 
   const onSubmitTaskgroupError = (error: Error | unknown) => {
     pushNotification({
       title: "Taskgroup submit failed",
       variant: "danger",
     });
-  }
+  };
 
   const { mutate: submitTaskgroup } = useSubmitTaskgroupMutation(
     onSubmitTaskgroupSuccess,
@@ -97,7 +94,7 @@ export const RunAddonForm: React.FC<RunAddonFormProps> = ({
   };
 
   const onSubmit = (formValues: RunAddonFormValues) => {
-    const addon = formValues.addon.trim()
+    const addon = formValues.addon.trim();
     const data = YAML.parse(formValues.data.trim());
     var payload: Taskgroup;
     if (!applications?.length || applications.length < 1) {
@@ -109,7 +106,7 @@ export const RunAddonForm: React.FC<RunAddonFormProps> = ({
       name: `${formValues.addon.trim()}`,
       addon: addon,
       data: data,
-      tasks: applications?.map((application) => initTask(addon, application))
+      tasks: applications?.map((application) => initTask(addon, application)),
     };
     createTaskgroup(payload);
   };
@@ -118,14 +115,17 @@ export const RunAddonForm: React.FC<RunAddonFormProps> = ({
     if (!applications?.length || applications.length < 1) {
       return false;
     }
-    const addonTasks = tasks.filter((task) => task.addon === addon)
+    const addonTasks = tasks.filter((task) => task.addon === addon);
     const runningTasks = addonTasks.filter((task) => {
       return applications.some((app) => {
-        return task.application?.id === app.id && task.state?.match(/(Created|Running|Ready|Pending)/)
-      })
-    })
+        return (
+          task.application?.id === app.id &&
+          task.state?.match(/(Created|Running|Ready|Pending)/)
+        );
+      });
+    });
     return runningTasks.length !== 0;
-  }
+  };
 
   const validationSchema: yup.SchemaOf<RunAddonFormValues> = yup
     .object()
@@ -139,9 +139,7 @@ export const RunAddonForm: React.FC<RunAddonFormProps> = ({
           "Task(s) running for at least one of selected applications.",
           (value) => !isAppRunningAddon(value || "")
         ),
-      data: yup
-        .string()
-        .required(t("validation.required")),
+      data: yup.string().required(t("validation.required")),
     });
 
   const {
@@ -159,32 +157,32 @@ export const RunAddonForm: React.FC<RunAddonFormProps> = ({
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
-
       <HookFormPFGroupController
         control={control}
         name="addon"
         label="Addon"
         fieldId="addon-select"
         isRequired
-        renderInput={
-          ({
-            field: { onChange, onBlur, value, name },
-            fieldState: { isTouched, error },
-          }) => (
-            <SimpleSelect
-              id="addon-select"
-              toggleId="addon-select-toggle"
-              toggleAriaLabel="Addon select dropdown toggle"
-              aria-label={name}
-              value={value ? value : undefined}
-              options={addons?.map((addon) => toAddonDropdownOptionWithValue(addon))}
-              onChange={(value) => {
-                onChange(value);
-                onBlur();
-              }}
-              validated={getValidatedFromErrorTouched(error, isTouched)}
-            />
-          )}
+        renderInput={({
+          field: { onChange, onBlur, value, name },
+          fieldState: { isTouched, error },
+        }) => (
+          <SimpleSelect
+            id="addon-select"
+            toggleId="addon-select-toggle"
+            toggleAriaLabel="Addon select dropdown toggle"
+            aria-label={name}
+            value={value ? value : undefined}
+            options={addons?.map((addon) =>
+              toAddonDropdownOptionWithValue(addon)
+            )}
+            onChange={(value) => {
+              onChange(value);
+              onBlur();
+            }}
+            validated={getValidatedFromErrorTouched(error, isTouched)}
+          />
+        )}
       />
 
       <HookFormPFGroupController
@@ -203,7 +201,7 @@ export const RunAddonForm: React.FC<RunAddonFormProps> = ({
               editor.focus();
               monaco.editor.getModels()[0].updateOptions({ tabSize: 4 });
             }}
-            height="sizeToFit"
+            height="20em"
           />
         )}
       />
@@ -213,9 +211,7 @@ export const RunAddonForm: React.FC<RunAddonFormProps> = ({
           type="submit"
           aria-label="submit"
           variant={ButtonVariant.primary}
-          isDisabled={
-            !isValid || isSubmitting || isValidating
-          }
+          isDisabled={!isValid || isSubmitting || isValidating}
         >
           {"Run"}
         </Button>
@@ -229,6 +225,6 @@ export const RunAddonForm: React.FC<RunAddonFormProps> = ({
           Cancel
         </Button>
       </ActionGroup>
-    </Form >
+    </Form>
   );
 };

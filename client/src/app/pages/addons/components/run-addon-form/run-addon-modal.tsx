@@ -1,15 +1,14 @@
 import React from "react";
-import { AxiosResponse } from "axios";
 
 import { Modal, ModalVariant } from "@patternfly/react-core";
 import { RunAddonForm } from "./run-addon-form";
-import { Application, Addon, Taskgroup } from "@app/api/models";
+import { Application, Addon } from "@app/api/models";
 
 export interface RunAddonModalProps {
   applications?: Application[];
   addons: Addon[];
   isOpen: boolean;
-  onSaved: (response: AxiosResponse<Taskgroup>) => void;
+  onSaved: () => void;
   onCancel: () => void;
 }
 

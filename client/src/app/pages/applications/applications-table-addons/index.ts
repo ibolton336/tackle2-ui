@@ -1,1 +1,1 @@
-export { ApplicationsTable as default } from "./applications-table-addons";
+export { ApplicationsTableAddons as default } from "./applications-table-addons";
