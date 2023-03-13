@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Wave } from "@app/api/models";
 import { AxiosError } from "axios";
 
@@ -17,7 +17,7 @@ export const WavesQueryKey = "stakeholders";
 
 export const useFetchWaves = (): IWaveFetchState => {
   const { data, isLoading, error, refetch } = useQuery(
-    WavesQueryKey,
+    [WavesQueryKey],
     async () => [],
     // async () => (await getWaves()).data,
     {
@@ -41,11 +41,11 @@ export const useDeleteWaveMutation = (
   const { isLoading, mutate, error } = useMutation(deleteWave, {
     onSuccess: (res) => {
       onSuccess(res);
-      queryClient.invalidateQueries(WavesQueryKey);
+      queryClient.invalidateQueries([WavesQueryKey]);
     },
     onError: (err: AxiosError) => {
       onError(err);
-      queryClient.invalidateQueries(WavesQueryKey);
+      queryClient.invalidateQueries([WavesQueryKey]);
     },
   });
   return {
