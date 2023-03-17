@@ -1,4 +1,9 @@
-import { useMutation, useQueries, UseQueryResult } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueries,
+  useQueryClient,
+  UseQueryResult,
+} from "@tanstack/react-query";
 
 import { deleteAssessment, getAssessments } from "@app/api/rest";
 import { AxiosError } from "axios";
@@ -35,7 +40,25 @@ export const useFetchApplicationAssessments = (
   };
 };
 
-export const useDeleteAssessmentMutation = () =>
-  useMutation({
-    mutationFn: deleteAssessment,
+export const useDeleteAssessmentMutation = (
+  onSuccess: (res: any, id: number) => void,
+  onError: (err: AxiosError) => void
+) => {
+  const queryClient = useQueryClient();
+
+  const { isLoading, mutate, error } = useMutation(deleteAssessment, {
+    onSuccess: (res, id) => {
+      onSuccess(res, id);
+      queryClient.invalidateQueries([assessmentsQueryKey]);
+    },
+    onError: (err: AxiosError) => {
+      onError(err);
+      queryClient.invalidateQueries([assessmentsQueryKey]);
+    },
   });
+  return {
+    mutate,
+    isLoading,
+    error,
+  };
+};
