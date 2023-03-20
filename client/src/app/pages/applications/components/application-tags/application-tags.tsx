@@ -185,7 +185,7 @@ export const ApplicationTags: React.FC<ApplicationTagsProps> = ({
 
       {Array.from(tagsBySource.keys())
         .sort(compareSources)
-        .map((source) => {
+        .map((source, tagSourceIndex) => {
           const tagsInThisSource = tagsBySource.get(source);
           const tagCategoriesInThisSource = new Set<TagCategory>();
           tagsInThisSource?.forEach((tag) => {
@@ -220,20 +220,15 @@ export const ApplicationTags: React.FC<ApplicationTagsProps> = ({
                     <Flex>
                       {tagsInThisCategoryInThisSource
                         ?.sort((a, b) => a.name.localeCompare(b.name))
-                        .map((tag) => {
-                          const colorLabel = DEFAULT_COLOR_LABELS.get(
-                            tagCategory?.colour || ""
-                          );
-                          return (
-                            <Label
-                              key={tag.id}
-                              color={colorLabel as any}
-                              className={`${spacing.mrSm} ${spacing.mbSm}`}
-                            >
-                              {tag.name}
-                            </Label>
-                          );
-                        })}
+                        .map((tag) => (
+                          <Label
+                            key={tag.id}
+                            color={tagSourceIndex % 2 === 0 ? "gold" : "red"}
+                            className={`${spacing.mrSm} ${spacing.mbSm}`}
+                          >
+                            {tag.name}
+                          </Label>
+                        ))}
                     </Flex>
                   </React.Fragment>
                 );
