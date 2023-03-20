@@ -259,7 +259,9 @@ export const AnalysisWizard: React.FC<IAnalysisWizard> = ({
           tags: {
             excluded: fieldValues.excludedRulesTags,
           },
-          bundles: fieldValues.formRuleBundles,
+          bundles: fieldValues.formRuleBundles.map((ruleBundle) => {
+            return { id: ruleBundle.id, name: ruleBundle.name };
+          }),
           ...(fieldValues.rulesKind === "repository" && {
             repository: {
               kind: fieldValues?.repositoryType,
