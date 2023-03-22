@@ -14,7 +14,6 @@ import {
 import spacing from "@patternfly/react-styles/css/utilities/Spacing/spacing";
 import textStyles from "@patternfly/react-styles/css/utilities/Text/text";
 import FilterIcon from "@patternfly/react-icons/dist/esm/icons/filter-icon";
-import { DEFAULT_COLOR_LABELS } from "@app/Constants";
 import { ConditionalRender } from "@app/shared/components";
 import { Application, Tag, TagCategory } from "@app/api/models";
 import { getTagById, getTagCategoryById } from "@app/api/rest";
@@ -24,6 +23,7 @@ import {
   FilterType,
 } from "@app/shared/components/FilterToolbar";
 import { useFilterState } from "@app/shared/hooks/useFilterState";
+import { LabelCustomColor } from "@migtools/lib-ui";
 
 interface TagWithSource extends Tag {
   source?: string;
@@ -218,17 +218,21 @@ export const ApplicationTags: React.FC<ApplicationTagsProps> = ({
                       </Text>
                     </TextContent>
                     <Flex>
-                      {tagsInThisCategoryInThisSource
-                        ?.sort((a, b) => a.name.localeCompare(b.name))
-                        .map((tag) => (
-                          <Label
-                            key={tag.id}
-                            color={tagSourceIndex % 2 === 0 ? "gold" : "red"}
-                            className={`${spacing.mrSm} ${spacing.mbSm}`}
-                          >
-                            {tag.name}
-                          </Label>
-                        ))}
+                      {tagsInThisCategoryInThisSource &&
+                        tagsInThisCategoryInThisSource.map((tag) => {
+                          const color =
+                            tagCategoriesById.get(tag?.category?.id || 0)
+                              ?.colour || "gray";
+                          return (
+                            <LabelCustomColor
+                              key={tag.id}
+                              color={color}
+                              className={spacing.mXs}
+                            >
+                              {tag.name}
+                            </LabelCustomColor>
+                          );
+                        })}
                     </Flex>
                   </React.Fragment>
                 );
