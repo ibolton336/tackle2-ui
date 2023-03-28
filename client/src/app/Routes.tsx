@@ -27,7 +27,7 @@ const Proxies = lazy(() => import("./pages/proxies"));
 const MigrationTargets = lazy(() => import("./pages/migration-targets"));
 const General = lazy(() => import("./pages/general"));
 const Waves = lazy(() => import("./pages/waves"));
-const Jira = lazy(() => import("./pages/jira"));
+const Jira = lazy(() => import("./pages/jira-trackers"));
 
 export interface IRoute {
   path: string;
