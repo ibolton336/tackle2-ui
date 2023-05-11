@@ -116,8 +116,8 @@ export const InstanceForm: React.FC<InstanceFormProps> = ({
     onClose();
   };
 
-  const localStandardURLRegex = new RegExp(standardURLRegex);
-  const containsURL = (string: string) => localStandardURLRegex.test(string);
+  const standardURL = new RegExp(standardURLRegex);
+  const containsURL = (string: string) => standardURL.test(string);
 
   const validationSchema: yup.SchemaOf<FormValues> = yup.object().shape({
     id: yup.number().defined(),
