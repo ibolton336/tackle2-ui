@@ -116,6 +116,9 @@ export const InstanceForm: React.FC<InstanceFormProps> = ({
     onClose();
   };
 
+  const localStandardURLRegex = new RegExp(standardURLRegex);
+  const containsURL = (string: string) => localStandardURLRegex.test(string);
+
   const validationSchema: yup.SchemaOf<FormValues> = yup.object().shape({
     id: yup.number().defined(),
     name: yup
@@ -135,7 +138,7 @@ export const InstanceForm: React.FC<InstanceFormProps> = ({
       .required(t("validation.required"))
       .max(250, t("validation.maxLength", { length: 250 }))
       .test("valid URL", "Enter a valid URL", (value) =>
-        value ? standardURLRegex.test(value) : false
+        value ? containsURL(value) : false
       ),
     kind: yup.mixed<IssueManagerKind>().required(),
     credentialName: yup.string().required(),

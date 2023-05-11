@@ -139,10 +139,10 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
     const gitUrlRegex =
       /(?:git|ssh|https?|git@[-\w.]+):(\/\/)?(.*?)(\.git)(\/?|\#[-\d\w._]+?)$/;
 
-    const standardUrlRegex = new RegExp(standardURLRegex);
+    const localStandardURLRegex = new RegExp(standardURLRegex);
 
     const containsURL = (string: string) =>
-      gitUrlRegex.test(string) || standardUrlRegex.test(string);
+      gitUrlRegex.test(string) || localStandardURLRegex.test(string);
 
     return schema.test("gitUrlTest", "Must be a valid URL.", (value) => {
       if (value) {
