@@ -123,23 +123,19 @@ export const InstanceForm: React.FC<InstanceFormProps> = ({
     id: yup.number().defined(),
     name: yup
       .string()
-      .trim()
-      .required(t("validation.required"))
       .min(3, t("validation.minLength", { length: 3 }))
       .max(120, t("validation.maxLength", { length: 120 }))
       .test(
         "Duplicate name",
         "An identity with this name already exists. Use a different name.",
         (value) => duplicateNameCheck(instances, instance || null, value || "")
-      ),
+      )
+      .required(t("validation.required")),
     url: yup
       .string()
-      .trim()
-      .required(t("validation.required"))
       .max(250, t("validation.maxLength", { length: 250 }))
-      .test("valid URL", "Enter a valid URL", (value) =>
-        value ? containsURL(value) : false
-      ),
+      .matches(standardURL, "Enter a valid URL")
+      .required(t("validation.required")),
     kind: yup.mixed<IssueManagerKind>().required(),
     credentialName: yup.string().required(),
     insecure: yup.boolean().required(),
@@ -257,7 +253,6 @@ export const InstanceForm: React.FC<InstanceFormProps> = ({
         control={control}
         name="insecure"
         fieldId="insecure-switch"
-        isRequired
         renderInput={({ field: { value, onChange } }) => (
           <Switch
             id="insecure-switch"
