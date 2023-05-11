@@ -48,8 +48,6 @@ export interface InstanceFormProps {
   onClose: () => void;
 }
 
-const containsURL = (string: string) => standardURLRegex.test(string);
-
 export const InstanceForm: React.FC<InstanceFormProps> = ({
   instance,
   onClose,
@@ -137,7 +135,7 @@ export const InstanceForm: React.FC<InstanceFormProps> = ({
       .required(t("validation.required"))
       .max(250, t("validation.maxLength", { length: 250 }))
       .test("valid URL", "Enter a valid URL", (value) =>
-        value ? containsURL(value) : false
+        value ? standardURLRegex.test(value) : false
       ),
     kind: yup.mixed<IssueManagerKind>().required(),
     credentialName: yup.string().required(),
