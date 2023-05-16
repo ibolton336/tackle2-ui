@@ -21,6 +21,7 @@ import { Application, TagRef } from "@app/api/models";
 import {
   duplicateNameCheck,
   getAxiosErrorMessage,
+  gitUrlRegex,
   standardURLRegex,
 } from "@app/utils/utils";
 import { toOptionLike } from "@app/utils/model-utils";
@@ -136,12 +137,12 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
   };
 
   const customURLValidation = (schema: StringSchema) => {
-    const gitUrlRegex =
-      /(?:git|ssh|https?|git@[-\w.]+):(\/\/)?(.*?)(\.git)(\/?|\#[-\d\w._]+?)$/;
-    return schema.matches(
-      gitUrlRegex || standardURLRegex,
-      "Must be a valid URL."
-    );
+    const result = schema.test("urlTest", "Must be a valid URL.", (value) => {
+      return value
+        ? gitUrlRegex.test(value) || standardURLRegex.test(value)
+        : false;
+    });
+    return result;
   };
 
   const { data: applications } = useFetchApplications();
