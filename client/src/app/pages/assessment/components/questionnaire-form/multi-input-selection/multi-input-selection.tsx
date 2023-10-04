@@ -37,10 +37,12 @@ export const MultiInputSelection: React.FC<MultiInputSelectionProps> = ({
             fieldId={`${questionFieldName}-${i}`}
             renderInput={({ field: { value, onChange } }) => (
               <Radio
-                id={`${questionFieldName}-${option.order}`}
+                id={`${questionFieldName}-${i}`}
                 name={questionFieldName}
                 isChecked={value === option.text}
                 onChange={(checked, e) => {
+                  console.log("option", option.text);
+                  console.log("value", value);
                   onChange(option.text);
                 }}
                 aria-label={option.text}

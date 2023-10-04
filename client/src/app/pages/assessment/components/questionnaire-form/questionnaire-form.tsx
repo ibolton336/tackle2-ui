@@ -53,8 +53,8 @@ export const QuestionnaireForm: React.FC<QuestionnaireFormProps> = ({
           <Text component="h1">{section.name}</Text>
         </TextContent>
       </StackItem>
-      {sortedQuestions.map((question) => (
-        <StackItem key={question.order}>
+      {sortedQuestions.map((question, i) => (
+        <StackItem key={`${getQuestionFieldName(question, false)}-${i}`}>
           <Question cy-data="question">
             <QuestionHeader>
               <Split hasGutter>
