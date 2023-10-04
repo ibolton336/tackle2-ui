@@ -23,10 +23,11 @@ export const MultiInputSelection: React.FC<MultiInputSelectionProps> = ({
     return (question.answers || []).sort((a, b) => a.order - b.order);
   }, [question]);
 
-  const questionFieldName = getQuestionFieldName(question, true);
+  const questionFieldName = getQuestionFieldName(question);
 
   const isArchetype = useIsArchetype();
   const { t } = useTranslation();
+  console.log("questionFieldName in multi-input", questionFieldName);
   return (
     <Stack>
       {sortedOptions.map((option, i) => (
@@ -43,7 +44,10 @@ export const MultiInputSelection: React.FC<MultiInputSelectionProps> = ({
                 onChange={(checked, e) => {
                   console.log("option", option.text);
                   console.log("value", value);
-                  onChange(option.text);
+                  // onChange(option.text);
+                  const updatedValue = option.text;
+                  // Update the correct value in the form state using setValue
+                  onChange(`questions.${questionFieldName}`, updatedValue);
                 }}
                 aria-label={option.text}
                 label={

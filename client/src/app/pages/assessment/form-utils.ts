@@ -14,9 +14,9 @@ export const getCommentFieldName = (section: Section, fullName: boolean) => {
   return fullName ? `${COMMENTS_KEY}.${fieldName}` : fieldName;
 };
 
-export const getQuestionFieldName = (question: Question, fullName: boolean) => {
+export const getQuestionFieldName = (question: Question) => {
   const fieldName = `${question.order || "no-order"}-${
     question.text || "no-text"
   }`;
-  return fullName ? `${QUESTIONS_KEY}.${fieldName}` : fieldName;
+  return `${fieldName}`;
 };

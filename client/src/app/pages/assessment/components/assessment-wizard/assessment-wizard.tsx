@@ -124,7 +124,7 @@ export const AssessmentWizard: React.FC<AssessmentWizardProps> = ({
             .find((q) => q.text === question.text)
             ?.answers.find((a) => a.selected === true);
 
-          questions[getQuestionFieldName(question, false)] =
+          questions[getQuestionFieldName(question)] =
             existingAnswer?.text || "";
         });
     }
@@ -170,7 +170,8 @@ export const AssessmentWizard: React.FC<AssessmentWizardProps> = ({
 
   const isQuestionValid = (question: Question): boolean => {
     const questionErrors = errors.questions || {};
-    return !questionErrors[getQuestionFieldName(question, false)];
+    console.log("questionErrors", questionErrors);
+    return !questionErrors[getQuestionFieldName(question)];
   };
 
   //TODO: Add comments to the sections
@@ -181,7 +182,9 @@ export const AssessmentWizard: React.FC<AssessmentWizardProps> = ({
 
   const questionHasValue = (question: Question): boolean => {
     const questionValues = values.questions || {};
-    const value = questionValues[getQuestionFieldName(question, false)];
+    const value = questionValues[getQuestionFieldName(question)];
+    console.log("value of questions ", questionValues);
+    console.log("value of question ", value);
     return value !== null && value !== undefined && value !== "";
   };
   //TODO: Add comments to the sections
@@ -252,7 +255,8 @@ export const AssessmentWizard: React.FC<AssessmentWizardProps> = ({
             return {
               ...question,
               answers: question.answers.map((option) => {
-                const fieldName = getQuestionFieldName(question, false);
+                const fieldName = getQuestionFieldName(question);
+                console.log("inside build function", fieldName);
                 const questionAnswerValue = updatedQuestionsData[fieldName];
                 return {
                   ...option,

@@ -54,7 +54,7 @@ export const QuestionnaireForm: React.FC<QuestionnaireFormProps> = ({
         </TextContent>
       </StackItem>
       {sortedQuestions.map((question, i) => (
-        <StackItem key={`${getQuestionFieldName(question, false)}-${i}`}>
+        <StackItem key={`${getQuestionFieldName(question)}-${i}`}>
           <Question cy-data="question">
             <QuestionHeader>
               <Split hasGutter>
@@ -75,7 +75,7 @@ export const QuestionnaireForm: React.FC<QuestionnaireFormProps> = ({
             </QuestionHeader>
             <QuestionBody>
               <MultiInputSelection
-                key={getQuestionFieldName(question, true)}
+                key={getQuestionFieldName(question)}
                 question={question}
               />
             </QuestionBody>

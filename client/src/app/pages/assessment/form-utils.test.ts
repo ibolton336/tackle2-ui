@@ -25,12 +25,12 @@ describe("Application assessment - form utils", () => {
   });
 
   it("getQuestionFieldName: fullName", () => {
-    const fieldName = getQuestionFieldName(question, true);
+    const fieldName = getQuestionFieldName(question);
     expect(fieldName).toBe("questions.question-1");
   });
 
   it("getQuestionFieldName: singleName", () => {
-    const fieldName = getQuestionFieldName(question, false);
+    const fieldName = getQuestionFieldName(question);
     expect(fieldName).toBe("question-1");
   });
 });
