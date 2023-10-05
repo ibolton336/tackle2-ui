@@ -63,8 +63,8 @@ const ArchetypeDetailDrawer: React.FC<IArchetypeDetailDrawerProps> = ({
         <DescriptionListGroup>
           <DescriptionListTerm>{t("terms.tagsCriteria")}</DescriptionListTerm>
           <DescriptionListDescription>
-            {archetype?.criteriaTags?.length ?? 0 > 0 ? (
-              <TagLabels tags={archetype?.criteriaTags} />
+            {archetype?.criteria?.length ?? 0 > 0 ? (
+              <TagLabels tags={archetype?.criteria} />
             ) : (
               <EmptyTextMessage message={t("terms.none")} />
             )}
