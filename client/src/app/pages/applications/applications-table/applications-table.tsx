@@ -819,7 +819,7 @@ export const ApplicationsTable: React.FC = () => {
             </ToolbarItem>
           </ToolbarContent>
         </Toolbar>
-        <Table {...tableProps} aria-label="App assessments table">
+        <Table {...tableProps} aria-label="main-table">
           <Thead>
             <Tr>
               <TableHeaderContentWithControls {...tableControls}>
