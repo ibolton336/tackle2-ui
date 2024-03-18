@@ -376,7 +376,8 @@ export interface TaskgroupTask {
 export interface Taskgroup {
   id?: number;
   name: string;
-  addon: string;
+  addon?: string;
+  profile?: string;
   data: TaskData;
   tasks: TaskgroupTask[];
 }

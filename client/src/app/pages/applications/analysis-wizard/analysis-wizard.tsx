@@ -72,7 +72,7 @@ const defaultTaskData: TaskData = {
 
 export const defaultTaskgroup: Taskgroup = {
   name: `taskgroup.analyzer`,
-  addon: "analyzer",
+  profile: "analyzer",
   data: {
     ...defaultTaskData,
   },
