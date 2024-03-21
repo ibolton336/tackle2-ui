@@ -377,7 +377,7 @@ export interface Taskgroup {
   id?: number;
   name: string;
   addon?: string;
-  profile?: string;
+  kind?: string;
   data: TaskData;
   tasks: TaskgroupTask[];
 }
