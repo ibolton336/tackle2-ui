@@ -14,7 +14,7 @@ export const TableHeaderContentWithControls: React.FC<
     {Array(numColumnsBeforeData)
       .fill(null)
       .map((_, i) => (
-        <Th key={i} />
+        <Th key={i} width={10} />
       ))}
     {children}
     {Array(numColumnsAfterData)

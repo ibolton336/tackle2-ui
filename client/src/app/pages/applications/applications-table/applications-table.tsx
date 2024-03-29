@@ -830,29 +830,27 @@ export const ApplicationsTable: React.FC = () => {
             <Tr>
               <TableHeaderContentWithControls {...tableControls}>
                 {getColumnVisibility("name") && (
-                  <Th {...getThProps({ columnKey: "name" })} width={15} />
+                  <Th {...getThProps({ columnKey: "name" })} />
                 )}
                 {getColumnVisibility("businessService") && (
-                  <Th
-                    {...getThProps({ columnKey: "businessService" })}
-                    width={15}
-                  />
+                  <Th {...getThProps({ columnKey: "businessService" })} />
                 )}
                 {getColumnVisibility("assessment") && (
-                  <Th {...getThProps({ columnKey: "assessment" })} width={15} />
+                  <Th {...getThProps({ columnKey: "assessment" })} />
                 )}
                 {getColumnVisibility("review") && (
-                  <Th {...getThProps({ columnKey: "review" })} width={10} />
+                  <Th {...getThProps({ columnKey: "review" })} />
                 )}
                 {getColumnVisibility("analysis") && (
-                  <Th {...getThProps({ columnKey: "analysis" })} width={10} />
+                  <Th {...getThProps({ columnKey: "analysis" })} />
                 )}
                 {getColumnVisibility("tags") && (
-                  <Th {...getThProps({ columnKey: "tags" })} width={10} />
+                  <Th {...getThProps({ columnKey: "tags" })} />
                 )}
                 {getColumnVisibility("effort") && (
-                  <Th {...getThProps({ columnKey: "effort" })} width={10} />
+                  <Th {...getThProps({ columnKey: "effort" })} />
                 )}
+                <Th />
                 <Th />
               </TableHeaderContentWithControls>
             </Tr>
@@ -890,7 +888,6 @@ export const ApplicationsTable: React.FC = () => {
                     >
                       {getColumnVisibility("name") && (
                         <Td
-                          width={15}
                           {...getTdProps({ columnKey: "name" })}
                           modifier="truncate"
                         >
@@ -899,7 +896,6 @@ export const ApplicationsTable: React.FC = () => {
                       )}
                       {getColumnVisibility("businessService") && (
                         <Td
-                          width={15}
                           {...getTdProps({ columnKey: "businessService" })}
                           modifier="truncate"
                         >
@@ -912,7 +908,6 @@ export const ApplicationsTable: React.FC = () => {
                       )}
                       {getColumnVisibility("assessment") && (
                         <Td
-                          width={15}
                           modifier="truncate"
                           {...getTdProps({ columnKey: "assessment" })}
                         >
@@ -929,7 +924,6 @@ export const ApplicationsTable: React.FC = () => {
                       )}
                       {getColumnVisibility("review") && (
                         <Td
-                          width={15}
                           modifier="truncate"
                           {...getTdProps({ columnKey: "review" })}
                         >
@@ -941,7 +935,6 @@ export const ApplicationsTable: React.FC = () => {
                       )}
                       {getColumnVisibility("analysis") && (
                         <Td
-                          width={10}
                           modifier="truncate"
                           {...getTdProps({ columnKey: "analysis" })}
                         >
@@ -952,7 +945,6 @@ export const ApplicationsTable: React.FC = () => {
                       )}
                       {getColumnVisibility("tags") && (
                         <Td
-                          width={10}
                           modifier="truncate"
                           {...getTdProps({ columnKey: "tags" })}
                         >
@@ -962,7 +954,6 @@ export const ApplicationsTable: React.FC = () => {
                       )}
                       {getColumnVisibility("effort") && (
                         <Td
-                          width={10}
                           modifier="truncate"
                           {...getTdProps({ columnKey: "effort" })}
                         >
