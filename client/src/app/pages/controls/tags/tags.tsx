@@ -16,7 +16,7 @@ import {
   ToolbarItem,
 } from "@patternfly/react-core";
 import {
-  IRowData,
+  ExpandableRowContent,
   Table,
   Tbody,
   Td,
@@ -52,12 +52,7 @@ import {
 } from "@app/components/TableControls";
 import { useLocalTableControls } from "@app/hooks/table-controls";
 import { RBAC, controlsWriteScopes, RBAC_TYPE } from "@app/rbac";
-
-const ENTITY_FIELD = "entity";
-
-const getRow = (rowData: IRowData): TagCategory => {
-  return rowData[ENTITY_FIELD];
-};
+import { TagTable } from "./components/tag-table";
 
 export const Tags: React.FC = () => {
   const { t } = useTranslation();
@@ -73,10 +68,6 @@ export const Tags: React.FC = () => {
   const isTagCategoryModalOpen = tagCategoryModalState !== null;
   const tagCategoryToUpdate =
     tagCategoryModalState !== "create" ? tagCategoryModalState : null;
-
-  // const [isNewTagCategoryModalOpen, setIsNewTagCategoryModalOpen] =
-  //   useState(false);
-  // const [rowToUpdate, setRowToUpdate] = useState<TagCategory>();
 
   const [tagModalState, setTagModalState] = React.useState<
     "create" | Tag | null
@@ -161,200 +152,10 @@ export const Tags: React.FC = () => {
     refetch,
   } = useFetchTagCategories();
 
-  // const filterCategories: FilterCategory<
-  //   TagCategory,
-  //   "tags" | "rank" | "color"
-  // >[] = [
-  //   {
-  //     categoryKey: "tags",
-  //     title: t("terms.name"),
-  //     type: FilterType.multiselect,
-  //     placeholderText:
-  //       t("actions.filterBy", {
-  //         what: t("terms.name").toLowerCase(),
-  //       }) + "...",
-  //     getItemValue: (item) => {
-  //       const tagCategoryNames = item.name?.toString() || "";
-  //       const tagNames = item?.tags
-  //         ?.map((tag) => tag.name)
-  //         .concat(tagCategoryNames)
-  //         .join("");
+  const deleteTagFromTable = (tag: Tag) => {
+    setTagToDelete(tag);
+  };
 
-  //       return tagNames || "";
-  //     },
-  //     selectOptions: dedupeFunction(
-  //       tagCategories
-  //         ?.map((tagCategory) => tagCategory?.tags)
-  //         .flat()
-  //         .filter((tag) => tag && tag.name)
-  //         .map((tag) => ({ key: tag?.name, value: tag?.name }))
-  //         .concat(
-  //           tagCategories?.map((tagCategory) => ({
-  //             key: tagCategory?.name,
-  //             value: tagCategory?.name,
-  //           }))
-  //         )
-  //         .sort((a, b) => {
-  //           if (a.value && b.value) {
-  //             return a?.value.localeCompare(b?.value);
-  //           } else {
-  //             return 0;
-  //           }
-  //         })
-  //     ),
-  //   },
-  //   {
-  //     categoryKey: "rank",
-  //     title: t("terms.rank"),
-  //     type: FilterType.search,
-  //     placeholderText:
-  //       t("actions.filterBy", {
-  //         what: t("terms.rank").toLowerCase(),
-  //       }) + "...",
-  //     getItemValue: (item) => {
-  //       return item.rank?.toString() || "";
-  //     },
-  //   },
-  //   {
-  //     categoryKey: "color",
-  //     title: t("terms.color"),
-  //     type: FilterType.search,
-  //     placeholderText:
-  //       t("actions.filterBy", {
-  //         what: t("terms.color").toLowerCase(),
-  //       }) + "...",
-  //     getItemValue: (item) => {
-  //       const hex = item?.colour || "";
-  //       const colorLabel = COLOR_NAMES_BY_HEX_VALUE[hex.toLowerCase()];
-  //       return colorLabel || hex;
-  //     },
-  //   },
-  // ];
-  // const { filterValues, setFilterValues, filteredItems } = useLegacyFilterState(
-  //   tagCategories || [],
-  //   filterCategories
-  // );
-
-  // const getSortValues = (item: TagCategory) => [
-  //   "",
-  //   item?.name || "",
-  //   typeof item?.rank === "number" ? item.rank : Number.MAX_VALUE,
-
-  //   "",
-  //   item?.tags?.length || 0,
-  //   "", // Action column
-  // ];
-
-  // const { sortBy, onSort, sortedItems } = useLegacySortState(
-  //   filteredItems,
-  //   getSortValues
-  // );
-
-  // const { currentPageItems, setPageNumber, paginationProps } =
-  //   useLegacyPaginationState(sortedItems, 10);
-
-  // const deleteTagFromTable = (row: Tag) => {
-  //   setTagToDelete(row);
-  // };
-
-  // const columns: ICell[] = [
-  //   {
-  //     title: t("terms.tagCategory"),
-  //     transforms: [sortable],
-  //     cellFormatters: [expandable],
-  //   },
-  //   { title: t("terms.rank"), transforms: [sortable] },
-  //   {
-  //     title: t("terms.color"),
-  //     transforms: [],
-  //   },
-  //   {
-  //     title: t("terms.tagCount"),
-  //     transforms: [sortable],
-  //   },
-  //   {
-  //     title: "",
-  //     props: {
-  //       className: "pf-v5-u-text-align-right",
-  //     },
-  //   },
-  // ];
-
-  // const rows: IRow[] = [];
-  // currentPageItems.forEach((item) => {
-  //   const isExpanded = isItemExpanded(item) && !!item?.tags?.length;
-  //   const categoryColor = item.colour || getTagCategoryFallbackColor(item);
-  //   rows.push({
-  //     [ENTITY_FIELD]: item,
-  //     isOpen: (item.tags || []).length > 0 ? isExpanded : undefined,
-  //     cells: [
-  //       {
-  //         title: item.name,
-  //       },
-  //       {
-  //         title: item.rank,
-  //       },
-  //       {
-  //         title: <Color hex={categoryColor} />,
-  //       },
-  //       {
-  //         title: item.tags ? item.tags.length : 0,
-  //       },
-  //       {
-  //         title: (
-  //           <AppTableActionButtons
-  //             isDeleteEnabled={!!item.tags?.length}
-  //             tooltipMessage="Cannot delete non empty tag category"
-  //             onEdit={() => setTagCategoryModalState(item)}
-  //             onDelete={() => deleteRow(item)}
-  //           />
-  //         ),
-  //       },
-  //     ],
-  //   });
-
-  //   if (isExpanded) {
-  //     rows.push({
-  //       parent: rows.length - 1,
-  //       fullWidth: true,
-  //       noPadding: true,
-  //       cells: [
-  //         {
-  //           title: (
-  //             <TagTable
-  //               tagCategory={item}
-  //               onEdit={setTagModalState}
-  //               onDelete={deleteTagFromTable}
-  //             />
-  //           ),
-  //         },
-  //       ],
-  //     });
-  //   }
-  // });
-
-  // // Rows
-
-  // const collapseRow = (
-  //   event: React.MouseEvent,
-  //   rowIndex: number,
-  //   isOpen: boolean,
-  //   rowData: IRowData,
-  //   extraData: IExtraData
-  // ) => {
-  //   const row = getRow(rowData);
-  //   toggleItemExpanded(row);
-  // };
-
-  // const deleteRow = (row: TagCategory) => {
-  //   setTagCategoryToDelete(row);
-  // };
-
-  // // Advanced filters
-
-  // const handleOnClearAllFilters = () => {
-  //   setFilterValues({});
-  // };
   const tableControls = useLocalTableControls({
     tableName: "business-services-table",
     idProperty: "name",
@@ -363,12 +164,14 @@ export const Tags: React.FC = () => {
       name: t("terms.name"),
       rank: t("terms.rank"),
       color: t("terms.color"),
-      tagCount: t("terms.count"),
+      tagCount: t("terms.tagCount"),
     },
     isFilterEnabled: true,
     isSortEnabled: true,
     isPaginationEnabled: true,
     hasActionsColumn: true,
+    isExpansionEnabled: true,
+    expandableVariant: "single",
     filterCategories: [
       {
         categoryKey: "tags",
@@ -460,8 +263,6 @@ export const Tags: React.FC = () => {
     },
     expansionDerivedState: { isCellExpanded },
   } = tableControls;
-  // const tagCategoryToUpdate =
-  //   tagCategoryModalState !== "create" ? tagCategoryModalState : null;
 
   const categoryColor =
     tagCategoryToUpdate?.colour ||
@@ -472,70 +273,6 @@ export const Tags: React.FC = () => {
         when={isFetching && !(tagCategories || fetchError)}
         then={<AppPlaceholder />}
       >
-        {/* <AppTableWithControls
-          paginationProps={paginationProps}
-          paginationIdPrefix="tags"
-          count={tagCategories ? tagCategories.length : 0}
-          sortBy={sortBy}
-          onSort={onSort}
-          onCollapse={collapseRow}
-          cells={columns}
-          rows={rows}
-          isLoading={isFetching}
-          loadingVariant="skeleton"
-          fetchError={fetchError}
-          toolbarClearAllFilters={handleOnClearAllFilters}
-          toolbarToggle={
-            <FilterToolbar
-              filterCategories={filterCategories}
-              filterValues={filterValues}
-              setFilterValues={setFilterValues}
-            />
-          }
-          toolbarActions={
-            <ToolbarGroup variant="button-group">
-              <RBAC
-                allowedPermissions={controlsWriteScopes}
-                rbacType={RBAC_TYPE.Scope}
-              >
-                <ToolbarItem>
-                  <Button
-                    type="button"
-                    id="create-tag"
-                    aria-label="Create tag"
-                    variant={ButtonVariant.primary}
-                    onClick={() => setTagModalState("create")}
-                  >
-                    {t("actions.createTag")}
-                  </Button>
-                </ToolbarItem>
-                <ToolbarItem>
-                  <Button
-                    type="button"
-                    id="create-tag-category"
-                    aria-label="Create tag category"
-                    variant={ButtonVariant.secondary}
-                    onClick={() => setTagCategoryModalState("create")}
-                  >
-                    {t("actions.createTagCategory")}
-                  </Button>
-                </ToolbarItem>
-              </RBAC>
-            </ToolbarGroup>
-          }
-          noDataState={
-            <NoDataEmptyState
-              // t('terms.tagCategories')
-              title={t("composed.noDataStateTitle", {
-                what: t("terms.tagCategories").toLowerCase(),
-              })}
-              // t('terms.stakeholderGroup')
-              description={t("composed.noDataStateBody", {
-                what: t("terms.tagCategory").toLowerCase(),
-              })}
-            />
-          }
-        /> */}
         <div
           style={{
             backgroundColor: "var(--pf-v5-global--BackgroundColor--100)",
@@ -617,6 +354,8 @@ export const Tags: React.FC = () => {
               numRenderedColumns={numRenderedColumns}
             >
               {currentPageItems?.map((tagCategory, rowIndex) => {
+                const hasTags = tagCategory.tags && tagCategory.tags.length > 0;
+
                 return (
                   <Tbody
                     key={tagCategory.id}
@@ -634,11 +373,14 @@ export const Tags: React.FC = () => {
                         <Td width={10} {...getTdProps({ columnKey: "rank" })}>
                           {tagCategory.rank}
                         </Td>
+                        <Td width={10} {...getTdProps({ columnKey: "color" })}>
+                          <Color hex={categoryColor} />
+                        </Td>
                         <Td
                           width={10}
                           {...getTdProps({ columnKey: "tagCount" })}
                         >
-                          {tagCategory.tags?.length}
+                          {tagCategory.tags?.length || 0}
                         </Td>
                         <Td width={20}>
                           <AppTableActionButtons
@@ -648,6 +390,31 @@ export const Tags: React.FC = () => {
                         </Td>
                       </TableRowContentWithControls>
                     </Tr>
+                    {isCellExpanded(tagCategory) && (
+                      <Tr>
+                        <Td colSpan={numRenderedColumns}>
+                          <ExpandableRowContent>
+                            {hasTags ? (
+                              <TagTable
+                                tagCategory={tagCategory}
+                                onEdit={setTagModalState}
+                                onDelete={deleteTagFromTable}
+                              />
+                            ) : (
+                              <EmptyState variant="sm">
+                                <EmptyStateIcon icon={CubesIcon} />
+                                <Title headingLevel="h4" size="lg">
+                                  {t("message.noTagsAvailable")}
+                                </Title>
+                                <EmptyStateBody>
+                                  {t("message.noAssociatedTags")}
+                                </EmptyStateBody>
+                              </EmptyState>
+                            )}
+                          </ExpandableRowContent>
+                        </Td>
+                      </Tr>
+                    )}
                   </Tbody>
                 );
               })}
