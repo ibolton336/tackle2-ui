@@ -12,12 +12,118 @@ import { server } from "@mocks/server";
 import { assessmentsQueryKey } from "@app/queries/assessments";
 import { QueryClient } from "@tanstack/react-query";
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+      cacheTime: 1000,
+    },
+  },
+});
+
 describe("useAssessmentStatus", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
   afterEach(() => {
     server.resetHandlers();
+  });
+
+  it("hasApplicationAssessmentInProgress reflects only required assessments", async () => {
+    server.use(
+      rest.get("/hub/assessments", (req, res, ctx) => {
+        return res(
+          ctx.json([
+            createMockAssessment({
+              id: 1,
+              application: { id: 1, name: "app1" },
+              questionnaire: { id: 1, name: "questionnaire1" },
+              status: "started",
+              required: true,
+              sections: [],
+            }),
+            createMockAssessment({
+              id: 2,
+              application: { id: 1, name: "app1" },
+              questionnaire: { id: 2, name: "questionnaire2" },
+              status: "complete",
+              required: false,
+              sections: [],
+            }),
+          ])
+        );
+      }),
+      rest.get("/hub/archetypes", (req, res, ctx) => {
+        return res(
+          ctx.json([
+            createMockArchetype({
+              id: 1,
+              name: "archetype1",
+              applications: [],
+              assessed: false,
+              assessments: [],
+            }),
+          ])
+        );
+      })
+    );
+
+    const { result, rerender } = renderHook(
+      () => useAssessmentStatus(createMockApplication({ id: 1, name: "app1" })),
+      {
+        queryClient,
+      }
+    );
+
+    await waitFor(() => {
+      expect(result.current.hasApplicationAssessmentInProgress).toBe(true);
+    });
+
+    server.use(
+      rest.get("/hub/assessments", (req, res, ctx) => {
+        return res(
+          ctx.json([
+            createMockAssessment({
+              id: 1,
+              application: { id: 1, name: "app1" },
+              questionnaire: { id: 1, name: "questionnaire1" },
+              status: "started",
+              required: false,
+              sections: [],
+            }),
+            createMockAssessment({
+              id: 2,
+              application: { id: 1, name: "app1" },
+              questionnaire: { id: 2, name: "questionnaire2" },
+              status: "complete",
+              required: false,
+              sections: [],
+            }),
+          ])
+        );
+      }),
+      rest.get("/hub/archetypes", (req, res, ctx) => {
+        return res(
+          ctx.json([
+            createMockArchetype({
+              id: 1,
+              name: "archetype1",
+              applications: [],
+              assessed: false,
+              assessments: [],
+            }),
+          ])
+        );
+      })
+    );
+
+    queryClient.invalidateQueries([assessmentsQueryKey]);
+
+    rerender();
+
+    await waitFor(() => {
+      expect(result.current.hasApplicationAssessmentInProgress).toBe(false);
+    });
   });
 
   it("Updates hasApplicationAssessmentInProgress to false once associated assessments are deleted", async () => {
@@ -56,14 +162,6 @@ describe("useAssessmentStatus", () => {
         );
       })
     );
-    const queryClient = new QueryClient({
-      defaultOptions: {
-        queries: {
-          retry: false,
-          cacheTime: 1000,
-        },
-      },
-    });
     const { result, rerender } = renderHook(
       () => useAssessmentStatus(createMockApplication({ id: 1, name: "app1" })),
       { queryClient }
