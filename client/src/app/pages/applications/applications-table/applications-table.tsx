@@ -867,6 +867,7 @@ export const ApplicationsTable: React.FC = () => {
                   what: t("terms.applications").toLowerCase(),
                 })}
                 description={t("composed.noDataStateBody", {
+                  how: t("terms.create"),
                   what: t("terms.application").toLowerCase(),
                 })}
               />

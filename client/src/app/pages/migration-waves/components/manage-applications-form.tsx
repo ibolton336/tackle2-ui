@@ -261,6 +261,7 @@ export const ManageApplicationsForm: React.FC<ManageApplicationsFormProps> = ({
                 what: t("terms.applications").toLowerCase(),
               })}
               description={t("composed.noDataStateBody", {
+                how: t("terms.add"),
                 what: t("terms.application").toLowerCase(),
               })}
             />
