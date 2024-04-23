@@ -28,6 +28,7 @@ export interface ISimpleSelectBasicProps {
   width?: number;
   noResultsFoundText?: string;
   hideClearButton?: boolean;
+  isDisabled?: boolean;
 }
 
 export const SimpleSelectTypeahead: React.FC<ISimpleSelectBasicProps> = ({
@@ -42,6 +43,7 @@ export const SimpleSelectTypeahead: React.FC<ISimpleSelectBasicProps> = ({
   width,
   noResultsFoundText,
   hideClearButton = false,
+  isDisabled = false,
 }) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const [selected, setSelected] = React.useState<string | string[]>(
@@ -196,6 +198,7 @@ export const SimpleSelectTypeahead: React.FC<ISimpleSelectBasicProps> = ({
       isExpanded={isOpen}
       isFullWidth={!width}
       style={{ width: width && width + "px" }}
+      isDisabled={selectOptions.length === 0 || isDisabled}
     >
       <TextInputGroup isPlain>
         <TextInputGroupMain

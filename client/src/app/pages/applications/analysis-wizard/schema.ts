@@ -10,6 +10,7 @@ import { useAnalyzableApplicationsByMode } from "./utils";
 import { customURLValidation } from "@app/utils/utils";
 
 export const ANALYSIS_MODES = [
+  "migration-optimization",
   "binary",
   "source-code",
   "source-code-deps",

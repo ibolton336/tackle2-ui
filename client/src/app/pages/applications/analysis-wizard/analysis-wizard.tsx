@@ -21,7 +21,6 @@ import {
 import { Review } from "./review";
 import { SetMode } from "./set-mode";
 import { SetOptions } from "./set-options";
-import { SetScope } from "./set-scope";
 import { SetTargets } from "./set-targets";
 import {
   useCreateTaskgroupMutation,
@@ -161,7 +160,7 @@ export const AnalysisWizard: React.FC<IAnalysisWizard> = ({
   const methods = useForm<AnalysisWizardFormValues>({
     defaultValues: {
       artifact: null,
-      mode: "source-code-deps",
+      mode: "migration-optimization",
       formLabels: [],
       selectedTargets: [],
       selectedSourceLabels: [],
@@ -190,7 +189,6 @@ export const AnalysisWizard: React.FC<IAnalysisWizard> = ({
   enum StepId {
     AnalysisMode = 1,
     SetTargets,
-    Scope,
     CustomRules,
     Options,
     Review,
@@ -199,7 +197,6 @@ export const AnalysisWizard: React.FC<IAnalysisWizard> = ({
   const isStepValid: Record<StepId, boolean> = {
     [StepId.AnalysisMode]: useAsyncYupValidation(values, schemas.modeStep),
     [StepId.SetTargets]: useAsyncYupValidation(values, schemas.targetsStep),
-    [StepId.Scope]: useAsyncYupValidation(values, schemas.scopeStep),
     [StepId.CustomRules]: useAsyncYupValidation(
       values,
       schemas.customRulesStep
@@ -360,15 +357,6 @@ export const AnalysisWizard: React.FC<IAnalysisWizard> = ({
           footer={{ isNextDisabled: !isStepEnabled(StepId.SetTargets + 1) }}
         >
           <SetTargets />
-        </WizardStep>,
-        <WizardStep
-          key={StepId.Scope}
-          id={StepId.Scope}
-          name={t("wizard.terms.scope")}
-          isDisabled={!isStepEnabled(StepId.Scope)}
-          footer={{ isNextDisabled: !isStepEnabled(StepId.Scope + 1) }}
-        >
-          <SetScope />
         </WizardStep>,
       ]}
     ></WizardStep>,

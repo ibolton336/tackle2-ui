@@ -27,6 +27,10 @@ export const SetMode: React.FC<ISetMode> = ({ isSingleApp, isModeValid }) => {
 
   const options: SelectOptionProps[] = [
     {
+      value: "migration-optimization",
+      children: "Migration Optimization (Crane & Provider Analysis)",
+    },
+    {
       value: "source-code-deps",
       children: "Source code + dependencies",
     },

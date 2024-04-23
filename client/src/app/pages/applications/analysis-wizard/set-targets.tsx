@@ -22,16 +22,43 @@ export const SetTargets: React.FC = () => {
   const { t } = useTranslation();
 
   const { targets } = useFetchTargets();
-
-  const [provider, setProvider] = useState("Java");
-
   const targetOrderSetting = useSetting("ui.target.order");
+  const hasMockTarget = targets.find((target) => target.id === 345);
+
+  if (!hasMockTarget) {
+    targets.push({
+      id: 345,
+      name: "EKS",
+      provider: "Provider",
+      custom: false,
+      labels: [
+        {
+          name: "EKS",
+          label: "EKS",
+        },
+      ],
+      ruleset: {
+        id: 123232,
+        name: "ruleset",
+        rules: [
+          {
+            name: "rule1",
+          },
+        ],
+      },
+    });
+    targetOrderSetting?.data?.push(345);
+  }
 
   const { watch, setValue, getValues } =
     useFormContext<AnalysisWizardFormValues>();
   const values = getValues();
   const formLabels = watch("formLabels");
   const selectedTargets = watch("selectedTargets");
+  const isMigrationOptimization = values.mode === "migration-optimization";
+  const [provider, setProvider] = useState(
+    isMigrationOptimization ? "Provider" : "Java"
+  );
 
   const handleOnSelectedCardTargetChange = (selectedLabelName: string) => {
     const otherSelectedLabels = formLabels?.filter((formLabel) => {
@@ -143,14 +170,17 @@ export const SetTargets: React.FC = () => {
         toggleId="action-select-toggle"
         hideClearButton
         id="action-select"
+        isDisabled={isMigrationOptimization}
         options={[
+          ...(isMigrationOptimization
+            ? []
+            : [
+                { value: "Java", children: "Java" },
+                { value: "Go", children: "Go" },
+              ]),
           {
-            value: "Java",
-            children: "Java",
-          },
-          {
-            value: "Go",
-            children: "Go",
+            value: "Provider",
+            children: "Provider",
           },
         ]}
         onChange={(selection) => {
