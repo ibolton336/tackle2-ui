@@ -23,32 +23,32 @@ export const SetTargets: React.FC = () => {
 
   const { targets } = useFetchTargets();
   const targetOrderSetting = useSetting("ui.target.order");
-  const hasMockTarget = targets.find((target) => target.id === 345);
+  // const hasMockTarget = targets.find((target) => target.id === 345);
 
-  if (!hasMockTarget) {
-    targets.push({
-      id: 345,
-      name: "EKS",
-      provider: "Kubernetes",
-      custom: false,
-      labels: [
-        {
-          name: "EKS",
-          label: "konveyor.io/target=EKS",
-        },
-      ],
-      ruleset: {
-        id: 123232,
-        name: "ruleset",
-        rules: [
-          {
-            name: "rule1",
-          },
-        ],
-      },
-    });
-    targetOrderSetting?.data?.push(345);
-  }
+  // if (!hasMockTarget) {
+  //   targets.push({
+  //     id: 345,
+  //     name: "EKS",
+  //     provider: "Kubernetes",
+  //     custom: false,
+  //     labels: [
+  //       {
+  //         name: "EKS",
+  //         label: "konveyor.io/target=EKS",
+  //       },
+  //     ],
+  //     ruleset: {
+  //       id: 123232,
+  //       name: "ruleset",
+  //       rules: [
+  //         {
+  //           name: "rule1",
+  //         },
+  //       ],
+  //     },
+  //   });
+  //   targetOrderSetting?.data?.push(345);
+  // }
 
   const { watch, setValue, getValues } =
     useFormContext<AnalysisWizardFormValues>();
