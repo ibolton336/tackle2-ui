@@ -183,10 +183,21 @@ export const ApplicationsTable: React.FC = () => {
   const getTask = (application: Application) =>
     tasks.find((task: Task) => task.application?.id === application.id);
 
+  const getCraneTask = (application: Application) => {
+    console.log("tasks", craneTasks);
+    return craneTasks.find(
+      (task: Task) =>
+        task.application?.id === application.id && task.addon === "crane"
+    );
+  };
+
   const { tasks, hasActiveTasks } = useFetchTasks(
     { addon: "analyzer" },
     isAnalyzeModalOpen
   );
+
+  const { tasks: craneTasks, hasActiveTasks: hasActiveCraneTasks } =
+    useFetchTasks({ addon: "crane" }, isAnalyzeModalOpen);
 
   const isTaskCancellable = (application: Application) => {
     const task = getTask(application);
@@ -350,6 +361,7 @@ export const ApplicationsTable: React.FC = () => {
       assessment: "Assessment",
       review: "Review",
       analysis: "Analysis",
+      crane: "Crane",
       tags: "Tags",
       effort: "Effort",
     },
@@ -877,6 +889,9 @@ export const ApplicationsTable: React.FC = () => {
                 {getColumnVisibility("analysis") && (
                   <Th {...getThProps({ columnKey: "analysis" })} width={15} />
                 )}
+                {getColumnVisibility("crane") && (
+                  <Th {...getThProps({ columnKey: "crane" })} width={15} />
+                )}
                 {getColumnVisibility("tags") && (
                   <Th {...getThProps({ columnKey: "tags" })} width={10} />
                 )}
@@ -978,6 +993,19 @@ export const ApplicationsTable: React.FC = () => {
                         >
                           <ApplicationAnalysisStatus
                             state={getTask(application)?.state || "No task"}
+                          />
+                        </Td>
+                      )}
+                      {getColumnVisibility("crane") && (
+                        <Td
+                          width={15}
+                          modifier="truncate"
+                          {...getTdProps({ columnKey: "analysis" })}
+                        >
+                          <ApplicationAnalysisStatus
+                            state={
+                              getCraneTask(application)?.state || "No task"
+                            }
                           />
                         </Td>
                       )}
