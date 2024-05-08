@@ -301,6 +301,7 @@ export const AnalysisWizard: React.FC<IAnalysisWizard> = ({
   const onSubmit = (fieldValues: AnalysisWizardFormValues) => {
     if (taskGroup) {
       const taskgroup = setupTaskgroup(taskGroup, fieldValues);
+      console.log("taskgroup", taskgroup);
       submitTaskgroup(taskgroup);
     }
     updateTaskGroup(null);

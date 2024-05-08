@@ -29,12 +29,12 @@ export const SetTargets: React.FC = () => {
     targets.push({
       id: 345,
       name: "EKS",
-      provider: "Provider",
+      provider: "Kubernetes",
       custom: false,
       labels: [
         {
           name: "EKS",
-          label: "EKS",
+          label: "konveyor.io/target=EKS",
         },
       ],
       ruleset: {
@@ -57,7 +57,7 @@ export const SetTargets: React.FC = () => {
   const selectedTargets = watch("selectedTargets");
   const isMigrationOptimization = values.mode === "migration-optimization";
   const [provider, setProvider] = useState(
-    isMigrationOptimization ? "Provider" : "Java"
+    isMigrationOptimization ? "Kubernetes" : "Java"
   );
 
   const handleOnSelectedCardTargetChange = (selectedLabelName: string) => {
@@ -179,8 +179,8 @@ export const SetTargets: React.FC = () => {
                 { value: "Go", children: "Go" },
               ]),
           {
-            value: "Provider",
-            children: "Provider",
+            value: "Kubernetes",
+            children: "kubernetes",
           },
         ]}
         onChange={(selection) => {

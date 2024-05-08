@@ -40,7 +40,7 @@ const defaultScopes: Map<string, string> = new Map([
 export const Review: React.FC<IReview> = ({ applications, mode }) => {
   const { t } = useTranslation();
 
-  const { watch } = useFormContext<AnalysisWizardFormValues>();
+  const { watch, getValues } = useFormContext<AnalysisWizardFormValues>();
   const {
     formLabels,
     selectedSourceLabels,
@@ -53,8 +53,10 @@ export const Review: React.FC<IReview> = ({ applications, mode }) => {
     autoTaggingEnabled,
     advancedAnalysisEnabled,
   } = watch();
+  const values = getValues();
 
   const hasIncludedPackages = withKnownLibs.includes("select");
+  const isMigrationOptimization = values.mode === "migration-optimization";
 
   return (
     <>
@@ -119,16 +121,18 @@ export const Review: React.FC<IReview> = ({ applications, mode }) => {
             </List>
           </DescriptionListDescription>
         </DescriptionListGroup>
-        <DescriptionListGroup>
-          <DescriptionListTerm>{t("wizard.terms.scope")}</DescriptionListTerm>
-          <DescriptionListDescription id="scope">
-            <List isPlain>
-              {withKnownLibs.split(",").map((scope, index) => (
-                <ListItem key={index}>{defaultScopes.get(scope)}</ListItem>
-              ))}
-            </List>
-          </DescriptionListDescription>
-        </DescriptionListGroup>
+        {!isMigrationOptimization && (
+          <DescriptionListGroup>
+            <DescriptionListTerm>{t("wizard.terms.scope")}</DescriptionListTerm>
+            <DescriptionListDescription id="scope">
+              <List isPlain>
+                {withKnownLibs.split(",").map((scope, index) => (
+                  <ListItem key={index}>{defaultScopes.get(scope)}</ListItem>
+                ))}
+              </List>
+            </DescriptionListDescription>
+          </DescriptionListGroup>
+        )}
         <DescriptionListGroup>
           <DescriptionListTerm>
             {t("wizard.composed.included", {
@@ -164,18 +168,20 @@ export const Review: React.FC<IReview> = ({ applications, mode }) => {
             </List>
           </DescriptionListDescription>
         </DescriptionListGroup>
-        <DescriptionListGroup>
-          <DescriptionListTerm>
-            {t("wizard.terms.customRules")}
-          </DescriptionListTerm>
-          <DescriptionListDescription id="rules">
-            <List isPlain>
-              {customRulesFiles.map((rule, index) => (
-                <ListItem key={index}>{rule.fileName}</ListItem>
-              ))}
-            </List>
-          </DescriptionListDescription>
-        </DescriptionListGroup>
+        {customRulesFiles.length > 0 && (
+          <DescriptionListGroup>
+            <DescriptionListTerm>
+              {t("wizard.terms.customRules")}
+            </DescriptionListTerm>
+            <DescriptionListDescription id="rules">
+              <List isPlain>
+                {customRulesFiles.map((rule, index) => (
+                  <ListItem key={index}>{rule.fileName}</ListItem>
+                ))}
+              </List>
+            </DescriptionListDescription>
+          </DescriptionListGroup>
+        )}
         <DescriptionListGroup>
           <DescriptionListTerm>
             {

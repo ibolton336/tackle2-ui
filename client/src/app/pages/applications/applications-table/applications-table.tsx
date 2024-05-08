@@ -72,7 +72,7 @@ import {
 } from "@app/hooks/table-controls";
 
 // Queries
-import { Application, Assessment, Ref, Task } from "@app/api/models";
+import { Application, Assessment, Ref, Task, Taskgroup } from "@app/api/models";
 import {
   useBulkDeleteApplicationMutation,
   useFetchApplications,
@@ -109,6 +109,7 @@ import { ApplicationFormModal } from "../components/application-form";
 import { ManageColumnsToolbar } from "./components/manage-columns-toolbar";
 import dayjs from "dayjs";
 import { IconWithLabel } from "@app/components/Icons";
+import { useCreateTaskgroupMutation } from "@app/queries/taskgroups";
 
 export const ApplicationsTable: React.FC = () => {
   const { t } = useTranslation();
@@ -121,6 +122,34 @@ export const ApplicationsTable: React.FC = () => {
 
   const [saveApplicationModalState, setSaveApplicationModalState] =
     React.useState<"create" | Application | null>(null);
+
+  /*** crane
+ * 
+ 
+ */
+  const onCreateTaskgroupSuccess = (data: Taskgroup) => {
+    pushNotification({
+      title: "Taskgroup created",
+      variant: "success",
+    });
+  };
+
+  const onCreateTaskgroupError = (error: Error | unknown) => {
+    console.log("Taskgroup creation failed: ", error);
+    pushNotification({
+      title: "Taskgroup creation failed",
+      variant: "danger",
+    });
+  };
+
+  const { mutateAsync: createTaskgroup } = useCreateTaskgroupMutation(
+    onCreateTaskgroupSuccess,
+    onCreateTaskgroupError
+  );
+
+  /**
+   *
+   */
 
   const isCreateUpdateApplicationsModalOpen =
     saveApplicationModalState !== null;
@@ -1079,6 +1108,23 @@ export const ApplicationsTable: React.FC = () => {
                                   },
                                 ]
                               : []),
+                            {
+                              title: t("actions.generateAssets"),
+                              onClick: () => {
+                                // const craneTaskgroup: Taskgroup = {
+                                //   addon: "crane",
+                                //   application: {
+                                //     id: application.id,
+                                //   },
+                                // };
+                                // createTaskgroup({});
+                                // history.push(
+                                //   formatPath(Paths.applicationDetails, {
+                                //     applicationId: application.id,
+                                //   })
+                                // );
+                              },
+                            },
                           ]}
                         />
                       </Td>
