@@ -352,7 +352,7 @@ export const cancelTask = (id: number) =>
   axios.put<Task>(`${TASKS}/${id}/cancel`);
 
 export const createTaskgroupV2 = (obj: Taskgroup | TaskgroupV2) =>
-  axios.post<TaskgroupV2>(TASKGROUPS, obj).then((response) => response.data);
+  axios.post<TaskgroupV2>(TASKS, obj).then((response) => response.data);
 
 export const createTaskgroup = (obj: Taskgroup) =>
   axios.post<Taskgroup>(TASKGROUPS, obj).then((response) => response.data);
