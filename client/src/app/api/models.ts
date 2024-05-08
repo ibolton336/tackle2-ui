@@ -788,7 +788,7 @@ export interface Archetype {
   review?: Ref;
   risk?: Risk;
 }
-export type ProviderType = "Java" | "Go";
+export type ProviderType = "Java" | "Go" | "Kubernetes";
 
 export interface QuestionWithSectionOrder extends Question {
   sectionOrder: number;

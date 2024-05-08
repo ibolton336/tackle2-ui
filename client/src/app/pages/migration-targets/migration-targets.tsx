@@ -179,7 +179,7 @@ export const MigrationTargets: React.FC = () => {
               toggleAriaLabel="Action select dropdown toggle"
               aria-label={"Select provider"}
               value={provider}
-              options={["Java", "Go"]}
+              options={["Java", "Go", "Kubernetes"]}
               onChange={(selection) => {
                 setProvider(selection as ProviderType);
               }}
