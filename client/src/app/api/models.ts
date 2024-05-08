@@ -381,6 +381,16 @@ export interface Taskgroup {
   data: TaskData;
   tasks: TaskgroupTask[];
 }
+export interface TaskgroupV2 {
+  state: string;
+  addon: string;
+  application: {
+    id: number | string;
+  };
+  data: {
+    namespace: string;
+  };
+}
 
 export interface Cache {
   path: string;

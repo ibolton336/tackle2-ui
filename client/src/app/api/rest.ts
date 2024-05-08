@@ -46,6 +46,7 @@ import {
   Archetype,
   InitialAssessment,
   MimeType,
+  TaskgroupV2,
 } from "./models";
 import { serializeRequestParamsForHub } from "@app/hooks/table-controls";
 
@@ -349,6 +350,9 @@ export const deleteTask = (id: number) => axios.delete<Task>(`${TASKS}/${id}`);
 
 export const cancelTask = (id: number) =>
   axios.put<Task>(`${TASKS}/${id}/cancel`);
+
+export const createTaskgroupV2 = (obj: Taskgroup | TaskgroupV2) =>
+  axios.post<TaskgroupV2>(TASKGROUPS, obj).then((response) => response.data);
 
 export const createTaskgroup = (obj: Taskgroup) =>
   axios.post<Taskgroup>(TASKGROUPS, obj).then((response) => response.data);

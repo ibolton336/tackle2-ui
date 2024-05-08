@@ -38,6 +38,7 @@
     "edit": "Edit",
     "export": "Export",
     "filterBy": "Filter by {{what}}",
+    "generateAssets": "Generate assets",
     "import": "Import",
     "logout": "Logout",
     "manageAccount": "User management",

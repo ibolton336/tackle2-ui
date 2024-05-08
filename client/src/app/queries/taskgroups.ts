@@ -1,15 +1,21 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import {
+  createTaskgroupV2,
   createTaskgroup,
   deleteTaskgroup,
   removeFileTaskgroup,
   submitTaskgroup,
   uploadFileTaskgroup,
 } from "@app/api/rest";
-import { IReadFile, Taskgroup } from "@app/api/models";
+import { IReadFile, Taskgroup, TaskgroupV2 } from "@app/api/models";
 import { AxiosError, AxiosResponse } from "axios";
 import { TasksQueryKey } from "./tasks";
+
+export const useCreateTaskgroupV2Mutation = (
+  onSuccess: (data: TaskgroupV2) => void,
+  onError: (err: Error | unknown) => void
+) => useMutation({ mutationFn: createTaskgroupV2, onSuccess, onError });
 
 export const useCreateTaskgroupMutation = (
   onSuccess: (data: Taskgroup) => void,

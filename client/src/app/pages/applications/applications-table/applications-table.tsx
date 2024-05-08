@@ -72,7 +72,13 @@ import {
 } from "@app/hooks/table-controls";
 
 // Queries
-import { Application, Assessment, Ref, Task, Taskgroup } from "@app/api/models";
+import {
+  Application,
+  Assessment,
+  Ref,
+  Task,
+  TaskgroupV2,
+} from "@app/api/models";
 import {
   useBulkDeleteApplicationMutation,
   useFetchApplications,
@@ -109,7 +115,7 @@ import { ApplicationFormModal } from "../components/application-form";
 import { ManageColumnsToolbar } from "./components/manage-columns-toolbar";
 import dayjs from "dayjs";
 import { IconWithLabel } from "@app/components/Icons";
-import { useCreateTaskgroupMutation } from "@app/queries/taskgroups";
+import { useCreateTaskgroupV2Mutation } from "@app/queries/taskgroups";
 
 export const ApplicationsTable: React.FC = () => {
   const { t } = useTranslation();
@@ -127,7 +133,7 @@ export const ApplicationsTable: React.FC = () => {
  * 
  
  */
-  const onCreateTaskgroupSuccess = (data: Taskgroup) => {
+  const onCreateTaskgroupSuccess = () => {
     pushNotification({
       title: "Taskgroup created",
       variant: "success",
@@ -142,7 +148,7 @@ export const ApplicationsTable: React.FC = () => {
     });
   };
 
-  const { mutateAsync: createTaskgroup } = useCreateTaskgroupMutation(
+  const { mutateAsync: createTaskgroup } = useCreateTaskgroupV2Mutation(
     onCreateTaskgroupSuccess,
     onCreateTaskgroupError
   );
@@ -1097,6 +1103,22 @@ export const ApplicationsTable: React.FC = () => {
                                   },
                                 ]
                               : []),
+                            {
+                              title: t("actions.generateAssets"),
+                              onClick: () => {
+                                const craneTaskgroup: TaskgroupV2 = {
+                                  state: "Ready",
+                                  addon: "crane",
+                                  application: {
+                                    id: application.id,
+                                  },
+                                  data: {
+                                    namespace: "konveyor-tackle",
+                                  },
+                                };
+                                createTaskgroup(craneTaskgroup);
+                              },
+                            },
                             ...(applicationWriteAccess
                               ? [
                                   { isSeparator: true },
@@ -1108,23 +1130,6 @@ export const ApplicationsTable: React.FC = () => {
                                   },
                                 ]
                               : []),
-                            {
-                              title: t("actions.generateAssets"),
-                              onClick: () => {
-                                // const craneTaskgroup: Taskgroup = {
-                                //   addon: "crane",
-                                //   application: {
-                                //     id: application.id,
-                                //   },
-                                // };
-                                // createTaskgroup({});
-                                // history.push(
-                                //   formatPath(Paths.applicationDetails, {
-                                //     applicationId: application.id,
-                                //   })
-                                // );
-                              },
-                            },
                           ]}
                         />
                       </Td>
