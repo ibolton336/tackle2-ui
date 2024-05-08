@@ -924,6 +924,10 @@ export const ApplicationsTable: React.FC = () => {
                   (task) => task.application?.id === application.id
                 );
 
+                const hasExistingCraneTask = craneTasks.some(
+                  (task) => task.application?.id === application.id
+                );
+
                 return (
                   <Tr
                     key={application.name}
@@ -1147,6 +1151,18 @@ export const ApplicationsTable: React.FC = () => {
                                 createTaskgroup(craneTaskgroup);
                               },
                             },
+                            ...(analysesReadAccess && hasExistingCraneTask
+                              ? [
+                                  {
+                                    title: t("actions.craneDetails"),
+                                    onClick: () =>
+                                      setTaskToView({
+                                        name: application.name,
+                                        task: getCraneTask(application)?.id,
+                                      }),
+                                  },
+                                ]
+                              : []),
                             ...(applicationWriteAccess
                               ? [
                                   { isSeparator: true },
@@ -1211,7 +1227,7 @@ export const ApplicationsTable: React.FC = () => {
           />
         )}
         <SimpleDocumentViewerModal
-          title={`Analysis details for ${taskToView?.name}`}
+          title={`${taskToView?.name} Details`}
           documentId={taskToView?.task}
           onClose={() => setTaskToView(undefined)}
         />
