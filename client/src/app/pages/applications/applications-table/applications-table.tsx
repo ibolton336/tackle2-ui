@@ -1196,7 +1196,8 @@ export const ApplicationsTable: React.FC = () => {
           archetypes={archetypes}
           onCloseClick={clearActiveItem}
           onEditClick={() => setSaveApplicationModalState(activeItem)}
-          task={activeItem ? getTask(activeItem) : null}
+          analysisTask={activeItem ? getTask(activeItem) : null}
+          craneTask={activeItem ? getCraneTask(activeItem) : null}
         />
         <TaskGroupProvider>
           <AnalysisWizard

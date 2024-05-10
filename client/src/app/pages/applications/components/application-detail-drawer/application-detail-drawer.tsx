@@ -14,34 +14,22 @@ import {
   Bullseye,
   List,
   ListItem,
-  Button,
   DescriptionList,
   DescriptionListDescription,
   DescriptionListGroup,
   DescriptionListTerm,
-  Divider,
-  Tooltip,
   Label,
   LabelGroup,
 } from "@patternfly/react-core";
 import spacing from "@patternfly/react-styles/css/utilities/Spacing/spacing";
-import CheckCircleIcon from "@patternfly/react-icons/dist/esm/icons/check-circle-icon";
-import ExclamationCircleIcon from "@patternfly/react-icons/dist/esm/icons/exclamation-circle-icon";
 
 import {
   Application,
-  Identity,
   Task,
-  MimeType,
   Ref,
   Archetype,
   AssessmentWithSectionOrder,
 } from "@app/api/models";
-import { COLOR_HEX_VALUES_BY_NAME } from "@app/Constants";
-import { useFetchFacts } from "@app/queries/facts";
-import { useFetchIdentities } from "@app/queries/identities";
-import { useSetting } from "@app/queries/settings";
-import { getKindIdByRef } from "@app/utils/model-utils";
 
 import {
   getDependenciesUrlFilteredByAppName,
@@ -52,28 +40,27 @@ import {
   PageDrawerContent,
 } from "@app/components/PageDrawerContext";
 import { EmptyTextMessage } from "@app/components/EmptyTextMessage";
-import { SimpleDocumentViewerModal } from "@app/components/SimpleDocumentViewer";
 import { LabelsFromItems } from "@app/components/labels/labels-from-items/labels-from-items";
 import { RiskLabel } from "@app/components/RiskLabel";
 import { ReviewFields } from "@app/components/detail-drawer/review-fields";
 
 import { ApplicationTags } from "../application-tags";
 import { AssessedArchetypes } from "./components/assessed-archetypes";
-import DownloadButton from "./components/download-button";
 import { ApplicationDetailFields } from "./application-detail-fields";
-import { ApplicationFacts } from "./application-facts";
+import { ReportsTab } from "./reports-tab";
 
 export interface IApplicationDetailDrawerProps
   extends Pick<IPageDrawerContentProps, "onCloseClick"> {
   application: Application | null;
-  task: Task | undefined | null;
+  analysisTask: Task | undefined | null;
+  craneTask: Task | undefined | null;
   applications?: Application[];
   assessments?: AssessmentWithSectionOrder[];
   archetypes?: Archetype[];
   onEditClick: () => void;
 }
 
-enum TabKey {
+export enum DetailDrawerTabKey {
   Details = 0,
   Tags,
   Reports,
@@ -88,31 +75,16 @@ export const ApplicationDetailDrawer: React.FC<
   application,
   assessments,
   archetypes,
-  task,
+  analysisTask,
+  craneTask,
   onEditClick,
 }) => {
   const { t } = useTranslation();
-  const [activeTabKey, setActiveTabKey] = React.useState<TabKey>(
-    TabKey.Details
+  const [activeTabKey, setActiveTabKey] = React.useState<DetailDrawerTabKey>(
+    DetailDrawerTabKey.Details
   );
 
-  const isTaskRunning = task?.state === "Running";
-
-  const { identities } = useFetchIdentities();
-  const { facts, isFetching } = useFetchFacts(application?.id);
-
-  const [taskIdToView, setTaskIdToView] = React.useState<number>();
-
-  let matchingSourceCredsRef: Identity | undefined;
-  let matchingMavenCredsRef: Identity | undefined;
-  if (application && identities) {
-    matchingSourceCredsRef = getKindIdByRef(identities, application, "source");
-    matchingMavenCredsRef = getKindIdByRef(identities, application, "maven");
-  }
-
-  const notAvailable = <EmptyTextMessage message={t("terms.notAvailable")} />;
-
-  const enableDownloadSetting = useSetting("download.html.enabled");
+  const isTaskRunning = analysisTask?.state === "Running";
 
   const reviewedArchetypes =
     application?.archetypes
@@ -143,11 +115,13 @@ export const ApplicationDetailDrawer: React.FC<
       <div>
         <Tabs
           activeKey={activeTabKey}
-          onSelect={(_event, tabKey) => setActiveTabKey(tabKey as TabKey)}
+          onSelect={(_event, tabKey) =>
+            setActiveTabKey(tabKey as DetailDrawerTabKey)
+          }
           className={spacing.mtLg}
         >
           <Tab
-            eventKey={TabKey.Details}
+            eventKey={DetailDrawerTabKey.Details}
             title={<TabTitleText>{t("terms.details")}</TabTitleText>}
           >
             <TextContent className={`${spacing.mtMd} ${spacing.mbMd}`}>
@@ -273,7 +247,10 @@ export const ApplicationDetailDrawer: React.FC<
             </>
           </Tab>
 
-          <Tab eventKey={TabKey.Tags} title={<TabTitleText>Tags</TabTitleText>}>
+          <Tab
+            eventKey={DetailDrawerTabKey.Tags}
+            title={<TabTitleText>Tags</TabTitleText>}
+          >
             {application && isTaskRunning ? (
               <Bullseye className={spacing.mtLg}>
                 <TextContent>
@@ -290,170 +267,14 @@ export const ApplicationDetailDrawer: React.FC<
 
             {application ? <ApplicationTags application={application} /> : null}
           </Tab>
+          <ReportsTab
+            application={application}
+            analysisTask={analysisTask}
+            craneTask={craneTask}
+          />
 
           <Tab
-            eventKey={TabKey.Reports}
-            title={<TabTitleText>{t("terms.reports")}</TabTitleText>}
-          >
-            <TextContent className={spacing.mtMd}>
-              <Title headingLevel="h3" size="md">
-                Credentials
-              </Title>
-              {matchingSourceCredsRef && matchingMavenCredsRef ? (
-                <Text component="small">
-                  <CheckCircleIcon color="green" />
-                  <span className={spacing.mlSm}>Source and Maven</span>
-                </Text>
-              ) : matchingMavenCredsRef ? (
-                <Text component="small">
-                  <CheckCircleIcon color="green" />
-                  <span className={spacing.mlSm}>Maven</span>
-                </Text>
-              ) : matchingSourceCredsRef ? (
-                <Text component="small">
-                  <CheckCircleIcon color="green" />
-                  <span className={spacing.mlSm}>Source</span>
-                </Text>
-              ) : (
-                notAvailable
-              )}
-              <Title headingLevel="h3" size="md">
-                Analysis
-              </Title>
-              {task?.state === "Succeeded" && application ? (
-                <>
-                  <DescriptionList
-                    isHorizontal
-                    columnModifier={{ default: "2Col" }}
-                  >
-                    <DescriptionListGroup>
-                      <DescriptionListTerm>Details</DescriptionListTerm>
-                      <DescriptionListDescription>
-                        <Tooltip content="View the analysis task details">
-                          <Button
-                            icon={
-                              <span className={spacing.mrXs}>
-                                <ExclamationCircleIcon
-                                  color={COLOR_HEX_VALUES_BY_NAME.blue}
-                                ></ExclamationCircleIcon>
-                              </span>
-                            }
-                            type="button"
-                            variant="link"
-                            onClick={() => setTaskIdToView(task.id)}
-                            className={spacing.ml_0}
-                            style={{ margin: "0", padding: "0" }}
-                          >
-                            View analysis details
-                          </Button>
-                        </Tooltip>
-                      </DescriptionListDescription>
-                      <DescriptionListTerm>Download</DescriptionListTerm>
-                      <DescriptionListDescription>
-                        <Tooltip
-                          content={
-                            enableDownloadSetting.data
-                              ? "Click to download TAR file with HTML static analysis report"
-                              : "Download TAR file with HTML static analysis report is disabled by administrator"
-                          }
-                          position="top"
-                        >
-                          <DownloadButton
-                            application={application}
-                            mimeType={MimeType.TAR}
-                            isDownloadEnabled={enableDownloadSetting.data}
-                          >
-                            HTML
-                          </DownloadButton>
-                        </Tooltip>
-                        {" | "}
-                        <Tooltip
-                          content={
-                            enableDownloadSetting.data
-                              ? "Click to download YAML file with static analysis report"
-                              : "Download YAML file with static analysis report is disabled by administrator"
-                          }
-                          position="top"
-                        >
-                          <DownloadButton
-                            application={application}
-                            mimeType={MimeType.YAML}
-                            isDownloadEnabled={enableDownloadSetting.data}
-                          >
-                            YAML
-                          </DownloadButton>
-                        </Tooltip>
-                      </DescriptionListDescription>
-                    </DescriptionListGroup>
-                  </DescriptionList>
-                  <Divider className={spacing.mtMd}></Divider>
-                </>
-              ) : task?.state === "Failed" ? (
-                task ? (
-                  <>
-                    <Button
-                      icon={
-                        <span className={spacing.mrXs}>
-                          <ExclamationCircleIcon
-                            color={COLOR_HEX_VALUES_BY_NAME.red}
-                          ></ExclamationCircleIcon>
-                        </span>
-                      }
-                      type="button"
-                      variant="link"
-                      onClick={() => setTaskIdToView(task.id)}
-                      className={spacing.ml_0}
-                      style={{ margin: "0", padding: "0" }}
-                    >
-                      Analysis details
-                    </Button>
-                  </>
-                ) : (
-                  <span className={spacing.mlSm}>
-                    <ExclamationCircleIcon
-                      color={COLOR_HEX_VALUES_BY_NAME.red}
-                    ></ExclamationCircleIcon>
-                    Failed
-                  </span>
-                )
-              ) : (
-                <>
-                  {task ? (
-                    <Button
-                      icon={
-                        <span className={spacing.mrXs}>
-                          <ExclamationCircleIcon
-                            color={COLOR_HEX_VALUES_BY_NAME.blue}
-                          ></ExclamationCircleIcon>
-                        </span>
-                      }
-                      type="button"
-                      variant="link"
-                      onClick={() => setTaskIdToView(task?.id)}
-                      className={spacing.ml_0}
-                      style={{ margin: "0", padding: "0" }}
-                    >
-                      Analysis details
-                    </Button>
-                  ) : (
-                    notAvailable
-                  )}
-                </>
-              )}
-              <SimpleDocumentViewerModal
-                title={`Analysis details for ${application?.name}`}
-                documentId={taskIdToView}
-                onClose={() => {
-                  setTaskIdToView(undefined);
-                }}
-              />
-            </TextContent>
-            {!isFetching && !!facts.length && (
-              <ApplicationFacts facts={facts} />
-            )}
-          </Tab>
-          <Tab
-            eventKey={TabKey.Reviews}
+            eventKey={DetailDrawerTabKey.Reviews}
             title={<TabTitleText>{t("terms.review")}</TabTitleText>}
           >
             <ReviewFields application={application} />
