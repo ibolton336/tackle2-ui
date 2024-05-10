@@ -1,4 +1,4 @@
-import { COLOR_HEX_VALUES_BY_NAME } from "@app/Constants";
+import { COLOR_HEX_VALUES_BY_NAME, isAuthRequired } from "@app/Constants";
 import { Application, Task, Identity } from "@app/api/models";
 import { SimpleDocumentViewerModal } from "@app/components/SimpleDocumentViewer";
 import {
@@ -28,6 +28,7 @@ import ExclamationCircleIcon from "@patternfly/react-icons/dist/js/icons/exclama
 import { MimeType } from "@app/api/models";
 import { useFetchDeploymentByID } from "@app/queries/deployments";
 import ExternalLink from "@app/components/ExternalLink";
+import keycloak from "@app/keycloak";
 
 export interface ReportsTabProps {
   application: Application | null;
@@ -41,6 +42,8 @@ export const ReportsTab: React.FC<ReportsTabProps> = ({
   analysisTask,
   craneTask,
 }) => {
+  const token = keycloak;
+  console.log("token", token);
   const { t } = useTranslation();
   const { identities } = useFetchIdentities();
   const { facts, isFetching } = useFetchFacts(application?.id);
@@ -231,7 +234,13 @@ export const ReportsTab: React.FC<ReportsTabProps> = ({
             </Title>
           </TextContent>
           <Text component="small">
-            <ExternalLink href={`/hub/applications/${application?.id}/bucket/`}>
+            <ExternalLink
+              href={
+                isAuthRequired
+                  ? `/hub/applications/${application?.id}/bucket/crane/?token=${token}`
+                  : `/hub/applications/${application?.id}/bucket/crane/`
+              }
+            >
               Output
             </ExternalLink>
           </Text>
