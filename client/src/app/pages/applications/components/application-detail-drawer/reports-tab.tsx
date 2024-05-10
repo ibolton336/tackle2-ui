@@ -211,7 +211,7 @@ export const ReportsTab: React.FC<ReportsTabProps> = ({
         />
       </TextContent>
       {!isFetching && !!facts.length && <ApplicationFacts facts={facts} />}
-      {deployment ? (
+      {!deployment ? (
         <>
           <Divider className={spacing.mtMd}></Divider>
           <TextContent className={spacing.mtMd}>
@@ -221,7 +221,7 @@ export const ReportsTab: React.FC<ReportsTabProps> = ({
           </TextContent>
           <Text component="small">
             <span className={spacing.mlSm}>
-              {deployment?.platform?.name || "N/A"}
+              {/* {deployment?.platform?.name || "N/A"} */}
             </span>
           </Text>
 
@@ -231,9 +231,7 @@ export const ReportsTab: React.FC<ReportsTabProps> = ({
             </Title>
           </TextContent>
           <Text component="small">
-            <ExternalLink
-              href={`/hub/applications/${application?.id}/bucket/crane/`}
-            >
+            <ExternalLink href={`/hub/applications/${application?.id}/bucket/`}>
               Output
             </ExternalLink>
           </Text>
