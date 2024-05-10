@@ -108,6 +108,8 @@ export const ARCHETYPES = HUB + "/archetypes";
 
 export const ASSESSMENTS = HUB + "/assessments";
 
+export const DEPLOYMENTS = HUB + "/deployments";
+
 const jsonHeaders: RawAxiosRequestHeaders = {
   Accept: "application/json",
 };
@@ -708,6 +710,15 @@ export const getFacts = (
   //TODO: Address this when moving to structured facts api
   id
     ? axios.get(`${APPLICATIONS}/${id}/facts`).then((response) => response.data)
+    : Promise.reject();
+
+// Deployments
+
+export const getDeploymentByID = (
+  id: number | string | undefined
+): Promise<any> =>
+  id
+    ? axios.get(`${DEPLOYMENTS}/${id}`).then((response) => response.data)
     : Promise.reject();
 
 // Proxies

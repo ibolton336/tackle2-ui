@@ -29,6 +29,7 @@ import { useFetchIdentities } from "@app/queries/identities";
 import CheckCircleIcon from "@patternfly/react-icons/dist/js/icons/check-circle-icon";
 import ExclamationCircleIcon from "@patternfly/react-icons/dist/js/icons/exclamation-circle-icon";
 import { MimeType } from "@app/api/models";
+import { useFetchDeploymentByID } from "@app/queries/deployments";
 
 export interface ReportsTabProps {
   application: Application | null;
@@ -45,6 +46,7 @@ export const ReportsTab: React.FC<ReportsTabProps> = ({
   const { t } = useTranslation();
   const { identities } = useFetchIdentities();
   const { facts, isFetching } = useFetchFacts(application?.id);
+  const { deployment } = useFetchDeploymentByID(application?.deployment?.id);
 
   const [taskIdToView, setTaskIdToView] = React.useState<number>();
 

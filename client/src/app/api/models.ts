@@ -138,6 +138,38 @@ export interface Application {
   risk?: Risk;
   confidence?: number;
   effort?: number;
+  deployment?: Ref | null;
+}
+// [
+//   {
+//     "id": 1,
+//     "createUser": "admin.noauth",
+//     "updateUser": "",
+//     "createTime": "2024-05-03T19:14:30.418063753Z",
+//     "application": {
+//       "id": 1,
+//       "name": "Guestbook"
+//     },
+//     "identity": {
+//       "id": 1,
+//       "name": "crane-demo"
+//     },
+//     "platform": {
+//       "id": 1,
+//       "name": "eks-jmontleo"
+//     },
+//     "locator": "slucidi"
+//   }
+// ]
+export interface Deployment {
+  id: number;
+  // createUser: string;
+  // updateUser: string;
+  // createTime: string;
+  application: Ref;
+  identity: Ref;
+  platform: Ref;
+  locator: string;
 }
 
 export interface Review {
