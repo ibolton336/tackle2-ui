@@ -1,4 +1,4 @@
-import { COLOR_HEX_VALUES_BY_NAME, isAuthRequired } from "@app/Constants";
+import { COLOR_HEX_VALUES_BY_NAME } from "@app/Constants";
 import { Application, Task, Identity } from "@app/api/models";
 import { SimpleDocumentViewerModal } from "@app/components/SimpleDocumentViewer";
 import {
@@ -214,7 +214,7 @@ export const ReportsTab: React.FC<ReportsTabProps> = ({
         />
       </TextContent>
       {!isFetching && !!facts.length && <ApplicationFacts facts={facts} />}
-      {!deployment ? (
+      {deployment ? (
         <>
           <Divider className={spacing.mtMd}></Divider>
           <TextContent className={spacing.mtMd}>
@@ -224,7 +224,7 @@ export const ReportsTab: React.FC<ReportsTabProps> = ({
           </TextContent>
           <Text component="small">
             <span className={spacing.mlSm}>
-              {/* {deployment?.platform?.name || "N/A"} */}
+              {deployment?.platform?.name || "N/A"}
             </span>
           </Text>
 
@@ -235,11 +235,12 @@ export const ReportsTab: React.FC<ReportsTabProps> = ({
           </TextContent>
           <Text component="small">
             <ExternalLink
-              href={
-                isAuthRequired
-                  ? `/hub/applications/${application?.id}/bucket/crane/?token=${token}`
-                  : `/hub/applications/${application?.id}/bucket/crane/`
-              }
+              // href={
+              //   isAuthRequired
+              //     ? `/hub/applications/${application?.id}/bucket/crane/?token=${token}`
+              //     : `/hub/applications/${application?.id}/bucket/crane/`
+              // }
+              href={`/hub/applications/${application?.id}/bucket/crane/`}
             >
               Output
             </ExternalLink>
