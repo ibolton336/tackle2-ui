@@ -2,8 +2,6 @@ import { COLOR_HEX_VALUES_BY_NAME } from "@app/Constants";
 import { Application, Task, Identity } from "@app/api/models";
 import { SimpleDocumentViewerModal } from "@app/components/SimpleDocumentViewer";
 import {
-  Tab,
-  TabTitleText,
   TextContent,
   Text,
   Title,
@@ -18,7 +16,6 @@ import {
 import React from "react";
 import { ApplicationFacts } from "./application-facts";
 import DownloadButton from "./components/download-button";
-import { DetailDrawerTabKey } from "./application-detail-drawer";
 import { useTranslation } from "react-i18next";
 import spacing from "@patternfly/react-styles/css/utilities/Spacing/spacing";
 import { EmptyTextMessage } from "@app/components/EmptyTextMessage";
@@ -30,6 +27,7 @@ import CheckCircleIcon from "@patternfly/react-icons/dist/js/icons/check-circle-
 import ExclamationCircleIcon from "@patternfly/react-icons/dist/js/icons/exclamation-circle-icon";
 import { MimeType } from "@app/api/models";
 import { useFetchDeploymentByID } from "@app/queries/deployments";
+import ExternalLink from "@app/components/ExternalLink";
 
 export interface ReportsTabProps {
   application: Application | null;
@@ -61,10 +59,7 @@ export const ReportsTab: React.FC<ReportsTabProps> = ({
   const enableDownloadSetting = useSetting("download.html.enabled");
 
   return (
-    <Tab
-      eventKey={DetailDrawerTabKey.Reports}
-      title={<TabTitleText>{t("terms.reports")}</TabTitleText>}
-    >
+    <>
       <TextContent className={spacing.mtMd}>
         <Title headingLevel="h3" size="md">
           Credentials
@@ -216,6 +211,34 @@ export const ReportsTab: React.FC<ReportsTabProps> = ({
         />
       </TextContent>
       {!isFetching && !!facts.length && <ApplicationFacts facts={facts} />}
-    </Tab>
+      {deployment ? (
+        <>
+          <Divider className={spacing.mtMd}></Divider>
+          <TextContent className={spacing.mtMd}>
+            <Title headingLevel="h3" size="md">
+              Deployment
+            </Title>
+          </TextContent>
+          <Text component="small">
+            <span className={spacing.mlSm}>
+              {deployment?.platform?.name || "N/A"}
+            </span>
+          </Text>
+
+          <TextContent className={spacing.mtMd}>
+            <Title headingLevel="h3" size="md">
+              Crane output
+            </Title>
+          </TextContent>
+          <Text component="small">
+            <ExternalLink
+              href={`/hub/applications/${application?.id}/bucket/crane/`}
+            >
+              Output
+            </ExternalLink>
+          </Text>
+        </>
+      ) : null}
+    </>
   );
 };

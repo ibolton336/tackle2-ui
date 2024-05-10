@@ -16,7 +16,7 @@ export const useFetchDeploymentByID = (id: number | string | undefined) => {
   });
 
   return {
-    deployment: data || [],
+    deployment: data || null,
     isFetching: isLoading,
     fetchError: error,
     refetch,

@@ -47,6 +47,7 @@ import {
   InitialAssessment,
   MimeType,
   TaskgroupV2,
+  Deployment,
 } from "./models";
 import { serializeRequestParamsForHub } from "@app/hooks/table-controls";
 
@@ -716,7 +717,7 @@ export const getFacts = (
 
 export const getDeploymentByID = (
   id: number | string | undefined
-): Promise<any> =>
+): Promise<Deployment> =>
   id
     ? axios.get(`${DEPLOYMENTS}/${id}`).then((response) => response.data)
     : Promise.reject();

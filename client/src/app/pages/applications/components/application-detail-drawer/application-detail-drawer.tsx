@@ -267,11 +267,16 @@ export const ApplicationDetailDrawer: React.FC<
 
             {application ? <ApplicationTags application={application} /> : null}
           </Tab>
-          <ReportsTab
-            application={application}
-            analysisTask={analysisTask}
-            craneTask={craneTask}
-          />
+          <Tab
+            eventKey={DetailDrawerTabKey.Reports}
+            title={<TabTitleText>{t("terms.reports")}</TabTitleText>}
+          >
+            <ReportsTab
+              application={application}
+              analysisTask={analysisTask}
+              craneTask={craneTask}
+            />
+          </Tab>
 
           <Tab
             eventKey={DetailDrawerTabKey.Reviews}
