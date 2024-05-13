@@ -515,7 +515,7 @@
     },
     "label": {
       "advancedOptions": "Specify additional options here.",
-      "analysisSource": "Source for analysis",
+      "analysisSource": "Type of analysis",
       "customRules": "Include rules for the analysis by uploading or importing from a repository.",
       "excludePackages": "Exclude packages",
       "noCustomRules": "No custom rules available",

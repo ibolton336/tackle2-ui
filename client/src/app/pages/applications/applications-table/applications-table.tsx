@@ -361,7 +361,7 @@ export const ApplicationsTable: React.FC = () => {
       assessment: "Assessment",
       review: "Review",
       analysis: "Analysis",
-      crane: "Crane",
+      crane: "Asset Generation",
       tags: "Tags",
       effort: "Effort",
     },
