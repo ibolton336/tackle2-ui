@@ -37,7 +37,10 @@ export const RepositoriesGit: React.FC = () => {
               <Alert
                 variant="danger"
                 isInline
-                title={gitInsecureSetting.error as string}
+                title={
+                  (gitInsecureSetting.error as Error)?.message ||
+                  "Unknown error"
+                }
               />
             )}
             <Switch

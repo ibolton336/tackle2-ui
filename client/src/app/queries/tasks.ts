@@ -1,4 +1,10 @@
-import { keepPreviousData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 
 import { DEFAULT_REFETCH_INTERVAL } from "@app/Constants";
 import {
@@ -65,7 +71,7 @@ const calculateSyntheticTaskDashboardState = (
 };
 
 export const useFetchTaskDashboard = (refetchDisabled: boolean = false) => {
-  const { isPending, isFetching, error, refetch, data } = useQuery({
+  const { _isPending, isFetching, error, refetch, data } = useQuery({
     queryKey: [TasksQueryKey, "/report/dashboard"],
     queryFn: getTasksDashboard,
     select: (tasks) =>
@@ -93,12 +99,13 @@ export const useInfiniteServerTasks = (
 ) => {
   // usually the params are part of the key
   // infinite query tracks the actual params for all pages under one key
-  // eslint-disable-next-line @tanstack/query/exhaustive-deps
+
   return useInfiniteQuery({
     queryKey: [TasksQueryKey],
 
-    queryFn: async ({ pageParam = initialParams }) =>
-      await getServerTasks(pageParam),
+    queryFn: async ({ pageParam }) => await getServerTasks(pageParam),
+
+    initialPageParam: initialParams,
 
     getNextPageParam: (lastPage) => {
       const pageNumber = lastPage?.params.page?.pageNumber ?? 0;
@@ -127,7 +134,7 @@ export const useInfiniteServerTasks = (
     },
 
     refetchInterval,
-    placeholderData: keepPreviousData
+    placeholderData: keepPreviousData,
   });
 };
 
@@ -135,7 +142,7 @@ export const useServerTasks = <D, TaskType extends Task<D> = Task<D>>(
   params: HubRequestParams,
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
-  const { data, isPending, error, refetch, isFetching } = useQuery({
+  const { data, _isPending, error, refetch, isFetching } = useQuery({
     queryKey: [TasksQueryKey, params],
     queryFn: async () => await getServerTasks(params),
 
@@ -147,7 +154,7 @@ export const useServerTasks = <D, TaskType extends Task<D> = Task<D>>(
     },
 
     refetchInterval,
-    placeholderData: keepPreviousData
+    placeholderData: keepPreviousData,
   });
 
   return {
@@ -229,7 +236,7 @@ export const useFetchTaskByIdAndFormat = ({
   merged?: boolean;
   enabled?: boolean;
 }) => {
-  const { isPending, isFetching, error, data, refetch } = useQuery({
+  const { _isPending, isFetching, error, data, refetch } = useQuery({
     queryKey: [TaskByIDQueryKey, taskId, format, merged],
     queryFn: () =>
       taskId ? getTaskByIdAndFormat(taskId, format, merged) : undefined,
@@ -251,7 +258,7 @@ export const useFetchTaskAttachmentById = ({
   attachmentId?: number;
   enabled?: boolean;
 }) => {
-  const { isPending, isFetching, error, data, refetch } = useQuery({
+  const { _isPending, isFetching, error, data, refetch } = useQuery({
     queryKey: [TaskAttachmentByIDQueryKey, attachmentId],
     queryFn: () => (attachmentId ? getTextFileById(attachmentId) : undefined),
     enabled,
@@ -269,7 +276,7 @@ export const useFetchTaskByID = (
   taskId?: number,
   refetchInterval: number | false = false
 ) => {
-  const { isPending, isFetching, error, data, refetch } = useQuery({
+  const { _isPending, isFetching, error, data, refetch } = useQuery({
     queryKey: [TaskByIDQueryKey, taskId],
     queryFn: () => (taskId ? getTaskById(taskId) : null),
     select: (task: Task<object> | null) =>

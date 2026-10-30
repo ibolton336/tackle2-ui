@@ -19,7 +19,7 @@ const QuestionnaireByIdQueryKey = "questionnaireById";
 export const useFetchQuestionnaires = (
   refetchInterval: number | false = false
 ) => {
-  const { isPending, data, error, isFetching } = useQuery({
+  const { _isPending, data, error, isFetching } = useQuery({
     queryKey: [QuestionnairesQueryKey],
     queryFn: getQuestionnaires,
     refetchInterval,
@@ -72,7 +72,7 @@ export const useFetchQuestionnaireById = (
   id: number | string,
   refetchInterval: number | false = false
 ) => {
-  const { data, isPending, error, isFetching } = useQuery({
+  const { data, _isPending, error, isFetching } = useQuery({
     queryKey: [QuestionnaireByIdQueryKey, id],
     queryFn: () => getQuestionnaireById(id),
     refetchInterval,

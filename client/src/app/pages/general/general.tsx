@@ -39,7 +39,10 @@ export const General: React.FC = () => {
               <Alert
                 variant="danger"
                 isInline
-                title={enableDownloadSetting.error as string}
+                title={
+                  (enableDownloadSetting.error as Error)?.message ||
+                  "Unknown error"
+                }
               />
             )}
             <Form className={spacing.mMd}>

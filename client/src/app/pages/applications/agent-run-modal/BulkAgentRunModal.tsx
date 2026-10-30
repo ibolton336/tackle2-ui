@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import { AxiosError } from "axios";
 import { useTranslation } from "react-i18next";
 import {
   Alert,
@@ -179,7 +180,7 @@ export const BulkAgentRunModal: React.FC<BulkAgentRunModalProps> = ({
             title={t("agentic.bulkRun.failedLoadWorkflows")}
             style={{ marginBottom: "1rem" }}
           >
-            {getAxiosErrorMessage(workflowsError)}
+            {getAxiosErrorMessage(workflowsError as AxiosError)}
           </Alert>
         )}
         {submitError && (

@@ -11,8 +11,12 @@ export const useFetchRoles = () => {
     queryKey: [RolesQueryKey],
     queryFn: getRoles,
   });
-  return { roles: data ?? [],
-    isLoading: isPending, isPending, fetchError: error };
+  return {
+    roles: data ?? [],
+    isLoading: isPending,
+    isPending,
+    fetchError: error,
+  };
 };
 
 export const useCreateRoleMutation = (

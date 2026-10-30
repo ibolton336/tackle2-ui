@@ -11,6 +11,10 @@ export const useFetchScopes = () => {
     queryKey: [ScopesQueryKey],
     queryFn: getScopes,
   });
-  return { scopes: data ?? [],
-    isLoading: isPending, isPending, fetchError: error };
+  return {
+    scopes: data ?? [],
+    isLoading: isPending,
+    isPending,
+    fetchError: error,
+  };
 };

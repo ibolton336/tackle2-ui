@@ -36,7 +36,10 @@ export const RepositoriesSvn: React.FC = () => {
               <Alert
                 variant="danger"
                 isInline
-                title={svnInsecureSetting.error as string}
+                title={
+                  (svnInsecureSetting.error as Error)?.message ||
+                  "Unknown error"
+                }
               />
             )}
             <Switch

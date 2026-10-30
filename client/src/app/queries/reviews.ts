@@ -20,7 +20,7 @@ const reviewsQueryKey = "reviews";
 export const useFetchReviews = (
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
-  const { data, isPending, isFetching, error } = useQuery({
+  const { data, _isPending, isFetching, error } = useQuery({
     queryKey: [reviewsQueryKey],
     queryFn: getReviews,
     refetchInterval,

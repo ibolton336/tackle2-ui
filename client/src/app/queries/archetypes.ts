@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { objectify } from "radash";
@@ -22,16 +22,20 @@ export const useFetchArchetypes = (
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
   const queryClient = useQueryClient();
-  const { data, isPending, isFetching, isSuccess, error, refetch } = useQuery({
+  const { data, _isPending, isFetching, isSuccess, error, refetch } = useQuery({
     queryKey: [ARCHETYPES_QUERY_KEY],
     queryFn: getArchetypes,
-    onSuccess: () => {
+    refetchInterval,
+  });
+
+  // Implement the onSuccess behavior with useEffect
+  useEffect(() => {
+    if (isSuccess && !isFetching) {
       queryClient.invalidateQueries({
         queryKey: [assessmentsByItemIdQueryKey],
       });
-    },
-    refetchInterval,
-  });
+    }
+  }, [isSuccess, isFetching, queryClient]);
 
   const archetypesById = useMemo(() => {
     return !data ? {} : objectify(data, ({ id }) => id);
@@ -51,7 +55,7 @@ export const useFetchArchetypeById = (
   id?: number | string,
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
-  const { data, isPending, isFetching, error } = useQuery({
+  const { data, _isPending, isFetching, error } = useQuery({
     queryKey: [ARCHETYPE_QUERY_KEY, String(id)],
     queryFn: () =>
       id === undefined ? Promise.resolve(undefined) : getArchetypeById(id),

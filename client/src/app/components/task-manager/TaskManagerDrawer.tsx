@@ -256,7 +256,7 @@ const useTaskManagerData = () => {
         ?.flatMap((data) => data?.data ?? [])
         ?.map(
           (task) =>
-            (({
+            ({
               id: task.id ?? -1,
               createUser: task.createUser ?? "",
               updateUser: task.updateUser ?? "",
@@ -274,8 +274,8 @@ const useTaskManagerData = () => {
 
               // TODO: Add any checks that could be needed later...
               //  - isCancelable (does the current user own the task? other things to check?)
-              _: task
-            }) as TaskManagerTask)
+              _: task,
+            }) as TaskManagerTask
         ) ?? [],
     [data]
   );

@@ -1,4 +1,5 @@
 import * as React from "react";
+import { AxiosError } from "axios";
 import { useParams } from "react-router-dom";
 
 import "./questionnaire-page.css";
@@ -24,7 +25,7 @@ const QuestionnairePage: React.FC = () => {
     <QuestionnaireSummary
       summaryData={questionnaire}
       isFetching={isFetchingQuestionnaireById}
-      fetchError={fetchQuestionnaireByIdError}
+      fetchError={fetchQuestionnaireByIdError as AxiosError | null}
       summaryType={SummaryType.Questionnaire}
     />
   );

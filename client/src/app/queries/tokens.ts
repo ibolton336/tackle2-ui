@@ -11,8 +11,12 @@ export const useFetchTokens = () => {
     queryKey: [TokensQueryKey],
     queryFn: getTokens,
   });
-  return { tokens: data ?? [],
-    isLoading: isPending, isPending, fetchError: error };
+  return {
+    tokens: data ?? [],
+    isLoading: isPending,
+    isPending,
+    fetchError: error,
+  };
 };
 
 export const useRevokeTokenMutation = (

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
@@ -43,15 +44,21 @@ export const useFetchMigrationWaves = (
   const { data: applications } = useFetchApplications();
 
   const queryClient = useQueryClient();
-  const { isPending, isFetching, error, refetch, data } = useQuery({
+  const { _isPending, isFetching, isSuccess, error, refetch, data } = useQuery({
     queryKey: [MigrationWavesQueryKey],
     queryFn: getMigrationWaves,
     refetchInterval,
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: [TrackersQueryKey] }),
     select: (waves) =>
       getWavesWithStatus(waves, tickets, stakeholders, applications),
   });
+
+  // Implement onSuccess behavior with useEffect
+  useEffect(() => {
+    if (isSuccess && !isFetching) {
+      queryClient.invalidateQueries({ queryKey: [TrackersQueryKey] });
+    }
+  }, [isSuccess, isFetching, queryClient]);
+
   return {
     migrationWaves: data || [],
     isFetching,

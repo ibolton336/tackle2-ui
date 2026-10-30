@@ -89,7 +89,7 @@ const useFetchReportAll_ = <UI extends WithUiId<API>, API>(
   params: HubRequestParams,
   refetchInterval: number | false
 ): AnalysisQueryResults<UI> => {
-  const { data, isPending, error, refetch, isFetching } = useQuery({
+  const { data, _isPending, error, refetch, isFetching } = useQuery({
     enabled,
     queryKey: [queryKey, params],
     queryFn: () => queryFn(params),
@@ -154,7 +154,7 @@ const useFetchReportApplication_ = <UI extends WithUiId<API>, API>(
   params: HubRequestParams = {},
   refetchInterval: number | false = false
 ): AnalysisQueryResults<UI> => {
-  const { data, isPending, error, refetch, isFetching } = useQuery({
+  const { data, _isPending, error, refetch, isFetching } = useQuery({
     enabled: applicationId !== undefined,
     queryKey: [queryKey, applicationId, params],
     queryFn: () =>
@@ -205,7 +205,7 @@ const useFetchReport_Apps = <API>(
   params: HubRequestParams,
   refetchInterval: number | false
 ): AnalysisQueryResults<API> => {
-  const { data, isPending, error, refetch, isFetching } = useQuery({
+  const { data, _isPending, error, refetch, isFetching } = useQuery({
     queryKey: [queryKey, params],
     queryFn: () => queryFn(params),
     refetchInterval,
@@ -223,7 +223,7 @@ export const useFetchInsight = (
   id?: number,
   refetchInterval: number | false = false
 ): AnalysisQueryResult<AnalysisInsight> => {
-  const { data, isPending, error, refetch, isFetching } = useQuery({
+  const { data, _isPending, error, refetch, isFetching } = useQuery({
     enabled: id !== undefined,
     queryKey: [InsightQueryKey, id],
     queryFn: () =>
@@ -243,7 +243,7 @@ export const useFetchIncidentsForInsight = (
   params: HubRequestParams = {},
   refetchInterval: number | false = false
 ): AnalysisQueryResults<AnalysisIncident> => {
-  const { data, isPending, error, refetch, isFetching } = useQuery({
+  const { data, _isPending, error, refetch, isFetching } = useQuery({
     enabled: insightId !== undefined,
     queryKey: [IncidentsQueryKey, insightId, params],
     queryFn: () =>
@@ -265,7 +265,7 @@ export const useFetchReportInsightFiles = (
   params: HubRequestParams = {},
   refetchInterval: number | false = false
 ): AnalysisQueryResults<WithUiId<AnalysisReportFile>> => {
-  const { data, isPending, error, refetch, isFetching } = useQuery({
+  const { data, _isPending, error, refetch, isFetching } = useQuery({
     enabled: insightId !== undefined,
     queryKey: [InsightFilesQueryKey, insightId, params],
     queryFn: () =>

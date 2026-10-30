@@ -61,7 +61,7 @@ export const useFetchIdentities = (
   refetchInterval: number | false = false,
   enabled: boolean = true
 ) => {
-  const { data, isPending, isSuccess, error, refetch, isFetching } = useQuery({
+  const { data, _isPending, isSuccess, error, refetch, isFetching } = useQuery({
     queryKey: [IdentitiesQueryKey],
     queryFn: getIdentities,
     refetchInterval,

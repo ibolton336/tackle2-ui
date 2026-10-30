@@ -19,7 +19,7 @@ const TagsQueryKey = "tags";
 const TagCategoriesQueryKey = "tagcategories";
 
 export const useFetchTags = (refetchInterval: number | false = false) => {
-  const { data, isPending, isFetching, error, refetch } = useQuery({
+  const { data, _isPending, isFetching, error, refetch } = useQuery({
     queryKey: [TagsQueryKey],
     queryFn: getTags,
     refetchInterval,
@@ -33,7 +33,7 @@ export const useFetchTags = (refetchInterval: number | false = false) => {
 };
 
 export const useFetchTagCategories = (refetchInterval?: number | false) => {
-  const { data, isPending, isFetching, isSuccess, error, refetch } = useQuery({
+  const { data, _isPending, isFetching, isSuccess, error, refetch } = useQuery({
     queryKey: [TagCategoriesQueryKey],
     queryFn: getTagCategories,
     refetchInterval,

@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { AxiosError } from "axios";
 
 import {
   getPlatformCoordinatesSchema,
@@ -12,7 +11,7 @@ const PLATFORM_DISCOVERY_FILTER_SCHEMA_QUERY_KEY =
   "platformDiscoveryFilterSchema";
 
 export const useFetchPlatformCoordinatesSchema = (platformKind?: string) => {
-  const { data, isPending, isSuccess, error } = useQuery({
+  const { data, _isPending, isSuccess, error } = useQuery({
     queryKey: [PLATFORM_COORDINATES_SCHEMA_QUERY_KEY, platformKind],
     queryFn: () =>
       platformKind === undefined
@@ -33,7 +32,7 @@ export const useFetchPlatformCoordinatesSchema = (platformKind?: string) => {
 export const useFetchPlatformDiscoveryFilterSchema = (
   platformKind?: string
 ) => {
-  const { data, isPending, isSuccess, error } = useQuery({
+  const { data, _isPending, isSuccess, error } = useQuery({
     queryKey: [PLATFORM_DISCOVERY_FILTER_SCHEMA_QUERY_KEY, platformKind],
     queryFn: () =>
       platformKind === undefined

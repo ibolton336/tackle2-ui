@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { AxiosError } from "axios";
 
 import { DEFAULT_REFETCH_INTERVAL } from "@app/Constants";
 import { getGateways } from "@app/api/rest";
@@ -15,13 +14,18 @@ export const GATEWAYS_QUERY_KEY = "gateways";
 export const useFetchGateways = (
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
-  const { isPending, error, data, refetch } = useQuery({
+  const { _isPending, error, data, refetch } = useQuery({
     queryKey: [GATEWAYS_QUERY_KEY],
     queryFn: getGateways,
     // Verification flips Ready on its own schedule — keep the page live.
     retry: AGENTIC_QUERY_RETRY,
     refetchInterval: (query) => pollUnlessErrored(query, refetchInterval),
   });
-  return { gateways: data || [],
-    isLoading: isPending, isPending, fetchError: error, refetch };
+  return {
+    gateways: data || [],
+    isLoading: isPending,
+    _isPending,
+    fetchError: error,
+    refetch,
+  };
 };

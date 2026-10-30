@@ -37,8 +37,13 @@ export const useFetchSkillCards = (
     retry: AGENTIC_QUERY_RETRY,
     refetchInterval: (query) => pollUnlessErrored(query, refetchInterval),
   });
-  return { skillCards: data || [],
-    isLoading: isPending, isPending, fetchError: error, refetch };
+  return {
+    skillCards: data || [],
+    isLoading: isPending,
+    isPending,
+    fetchError: error,
+    refetch,
+  };
 };
 
 export const useCreateSkillCardMutation = (

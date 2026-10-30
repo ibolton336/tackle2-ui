@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
@@ -22,13 +23,19 @@ export const useFetchTrackers = (
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
   const queryClient = useQueryClient();
-  const { data, isPending, isFetching, error, refetch } = useQuery({
+  const { data, _isPending, isFetching, isSuccess, error, refetch } = useQuery({
     queryKey: [TrackersQueryKey],
     queryFn: getTrackers,
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: [TicketsQueryKey] }),
     refetchInterval,
   });
+
+  // Implement onSuccess behavior with useEffect
+  useEffect(() => {
+    if (isSuccess && !isFetching) {
+      queryClient.invalidateQueries({ queryKey: [TicketsQueryKey] });
+    }
+  }, [isSuccess, isFetching, queryClient]);
+
   return {
     trackers: data || [],
     isFetching,
@@ -89,14 +96,20 @@ const useFetchTrackerProjects = (
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
   const queryClient = useQueryClient();
-  const { data, isPending, isFetching, error, refetch } = useQuery({
+  const { data, _isPending, isFetching, isSuccess, error, refetch } = useQuery({
     queryKey: [TrackerProjectsQueryKey, { id: trackerId }],
     queryFn: () => getTrackerProjects(trackerId!),
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: [TicketsQueryKey] }),
     enabled: !!trackerId,
     refetchInterval,
   });
+
+  // Implement onSuccess behavior with useEffect
+  useEffect(() => {
+    if (isSuccess && !isFetching) {
+      queryClient.invalidateQueries({ queryKey: [TicketsQueryKey] });
+    }
+  }, [isSuccess, isFetching, queryClient]);
+
   return {
     projects: data || [],
     isFetching,
@@ -111,17 +124,23 @@ const useFetchTrackerProjectIssuetypes = (
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
   const queryClient = useQueryClient();
-  const { data, isPending, isFetching, error, refetch } = useQuery({
+  const { data, _isPending, isFetching, isSuccess, error, refetch } = useQuery({
     queryKey: [
       TrackerProjectIssuetypesQueryKey,
       { id: trackerId, projectId: projectId },
     ],
     queryFn: () => getTrackerProjectIssuetypes(trackerId!, projectId!),
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: [TicketsQueryKey] }),
     enabled: !!trackerId && !!projectId,
     refetchInterval,
   });
+
+  // Implement onSuccess behavior with useEffect
+  useEffect(() => {
+    if (isSuccess && !isFetching) {
+      queryClient.invalidateQueries({ queryKey: [TicketsQueryKey] });
+    }
+  }, [isSuccess, isFetching, queryClient]);
+
   return {
     issuetypes: data || [],
     isFetching,

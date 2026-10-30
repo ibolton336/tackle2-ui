@@ -1,4 +1,5 @@
 import * as React from "react";
+import { AxiosError } from "axios";
 import { useParams } from "react-router-dom";
 
 import QuestionnaireSummary, {
@@ -23,7 +24,7 @@ const AssessmentSummaryPage: React.FC = () => {
     <QuestionnaireSummary
       summaryData={assessment}
       isFetching={isFetchingAssessment}
-      fetchError={fetchAssessmentError}
+      fetchError={fetchAssessmentError as AxiosError | null}
       summaryType={SummaryType.Assessment}
     />
   );

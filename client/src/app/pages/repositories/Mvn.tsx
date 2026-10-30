@@ -64,7 +64,7 @@ export const RepositoriesMvn: React.FC = () => {
     refetch();
   };
 
-  const { mutate: deleteCache, isLoading: isDeleting } = useDeleteCacheMutation(
+  const { mutate: deleteCache, isPending: isDeleting } = useDeleteCacheMutation(
     onHandleCleanSuccess,
     onHandleCleanError
   );
@@ -132,7 +132,10 @@ export const RepositoriesMvn: React.FC = () => {
                   <Alert
                     variant="danger"
                     isInline
-                    title={mvnInsecureSetting.error as string}
+                    title={
+                      (mvnInsecureSetting.error as Error)?.message ||
+                      "Unknown error"
+                    }
                   />
                 )}
                 <Tooltip

@@ -19,7 +19,7 @@ export const useFetchDependencies = (
 ) => {
   const {
     data: dependencies,
-    isPending,
+    isPending: _isPending,
     error,
     refetch,
     isFetching,
@@ -27,7 +27,7 @@ export const useFetchDependencies = (
     queryKey: [DependenciesQueryKey, params],
     queryFn: async () => await getDependencies(params),
     refetchInterval,
-    placeholderData: keepPreviousData
+    placeholderData: keepPreviousData,
   });
 
   const withUiId = useWithUiId(
@@ -50,11 +50,11 @@ export const useFetchAppDependencies = (
   params: HubRequestParams = {},
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
-  const { data, isPending, error, refetch, isFetching } = useQuery({
+  const { data, _isPending, error, refetch, isFetching } = useQuery({
     queryKey: [AppDependenciesQueryKey, params],
     queryFn: async () => await getAppDependencies(params),
     refetchInterval,
-    placeholderData: keepPreviousData
+    placeholderData: keepPreviousData,
   });
   return {
     result: data || { data: [], total: 0, params },

@@ -59,7 +59,7 @@ const DynamicAssessmentActionsRow: FunctionComponent<
   const onSuccessHandler = () => {};
   const onErrorHandler = () => {};
 
-  const { mutateAsync: createAssessmentAsync, isLoading: isCreating } =
+  const { mutateAsync: createAssessmentAsync, isPending: isCreating } =
     useCreateAssessmentMutation(isArchetype, onSuccessHandler, onErrorHandler);
 
   const onDeleteAssessmentSuccess = (name: string) => {
@@ -78,7 +78,7 @@ const DynamicAssessmentActionsRow: FunctionComponent<
     });
   };
 
-  const { mutate: deleteAssessment, isLoading: isDeleting } =
+  const { mutate: deleteAssessment, isPending: isDeleting } =
     useDeleteAssessmentMutation(onDeleteAssessmentSuccess, onDeleteError);
 
   const determineAction = useCallback(() => {

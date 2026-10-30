@@ -21,7 +21,7 @@ export const useFetchTargets = (
 ) => {
   const {
     data: targets,
-    isPending,
+    isPending: _isPending,
     isSuccess,
     error,
     refetch,
@@ -144,7 +144,7 @@ export const useCreateFileMutation = (
 ) => {
   const queryClient = useQueryClient();
   const { isPending, mutate, mutateAsync, error } = useMutation({
-    mutationFn: createFile,
+    mutationFn: (args: { file: File }) => createFile(args),
     onSuccess: (data, { file }) => {
       onSuccess?.(data, file);
       queryClient.invalidateQueries({ queryKey: [TargetsQueryKey] });

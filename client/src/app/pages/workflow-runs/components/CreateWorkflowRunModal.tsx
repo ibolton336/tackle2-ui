@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { AxiosError } from "axios";
 import { useTranslation } from "react-i18next";
 import {
   Alert,
@@ -213,7 +214,7 @@ export const CreateWorkflowRunModal: React.FC<CreateWorkflowRunModalProps> = ({
   const { data: applications, error: applicationsFetchError } =
     useFetchApplications();
   const applicationsError = applicationsFetchError
-    ? getAxiosErrorMessage(applicationsFetchError)
+    ? getAxiosErrorMessage(applicationsFetchError as AxiosError)
     : null;
 
   const { gateways } = useFetchGateways();
@@ -420,7 +421,7 @@ export const CreateWorkflowRunModal: React.FC<CreateWorkflowRunModalProps> = ({
             title={t("agentic.workflowRuns.failedLoadWorkflowsTitle")}
             style={{ marginBottom: "1rem" }}
           >
-            {getAxiosErrorMessage(workflowsError)}
+            {getAxiosErrorMessage(workflowsError as AxiosError)}
           </Alert>
         )}
         {submitError && (

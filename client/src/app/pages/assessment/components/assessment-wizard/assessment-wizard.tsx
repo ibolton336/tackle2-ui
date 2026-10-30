@@ -86,10 +86,7 @@ export const AssessmentWizard: React.FC<AssessmentWizardProps> = ({
 
   const onHandleUpdateAssessmentSuccess = () => {
     queryClient.invalidateQueries({
-      queryKey: [
-        assessmentsByItemIdQueryKey,
-        assessment?.application?.id,
-      ]
+      queryKey: [assessmentsByItemIdQueryKey, assessment?.application?.id],
     });
   };
   const { mutate: updateAssessmentMutation } = useUpdateAssessmentMutation(

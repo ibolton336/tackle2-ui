@@ -15,7 +15,7 @@ const StakeholderGroupsQueryKey = "stakeholderGroups";
 export const useFetchStakeholderGroups = (
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
-  const { data, isPending, isFetching, isSuccess, error, refetch } = useQuery({
+  const { data, _isPending, isFetching, isSuccess, error, refetch } = useQuery({
     queryKey: [StakeholderGroupsQueryKey],
     queryFn: getStakeholderGroups,
     refetchInterval,

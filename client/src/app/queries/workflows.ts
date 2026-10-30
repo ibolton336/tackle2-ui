@@ -28,8 +28,13 @@ export const useFetchWorkflows = (
     retry: AGENTIC_QUERY_RETRY,
     refetchInterval: (query) => pollUnlessErrored(query, refetchInterval),
   });
-  return { workflows: data || [],
-    isLoading: isPending, isPending, fetchError: error, refetch };
+  return {
+    workflows: data || [],
+    isLoading: isPending,
+    isPending,
+    fetchError: error,
+    refetch,
+  };
 };
 
 export const useCreateWorkflowMutation = (

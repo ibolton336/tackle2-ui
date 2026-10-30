@@ -24,10 +24,10 @@ export const useWithUiId = <F, T extends F = F>(
 
     const dataWithUiId = data.map<WithUiId<T>>(
       (item) =>
-        (({
+        ({
           ...item,
-          [UI_UNIQUE_ID]: generator(item)
-        }) as WithUiId<T>)
+          [UI_UNIQUE_ID]: generator(item),
+        }) as WithUiId<T>
     );
 
     return dataWithUiId;

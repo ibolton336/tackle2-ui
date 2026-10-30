@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { AxiosError } from "axios";
 import { Trans, useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import {
@@ -177,13 +178,13 @@ export const CreateRunModal: React.FC<CreateRunModalProps> = ({
     fetchError: agentsFetchError,
   } = useFetchAgents();
   const agentsError = agentsFetchError
-    ? getAxiosErrorMessage(agentsFetchError)
+    ? getAxiosErrorMessage(agentsFetchError as AxiosError)
     : null;
 
   const { data: applications, error: applicationsFetchError } =
     useFetchApplications();
   const applicationsError = applicationsFetchError
-    ? getAxiosErrorMessage(applicationsFetchError)
+    ? getAxiosErrorMessage(applicationsFetchError as AxiosError)
     : null;
 
   const { gateways } = useFetchGateways();
@@ -255,7 +256,7 @@ export const CreateRunModal: React.FC<CreateRunModalProps> = ({
       }
       onCreated(name);
     },
-    (err) => setSubmitError(getAxiosErrorMessage(err))
+    (err) => setSubmitError(getAxiosErrorMessage(err as AxiosError))
   );
   const submitting = createRunMutation.isPending;
 
