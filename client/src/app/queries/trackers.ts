@@ -22,17 +22,16 @@ export const useFetchTrackers = (
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
   const queryClient = useQueryClient();
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, isPending, isFetching, error, refetch } = useQuery({
     queryKey: [TrackersQueryKey],
     queryFn: getTrackers,
-    onError: (error: AxiosError) => console.log("error, ", error),
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: [TicketsQueryKey] }),
     refetchInterval,
   });
   return {
     trackers: data || [],
-    isFetching: isLoading,
+    isFetching,
     fetchError: error,
     refetch,
   };
@@ -90,10 +89,9 @@ const useFetchTrackerProjects = (
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
   const queryClient = useQueryClient();
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, isPending, isFetching, error, refetch } = useQuery({
     queryKey: [TrackerProjectsQueryKey, { id: trackerId }],
     queryFn: () => getTrackerProjects(trackerId!),
-    onError: (error: AxiosError) => console.log("error, ", error),
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: [TicketsQueryKey] }),
     enabled: !!trackerId,
@@ -101,7 +99,7 @@ const useFetchTrackerProjects = (
   });
   return {
     projects: data || [],
-    isFetching: isLoading,
+    isFetching,
     fetchError: error,
     refetch,
   };
@@ -113,13 +111,12 @@ const useFetchTrackerProjectIssuetypes = (
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
   const queryClient = useQueryClient();
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, isPending, isFetching, error, refetch } = useQuery({
     queryKey: [
       TrackerProjectIssuetypesQueryKey,
       { id: trackerId, projectId: projectId },
     ],
     queryFn: () => getTrackerProjectIssuetypes(trackerId!, projectId!),
-    onError: (error: AxiosError) => console.log("error, ", error),
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: [TicketsQueryKey] }),
     enabled: !!trackerId && !!projectId,
@@ -127,7 +124,7 @@ const useFetchTrackerProjectIssuetypes = (
   });
   return {
     issuetypes: data || [],
-    isFetching: isLoading,
+    isFetching,
     fetchError: error,
     refetch,
   };

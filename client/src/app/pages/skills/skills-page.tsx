@@ -597,7 +597,7 @@ const SkillsPage: React.FC = () => {
         confirmBtnVariant={ButtonVariant.danger}
         confirmBtnLabel={t("actions.delete")}
         cancelBtnLabel={t("actions.cancel")}
-        inProgress={deleteCardMutation.isLoading}
+        inProgress={deleteCardMutation.isPending}
         onCancel={() => setDeleteCardTarget(null)}
         onClose={() => setDeleteCardTarget(null)}
         onConfirm={() => {
@@ -616,7 +616,7 @@ const SkillsPage: React.FC = () => {
         confirmBtnVariant={ButtonVariant.danger}
         confirmBtnLabel={t("actions.delete")}
         cancelBtnLabel={t("actions.cancel")}
-        inProgress={deleteCollectionMutation.isLoading}
+        inProgress={deleteCollectionMutation.isPending}
         onCancel={() => setDeleteCollectionTarget(null)}
         onClose={() => setDeleteCollectionTarget(null)}
         onConfirm={() => {

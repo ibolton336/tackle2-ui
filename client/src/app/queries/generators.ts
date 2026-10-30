@@ -16,16 +16,16 @@ const GENERATOR_QUERY_KEY = "generator";
 export const useFetchGenerators = (
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
-  const { isLoading, isSuccess, error, refetch, data } = useQuery({
+  const { isPending, isSuccess, error, refetch, data } = useQuery({
     queryKey: [GENERATORS_QUERY_KEY],
     queryFn: getGenerators,
-    onError: (error: AxiosError) => console.log(error),
     refetchInterval,
   });
 
   return {
     generators: data || [],
-    isLoading,
+    isLoading: isPending,
+    isPending,
     isSuccess,
     fetchError: error,
     refetch,

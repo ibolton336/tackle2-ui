@@ -9,15 +9,14 @@ const ProxiesTasksQueryKey = "proxies";
 export const useFetchProxies = (
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
-  const { isLoading, data, error } = useQuery({
+  const { isPending, isFetching, data, error } = useQuery({
     queryKey: [ProxiesTasksQueryKey],
     queryFn: getProxies,
-    onError: (error) => console.log("error, ", error),
     refetchInterval,
   });
   return {
     proxies: data || [],
-    isFetching: isLoading,
+    isFetching,
     fetchError: error as AxiosError,
   };
 };

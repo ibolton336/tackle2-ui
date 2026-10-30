@@ -19,15 +19,15 @@ const QuestionnaireByIdQueryKey = "questionnaireById";
 export const useFetchQuestionnaires = (
   refetchInterval: number | false = false
 ) => {
-  const { isLoading, data, error } = useQuery({
+  const { isPending, data, error, isFetching } = useQuery({
     queryKey: [QuestionnairesQueryKey],
     queryFn: getQuestionnaires,
-    onError: (error: AxiosError) => console.log("error, ", error),
     refetchInterval,
   });
   return {
     questionnaires: data || [],
-    isFetching: isLoading,
+    isLoading: isPending,
+    isFetching,
     fetchError: error,
   };
 };
@@ -72,16 +72,15 @@ export const useFetchQuestionnaireById = (
   id: number | string,
   refetchInterval: number | false = false
 ) => {
-  const { data, isLoading, error } = useQuery({
+  const { data, isPending, error, isFetching } = useQuery({
     queryKey: [QuestionnaireByIdQueryKey, id],
     queryFn: () => getQuestionnaireById(id),
-    onError: (error: AxiosError) => console.log("error, ", error),
     refetchInterval,
   });
 
   return {
     questionnaire: data,
-    isFetching: isLoading,
+    isFetching,
     fetchError: error,
   };
 };
@@ -104,6 +103,7 @@ export const useCreateQuestionnaireMutation = (
   return {
     mutate,
     mutateAsync,
+    isLoading: isPending,
     isPending,
     error,
   };

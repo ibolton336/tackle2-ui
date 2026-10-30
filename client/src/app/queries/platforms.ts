@@ -28,17 +28,17 @@ const PLATFORM_QUERY_KEY = "platform";
 export const useFetchPlatforms = (
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
-  const { isLoading, isSuccess, error, refetch, data } = useQuery({
+  const { isPending, isSuccess, error, refetch, data, isFetching } = useQuery({
     queryKey: [PLATFORMS_QUERY_KEY],
     queryFn: getPlatforms,
-    onError: (error: AxiosError) => console.log(error),
     refetchInterval,
   });
 
   return {
     platforms: data || [],
-    isFetching: isLoading,
-    isLoading,
+    isFetching,
+    isLoading: isPending,
+    isPending,
     isSuccess,
     error,
     refetch,
@@ -106,18 +106,18 @@ export const useFetchPlatformById = (
   id?: number | string,
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
-  const { data, isLoading, isSuccess, error } = useQuery({
+  const { data, isPending, isSuccess, error } = useQuery({
     queryKey: [PLATFORM_QUERY_KEY, id],
     queryFn: () =>
       id === undefined ? Promise.resolve(undefined) : getPlatformById(id),
-    onError: (error: AxiosError) => console.log("error, ", error),
     enabled: id !== undefined,
     refetchInterval,
   });
 
   return {
     platform: data,
-    isLoading,
+    isLoading: isPending,
+    isPending,
     isSuccess,
     fetchError: error,
   };

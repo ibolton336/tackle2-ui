@@ -7,11 +7,12 @@ import { createRole, deleteRole, getRoles, updateRole } from "@app/api/rest";
 export const RolesQueryKey = "roles";
 
 export const useFetchRoles = () => {
-  const { data, isLoading, error } = useQuery<Role[], AxiosError>({
+  const { data, isPending, error } = useQuery<Role[], AxiosError>({
     queryKey: [RolesQueryKey],
     queryFn: getRoles,
   });
-  return { roles: data ?? [], isLoading, fetchError: error };
+  return { roles: data ?? [],
+    isLoading: isPending, isPending, fetchError: error };
 };
 
 export const useCreateRoleMutation = (

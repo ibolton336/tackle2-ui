@@ -22,15 +22,14 @@ export const WORKFLOWS_QUERY_KEY = "workflows";
 export const useFetchWorkflows = (
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
-  const { isLoading, error, data, refetch } = useQuery({
+  const { isPending, error, data, refetch } = useQuery({
     queryKey: [WORKFLOWS_QUERY_KEY],
     queryFn: getWorkflows,
-    onError: (error: AxiosError) => console.log(error),
     retry: AGENTIC_QUERY_RETRY,
-    refetchInterval: (_data, query) =>
-      pollUnlessErrored(query, refetchInterval),
+    refetchInterval: (query) => pollUnlessErrored(query, refetchInterval),
   });
-  return { workflows: data || [], isLoading, fetchError: error, refetch };
+  return { workflows: data || [],
+    isLoading: isPending, isPending, fetchError: error, refetch };
 };
 
 export const useCreateWorkflowMutation = (

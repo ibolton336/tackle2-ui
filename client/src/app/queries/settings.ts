@@ -13,7 +13,6 @@ export const useSetting = <K extends keyof SettingTypes>(
   return useQuery({
     queryKey: [SettingQueryKey, key],
     queryFn: () => getSettingById<K>(key),
-    onError: (error) => console.log(error),
     refetchInterval,
   });
 };

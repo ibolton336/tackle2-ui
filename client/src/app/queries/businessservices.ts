@@ -15,16 +15,16 @@ export const BusinessServicesQueryKey = "businessservices";
 export const useFetchBusinessServices = (
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
-  const { data, isLoading, isSuccess, error, refetch } = useQuery({
+  const { data, isPending, isSuccess, error, refetch, isFetching } = useQuery({
     queryKey: [BusinessServicesQueryKey],
     queryFn: getBusinessServices,
-    onError: (error: AxiosError) => console.log("error, ", error),
     refetchInterval,
   });
   return {
     businessServices: data || [],
-    isFetching: isLoading,
-    isLoading,
+    isFetching,
+    isLoading: isPending,
+    isPending,
     isSuccess,
     fetchError: error as AxiosError,
     refetch,
@@ -81,6 +81,7 @@ export const useDeleteBusinessServiceMutation = (
   });
   return {
     mutate,
+    isLoading: isPending,
     isPending,
     error,
   };

@@ -20,15 +20,14 @@ const reviewsQueryKey = "reviews";
 export const useFetchReviews = (
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
-  const { data, isLoading, error } = useQuery({
+  const { data, isPending, isFetching, error } = useQuery({
     queryKey: [reviewsQueryKey],
     queryFn: getReviews,
-    onError: (error: AxiosError) => console.log("error, ", error),
     refetchInterval,
   });
   return {
     reviews: data || [],
-    isFetching: isLoading,
+    isFetching,
     fetchError: error,
   };
 };
@@ -104,7 +103,6 @@ export const useFetchReviewById = (
     queryKey: [reviewQueryKey, id],
     queryFn: () =>
       id === undefined ? Promise.resolve(null) : getReviewById(id),
-    onError: (error: AxiosError) => console.log("error, ", error),
     enabled: id !== undefined,
     refetchInterval,
   });

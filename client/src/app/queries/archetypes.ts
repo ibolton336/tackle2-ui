@@ -22,7 +22,7 @@ export const useFetchArchetypes = (
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
   const queryClient = useQueryClient();
-  const { data, isLoading, isSuccess, error, refetch } = useQuery({
+  const { data, isPending, isFetching, isSuccess, error, refetch } = useQuery({
     queryKey: [ARCHETYPES_QUERY_KEY],
     queryFn: getArchetypes,
     onSuccess: () => {
@@ -30,7 +30,6 @@ export const useFetchArchetypes = (
         queryKey: [assessmentsByItemIdQueryKey],
       });
     },
-    onError: (error: AxiosError) => console.log(error),
     refetchInterval,
   });
 
@@ -41,7 +40,7 @@ export const useFetchArchetypes = (
   return {
     archetypes: data || [],
     archetypesById,
-    isFetching: isLoading,
+    isFetching,
     isSuccess,
     error,
     refetch,
@@ -52,18 +51,17 @@ export const useFetchArchetypeById = (
   id?: number | string,
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
-  const { data, isLoading, error } = useQuery({
+  const { data, isPending, isFetching, error } = useQuery({
     queryKey: [ARCHETYPE_QUERY_KEY, String(id)],
     queryFn: () =>
       id === undefined ? Promise.resolve(undefined) : getArchetypeById(id),
-    onError: (error: AxiosError) => console.log("error, ", error),
     enabled: id !== undefined,
     refetchInterval,
   });
 
   return {
     archetype: data,
-    isFetching: isLoading,
+    isFetching,
     fetchError: error,
   };
 };

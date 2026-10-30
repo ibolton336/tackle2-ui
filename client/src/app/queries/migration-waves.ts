@@ -43,11 +43,10 @@ export const useFetchMigrationWaves = (
   const { data: applications } = useFetchApplications();
 
   const queryClient = useQueryClient();
-  const { isLoading, error, refetch, data } = useQuery({
+  const { isPending, isFetching, error, refetch, data } = useQuery({
     queryKey: [MigrationWavesQueryKey],
     queryFn: getMigrationWaves,
     refetchInterval,
-    onError: (error) => console.log("error, ", error),
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: [TrackersQueryKey] }),
     select: (waves) =>
@@ -55,7 +54,7 @@ export const useFetchMigrationWaves = (
   });
   return {
     migrationWaves: data || [],
-    isFetching: isLoading,
+    isFetching,
     fetchError: error,
     refetch,
   };

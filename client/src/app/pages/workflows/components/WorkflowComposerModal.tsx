@@ -138,7 +138,7 @@ export const WorkflowComposerModal: React.FC<WorkflowComposerModalProps> = ({
     (err) => setSubmitError(getAxiosErrorMessage(err))
   );
 
-  const submitting = createMutation.isLoading || updateMutation.isLoading;
+  const submitting = createMutation.isPending || updateMutation.isPending;
 
   // --- Validation ---
 

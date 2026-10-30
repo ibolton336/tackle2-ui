@@ -20,13 +20,11 @@ export const AGENT_RUN_QUERY_KEY = "agentRun";
 export const useFetchAgentRuns = (
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
-  const { isLoading, error, data, refetch } = useQuery({
+  const { isPending, error, data, refetch } = useQuery({
     queryKey: [AGENT_RUNS_QUERY_KEY],
     queryFn: getAgentRuns,
-    onError: (error: AxiosError) => console.log(error),
     retry: AGENTIC_QUERY_RETRY,
-    refetchInterval: (_data, query) =>
-      pollUnlessErrored(query, refetchInterval),
+    refetchInterval: (query) => pollUnlessErrored(query, refetchInterval),
     // Runs mutate server-side while the user is elsewhere — keep polling
     // even when the tab is hidden so the page is current on return.
     refetchIntervalInBackground: true,
@@ -34,7 +32,8 @@ export const useFetchAgentRuns = (
 
   return {
     agentRuns: data || [],
-    isLoading,
+    isLoading: isPending,
+    isPending,
     fetchError: error,
     refetch,
   };
@@ -44,20 +43,19 @@ export const useFetchAgentRun = (
   name: string,
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
-  const { isLoading, error, data } = useQuery({
+  const { isPending, error, data } = useQuery({
     queryKey: [AGENT_RUN_QUERY_KEY, name],
     queryFn: () => getAgentRun(name),
-    onError: (error: AxiosError) => console.log(error),
     retry: AGENTIC_QUERY_RETRY,
-    refetchInterval: (_data, query) =>
-      pollUnlessErrored(query, refetchInterval),
+    refetchInterval: (query) => pollUnlessErrored(query, refetchInterval),
     refetchIntervalInBackground: true,
     enabled: !!name,
   });
 
   return {
     agentRun: data,
-    isLoading,
+    isLoading: isPending,
+    isPending,
     fetchError: error,
   };
 };

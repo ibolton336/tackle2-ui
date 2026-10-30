@@ -17,15 +17,14 @@ export const useFetchImports = (
   isValid: boolean | string,
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, isPending, isFetching, error, refetch } = useQuery({
     queryKey: [ImportsQueryKey, importSummaryID, isValid],
     queryFn: () => getApplicationImports(importSummaryID, isValid),
-    onError: (error) => console.log(error),
     refetchInterval,
   });
   return {
     imports: data || [],
-    isFetching: isLoading,
+    isFetching,
     fetchError: error,
     refetch,
   };
@@ -34,30 +33,28 @@ export const useFetchImports = (
 export const useFetchImportSummaries = (
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, isPending, isFetching, error, refetch } = useQuery({
     queryKey: [ImportSummariesQueryKey],
     queryFn: getApplicationsImportSummary,
     refetchInterval,
-    onError: (error) => console.log(error),
   });
   return {
     importSummaries: data || [],
-    isFetching: isLoading,
+    isFetching,
     fetchError: error,
     refetch,
   };
 };
 
 export const useFetchImportSummaryById = (id: number | string) => {
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, isPending, isFetching, error, refetch } = useQuery({
     queryKey: [ImportQueryKey, id],
     queryFn: () => getApplicationImportSummaryById(id),
-    onError: (error) => console.log(error),
   });
 
   return {
     importSummary: data,
-    isFetching: isLoading,
+    isFetching,
     fetchError: error,
     refetch,
   };

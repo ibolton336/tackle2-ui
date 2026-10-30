@@ -34,15 +34,14 @@ export const useCreateTicketsMutation = (
 export const useFetchTickets = (
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
-  const { isLoading, error, refetch, data } = useQuery({
+  const { isPending, isFetching, error, refetch, data } = useQuery({
     queryKey: [TicketsQueryKey],
     queryFn: getTickets,
     refetchInterval,
-    onError: (error) => console.log("error, ", error),
   });
   return {
     tickets: data || [],
-    isFetching: isLoading,
+    isFetching,
     fetchError: error,
     refetch,
   };

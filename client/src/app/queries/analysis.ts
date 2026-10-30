@@ -89,7 +89,7 @@ const useFetchReportAll_ = <UI extends WithUiId<API>, API>(
   params: HubRequestParams,
   refetchInterval: number | false
 ): AnalysisQueryResults<UI> => {
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, isPending, error, refetch, isFetching } = useQuery({
     enabled,
     queryKey: [queryKey, params],
     queryFn: () => queryFn(params),
@@ -101,7 +101,7 @@ const useFetchReportAll_ = <UI extends WithUiId<API>, API>(
       total: data?.total ?? 0,
       params: data?.params ?? params,
     },
-    isFetching: isLoading,
+    isFetching,
     fetchError: error as Error | undefined,
     refetch,
   };
@@ -154,7 +154,7 @@ const useFetchReportApplication_ = <UI extends WithUiId<API>, API>(
   params: HubRequestParams = {},
   refetchInterval: number | false = false
 ): AnalysisQueryResults<UI> => {
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, isPending, error, refetch, isFetching } = useQuery({
     enabled: applicationId !== undefined,
     queryKey: [queryKey, applicationId, params],
     queryFn: () =>
@@ -169,7 +169,7 @@ const useFetchReportApplication_ = <UI extends WithUiId<API>, API>(
       total: data?.total ?? 0,
       params: data?.params ?? params,
     },
-    isFetching: isLoading,
+    isFetching,
     fetchError: error as Error | undefined,
     refetch,
   };
@@ -205,14 +205,14 @@ const useFetchReport_Apps = <API>(
   params: HubRequestParams,
   refetchInterval: number | false
 ): AnalysisQueryResults<API> => {
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, isPending, error, refetch, isFetching } = useQuery({
     queryKey: [queryKey, params],
     queryFn: () => queryFn(params),
     refetchInterval,
   });
   return {
     result: data || { data: [], total: 0, params },
-    isFetching: isLoading,
+    isFetching,
     fetchError: error as Error | undefined,
     refetch,
   };
@@ -223,17 +223,16 @@ export const useFetchInsight = (
   id?: number,
   refetchInterval: number | false = false
 ): AnalysisQueryResult<AnalysisInsight> => {
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, isPending, error, refetch, isFetching } = useQuery({
     enabled: id !== undefined,
     queryKey: [InsightQueryKey, id],
     queryFn: () =>
       id === undefined ? Promise.resolve(undefined) : getInsight(id),
-    onError: (error) => console.log("error, ", error),
     refetchInterval,
   });
   return {
     result: { data },
-    isFetching: isLoading,
+    isFetching,
     fetchError: error as Error | undefined,
     refetch,
   };
@@ -244,19 +243,18 @@ export const useFetchIncidentsForInsight = (
   params: HubRequestParams = {},
   refetchInterval: number | false = false
 ): AnalysisQueryResults<AnalysisIncident> => {
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, isPending, error, refetch, isFetching } = useQuery({
     enabled: insightId !== undefined,
     queryKey: [IncidentsQueryKey, insightId, params],
     queryFn: () =>
       insightId === undefined
         ? Promise.resolve(undefined)
         : getInsightIncidents(insightId, params),
-    onError: (error) => console.log("error, ", error),
     refetchInterval,
   });
   return {
     result: data || { data: [], total: 0, params },
-    isFetching: isLoading,
+    isFetching,
     fetchError: error as Error | undefined,
     refetch,
   };
@@ -267,14 +265,13 @@ export const useFetchReportInsightFiles = (
   params: HubRequestParams = {},
   refetchInterval: number | false = false
 ): AnalysisQueryResults<WithUiId<AnalysisReportFile>> => {
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, isPending, error, refetch, isFetching } = useQuery({
     enabled: insightId !== undefined,
     queryKey: [InsightFilesQueryKey, insightId, params],
     queryFn: () =>
       insightId === undefined
         ? Promise.resolve(undefined)
         : getInsightFiles(insightId, params),
-    onError: (error) => console.log("error, ", error),
     refetchInterval,
   });
 
@@ -289,7 +286,7 @@ export const useFetchReportInsightFiles = (
       total: data?.total ?? 0,
       params: data?.params ?? params,
     },
-    isFetching: isLoading,
+    isFetching,
     fetchError: error as Error | undefined,
     refetch,
   };

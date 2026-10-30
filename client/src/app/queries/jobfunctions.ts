@@ -14,15 +14,15 @@ const JobFunctionsQueryKey = "jobfunctions";
 export const useFetchJobFunctions = (
   refetchInterval: number | false = false
 ) => {
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, isPending, error, refetch, isFetching } = useQuery({
     queryKey: [JobFunctionsQueryKey],
     queryFn: getJobFunctions,
-    onError: (error: AxiosError) => console.log("error, ", error),
     refetchInterval,
   });
   return {
     jobFunctions: data || [],
-    isFetching: isLoading,
+    isLoading: isPending,
+    isFetching,
     fetchError: error,
     refetch,
   };
@@ -79,6 +79,7 @@ export const useDeleteJobFunctionMutation = (
   });
   return {
     mutate,
+    isLoading: isPending,
     isPending,
     error,
   };

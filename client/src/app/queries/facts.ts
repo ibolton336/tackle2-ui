@@ -10,14 +10,13 @@ export const useFetchFacts = (
   applicationID: number | string | undefined,
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, isPending, isFetching, error, refetch } = useQuery({
     queryKey: [FactsQueryKey, applicationID],
     queryFn: () =>
       applicationID === undefined
         ? Promise.resolve(undefined)
         : getFacts(applicationID),
     enabled: !!applicationID,
-    onError: (error) => console.log("error, ", error),
     select: (facts): Fact[] =>
       facts === undefined
         ? []
@@ -30,7 +29,7 @@ export const useFetchFacts = (
 
   return {
     facts: data || [],
-    isFetching: isLoading,
+    isFetching,
     fetchError: error,
     refetch,
   };

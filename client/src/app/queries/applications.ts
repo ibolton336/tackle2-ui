@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { saveAs } from "file-saver";
 
@@ -40,21 +41,25 @@ export const useFetchApplications = (
     | (() => number | false) = DEFAULT_REFETCH_INTERVAL
 ) => {
   const queryClient = useQueryClient();
-  const { isLoading, isSuccess, error, refetch, data } = useQuery({
+  const { isPending, isSuccess, error, refetch, data, isFetching } = useQuery({
     queryKey: [ApplicationsQueryKey],
     queryFn: getApplications,
-    onSuccess: () => {
+    refetchInterval,
+  });
+
+  useEffect(() => {
+    if (isSuccess && data) {
       queryClient.invalidateQueries({
         queryKey: [assessmentsByItemIdQueryKey],
       });
-    },
-    onError: (error: AxiosError) => console.log(error),
-    refetchInterval,
-  });
+    }
+  }, [isSuccess, data, queryClient]);
+
   return {
     data: data || [],
-    isFetching: isLoading,
-    isLoading,
+    isFetching,
+    isLoading: isPending,
+    isPending,
     isSuccess,
     error,
     refetch,
@@ -67,19 +72,19 @@ export const useFetchApplicationById = (
   id?: number | string,
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
-  const { data, isLoading, isSuccess, error } = useQuery({
+  const { data, isPending, isSuccess, error, isFetching } = useQuery({
     queryKey: [ApplicationQueryKey, id],
     queryFn: () =>
       id === undefined ? Promise.resolve(undefined) : getApplicationById(id),
-    onError: (error: AxiosError) => console.log("error, ", error),
     enabled: id !== undefined,
     refetchInterval,
   });
 
   return {
     application: data,
-    isFetching: isLoading,
-    isLoading,
+    isFetching,
+    isLoading: isPending,
+    isPending,
     isSuccess,
     fetchError: error,
   };
@@ -89,7 +94,7 @@ export const useFetchApplicationManifest = (
   applicationId?: number | string,
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL * 2
 ) => {
-  const { data, isLoading, isSuccess, error } = useQuery({
+  const { data, isPending, isSuccess, error, isFetching } = useQuery({
     queryKey: [ApplicationManifestQueryKey, applicationId],
     queryFn: () =>
       applicationId === undefined
@@ -102,8 +107,9 @@ export const useFetchApplicationManifest = (
 
   return {
     manifest: data,
-    isFetching: isLoading,
-    isLoading,
+    isFetching,
+    isLoading: isPending,
+    isPending,
     isSuccess,
     fetchError: error,
   };
@@ -257,7 +263,7 @@ export const useFetchApplicationDependencies = (
   const {
     data: northData,
     error: northError,
-    isLoading: isLoadingNorth,
+    isPending: isLoadingNorth,
     refetch: refetchNorth,
   } = useQuery<ApplicationDependency[], AxiosError>({
     queryKey: [ApplicationDependencyQueryKey, applicationId, "north"],
@@ -269,7 +275,7 @@ export const useFetchApplicationDependencies = (
   const {
     data: southData,
     error: southError,
-    isLoading: isLoadingSouth,
+    isPending: isLoadingSouth,
     refetch: refetchSouth,
   } = useQuery<ApplicationDependency[], AxiosError>({
     queryKey: [ApplicationDependencyQueryKey, applicationId, "south"],

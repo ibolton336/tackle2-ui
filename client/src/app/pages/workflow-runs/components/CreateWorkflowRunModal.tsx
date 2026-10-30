@@ -208,7 +208,7 @@ export const CreateWorkflowRunModal: React.FC<CreateWorkflowRunModalProps> = ({
     },
     (err) => setSubmitError(getAxiosErrorMessage(err))
   );
-  const submitting = createMutation.isLoading;
+  const submitting = createMutation.isPending;
 
   const { data: applications, error: applicationsFetchError } =
     useFetchApplications();

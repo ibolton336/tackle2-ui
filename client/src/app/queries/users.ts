@@ -14,27 +14,29 @@ export const UsersQueryKey = "users";
 export const CurrentUserQueryKey = [UsersQueryKey, "self"];
 
 export const useFetchUsers = () => {
-  const { data, isLoading, error } = useQuery<User[], AxiosError>({
+  const { data, isPending, error } = useQuery<User[], AxiosError>({
     queryKey: [UsersQueryKey],
     queryFn: getUsers,
   });
 
   return {
     users: data ?? [],
-    isLoading,
+    isLoading: isPending,
+    isPending,
     fetchError: error,
   };
 };
 
 export const useFetchCurrentUserAndScopes = () => {
-  const { data, isLoading, error } = useQuery<AuthMe, AxiosError>({
+  const { data, isPending, error } = useQuery<AuthMe, AxiosError>({
     queryKey: [...CurrentUserQueryKey],
     queryFn: getAuthMe,
   });
 
   return {
     userAndScopes: data,
-    isLoading,
+    isLoading: isPending,
+    isPending,
     fetchError: error,
   };
 };

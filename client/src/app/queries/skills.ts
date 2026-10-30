@@ -31,15 +31,14 @@ export const SKILL_COLLECTIONS_QUERY_KEY = "skillCollections";
 export const useFetchSkillCards = (
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
-  const { isLoading, error, data, refetch } = useQuery({
+  const { isPending, error, data, refetch } = useQuery({
     queryKey: [SKILL_CARDS_QUERY_KEY],
     queryFn: getSkillCards,
-    onError: (error: AxiosError) => console.log(error),
     retry: AGENTIC_QUERY_RETRY,
-    refetchInterval: (_data, query) =>
-      pollUnlessErrored(query, refetchInterval),
+    refetchInterval: (query) => pollUnlessErrored(query, refetchInterval),
   });
-  return { skillCards: data || [], isLoading, fetchError: error, refetch };
+  return { skillCards: data || [],
+    isLoading: isPending, isPending, fetchError: error, refetch };
 };
 
 export const useCreateSkillCardMutation = (
@@ -94,17 +93,16 @@ export const useDeleteSkillCardMutation = (
 export const useFetchSkillCollections = (
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
-  const { isLoading, error, data, refetch } = useQuery({
+  const { isPending, error, data, refetch } = useQuery({
     queryKey: [SKILL_COLLECTIONS_QUERY_KEY],
     queryFn: getSkillCollections,
-    onError: (error: AxiosError) => console.log(error),
     retry: AGENTIC_QUERY_RETRY,
-    refetchInterval: (_data, query) =>
-      pollUnlessErrored(query, refetchInterval),
+    refetchInterval: (query) => pollUnlessErrored(query, refetchInterval),
   });
   return {
     skillCollections: data || [],
-    isLoading,
+    isLoading: isPending,
+    isPending,
     fetchError: error,
     refetch,
   };

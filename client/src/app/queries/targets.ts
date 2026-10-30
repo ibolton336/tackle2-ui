@@ -21,14 +21,14 @@ export const useFetchTargets = (
 ) => {
   const {
     data: targets,
-    isLoading,
+    isPending,
     isSuccess,
     error,
     refetch,
+    isFetching,
   } = useQuery<Target[]>({
     queryKey: [TargetsQueryKey],
     queryFn: getTargets,
-    onError: (err) => console.log(err),
     refetchInterval,
   });
 
@@ -59,7 +59,7 @@ export const useFetchTargets = (
      * that are not in the setting at the end of the list.
      */
     targetsInOrder,
-    isFetching: isLoading,
+    isFetching,
     isSuccess,
     fetchError: error,
     refetch,
@@ -83,6 +83,7 @@ export const useUpdateTargetMutation = (
   });
   return {
     mutate,
+    isLoading: isPending,
     isPending,
     error,
   };
@@ -107,6 +108,7 @@ export const useDeleteTargetMutation = (
   });
   return {
     mutate,
+    isLoading: isPending,
     isPending,
     error,
   };
@@ -130,6 +132,7 @@ export const useCreateTargetMutation = (
   return {
     mutate,
     mutateAsync,
+    isLoading: isPending,
     isPending,
     error,
   };
@@ -153,6 +156,7 @@ export const useCreateFileMutation = (
   return {
     mutate,
     mutateAsync,
+    isLoading: isPending,
     isPending,
     error,
   };

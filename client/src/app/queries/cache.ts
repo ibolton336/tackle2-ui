@@ -9,7 +9,6 @@ export const useFetchCache = () =>
   useQuery({
     queryKey: [CacheQueryKey],
     queryFn: getCache,
-    onError: (error) => console.log("error, ", error),
     enabled: isRWXSupported,
   });
 

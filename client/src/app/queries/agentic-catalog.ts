@@ -15,14 +15,13 @@ export const GATEWAYS_QUERY_KEY = "gateways";
 export const useFetchGateways = (
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
-  const { isLoading, error, data, refetch } = useQuery({
+  const { isPending, error, data, refetch } = useQuery({
     queryKey: [GATEWAYS_QUERY_KEY],
     queryFn: getGateways,
-    onError: (error: AxiosError) => console.log(error),
     // Verification flips Ready on its own schedule — keep the page live.
     retry: AGENTIC_QUERY_RETRY,
-    refetchInterval: (_data, query) =>
-      pollUnlessErrored(query, refetchInterval),
+    refetchInterval: (query) => pollUnlessErrored(query, refetchInterval),
   });
-  return { gateways: data || [], isLoading, fetchError: error, refetch };
+  return { gateways: data || [],
+    isLoading: isPending, isPending, fetchError: error, refetch };
 };

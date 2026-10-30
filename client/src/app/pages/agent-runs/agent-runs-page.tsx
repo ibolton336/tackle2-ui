@@ -457,7 +457,7 @@ const AgentRunsPage: React.FC = () => {
         confirmBtnVariant={ButtonVariant.danger}
         confirmBtnLabel={t("actions.delete")}
         cancelBtnLabel={t("actions.cancel")}
-        inProgress={deleteMutation.isLoading}
+        inProgress={deleteMutation.isPending}
         onCancel={() => setDeleteTarget(null)}
         onClose={() => setDeleteTarget(null)}
         onConfirm={() => {

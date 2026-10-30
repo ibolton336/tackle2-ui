@@ -32,10 +32,9 @@ const getRole = (stakeholder: Stakeholder): Role => {
 export const useFetchStakeholders = (
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
-  const { data, isLoading, isSuccess, error, refetch } = useQuery({
+  const { data, isPending, isFetching, isSuccess, error, refetch } = useQuery({
     queryKey: [StakeholdersQueryKey],
     queryFn: getStakeholders,
-    onError: (error: AxiosError) => console.log("error, ", error),
     refetchInterval,
     select: (stakeholders): StakeholderWithRole[] =>
       stakeholders.map((stakeholder) => ({
@@ -45,8 +44,8 @@ export const useFetchStakeholders = (
   });
   return {
     stakeholders: data || [],
-    isFetching: isLoading,
-    isLoading,
+    isFetching,
+    isPending,
     isSuccess,
     fetchError: error,
     refetch,

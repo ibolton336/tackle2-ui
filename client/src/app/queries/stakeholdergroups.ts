@@ -15,15 +15,14 @@ const StakeholderGroupsQueryKey = "stakeholderGroups";
 export const useFetchStakeholderGroups = (
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
-  const { data, isLoading, isSuccess, error, refetch } = useQuery({
+  const { data, isPending, isFetching, isSuccess, error, refetch } = useQuery({
     queryKey: [StakeholderGroupsQueryKey],
     queryFn: getStakeholderGroups,
-    onError: (error: AxiosError) => console.log("error, ", error),
     refetchInterval,
   });
   return {
     stakeholderGroups: data || [],
-    isFetching: isLoading,
+    isFetching,
     isSuccess,
     fetchError: error,
     refetch,

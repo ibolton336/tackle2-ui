@@ -34,10 +34,9 @@ export const assessmentsByItemIdQueryKey = "assessmentsByItemId";
 export const useFetchAssessments = (
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
-  const { isLoading, data, error } = useQuery({
+  const { isPending, isFetching, data, error } = useQuery({
     queryKey: [assessmentsQueryKey],
     queryFn: getAssessments,
-    onError: (error: AxiosError) => console.log("error, ", error),
     refetchInterval,
   });
 
@@ -48,7 +47,7 @@ export const useFetchAssessments = (
 
   return {
     assessments: assessmentsWithOrder || [],
-    isFetching: isLoading,
+    isFetching,
     fetchError: error,
   };
 };
@@ -171,16 +170,15 @@ export const useDeleteAssessmentMutation = (
 };
 
 export const useFetchAssessmentById = (id?: number | string) => {
-  const { data, isLoading, error, isFetching } = useQuery({
+  const { data, isPending, error, isFetching } = useQuery({
     queryKey: [assessmentQueryKey, id],
     queryFn: () => (id ? getAssessmentById(id) : undefined),
-    onError: (error: AxiosError) => console.log("error, ", error),
     enabled: !!id,
     refetchOnWindowFocus: false,
   });
   return {
     assessment: data,
-    isFetching: isLoading || isFetching,
+    isFetching: isPending || isFetching,
     fetchError: error,
   };
 };
@@ -189,10 +187,9 @@ export const useFetchAssessmentsByItemId = (
   isArchetype: boolean,
   itemId?: number | string
 ) => {
-  const { data, isLoading, error } = useQuery({
+  const { data, isPending, isFetching, error } = useQuery({
     queryKey: [assessmentsByItemIdQueryKey, itemId, isArchetype],
     queryFn: () => getAssessmentsByItemId(isArchetype, itemId),
-    onError: (error: AxiosError) => console.log("error, ", error),
     onSuccess: (_data) => {},
     enabled: !!itemId,
   });
@@ -208,7 +205,7 @@ export const useFetchAssessmentsByItemId = (
     data?.map(addSectionOrderToQuestions) || [];
   return {
     assessments: assessmentsWithOrder,
-    isFetching: isLoading,
+    isFetching,
     fetchError: error,
     invalidateAssessmentsQuery,
   };

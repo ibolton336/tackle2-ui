@@ -233,7 +233,7 @@ export const AgentDesignerModal: React.FC<Props> = ({
     }
   };
 
-  const isSaving = createMutation.isLoading || updateMutation.isLoading;
+  const isSaving = createMutation.isPending || updateMutation.isPending;
   const canSubmit = nameValid && imageValid && !isSaving;
 
   return (

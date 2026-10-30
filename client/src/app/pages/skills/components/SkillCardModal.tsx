@@ -195,7 +195,7 @@ export const SkillCardModal: React.FC<SkillCardModalProps> = ({
     (err) => setSubmitError(getAxiosErrorMessage(err))
   );
 
-  const isSubmitting = createMutation.isLoading || updateMutation.isLoading;
+  const isSubmitting = createMutation.isPending || updateMutation.isPending;
 
   const submit = () => {
     setSubmitError(null);

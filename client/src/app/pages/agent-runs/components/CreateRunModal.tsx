@@ -257,7 +257,7 @@ export const CreateRunModal: React.FC<CreateRunModalProps> = ({
     },
     (err) => setSubmitError(getAxiosErrorMessage(err))
   );
-  const submitting = createRunMutation.isLoading;
+  const submitting = createRunMutation.isPending;
 
   const selected = agents.find((a) => a.metadata.name === agentName);
   const selectedReady = selected ? isSelectable(selected) : false;

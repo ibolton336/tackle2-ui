@@ -19,31 +19,29 @@ const TagsQueryKey = "tags";
 const TagCategoriesQueryKey = "tagcategories";
 
 export const useFetchTags = (refetchInterval: number | false = false) => {
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, isPending, isFetching, error, refetch } = useQuery({
     queryKey: [TagsQueryKey],
     queryFn: getTags,
-    onError: (error: AxiosError) => console.log("error, ", error),
     refetchInterval,
   });
   return {
     tags: data || [],
-    isFetching: isLoading,
+    isFetching,
     fetchError: error,
     refetch,
   };
 };
 
 export const useFetchTagCategories = (refetchInterval?: number | false) => {
-  const { data, isLoading, isSuccess, error, refetch } = useQuery({
+  const { data, isPending, isFetching, isSuccess, error, refetch } = useQuery({
     queryKey: [TagCategoriesQueryKey],
     queryFn: getTagCategories,
-    onError: (error: AxiosError) => console.log("error, ", error),
     refetchInterval,
   });
 
   return {
     tagCategories: data || [],
-    isFetching: isLoading,
+    isFetching,
     isSuccess,
     fetchError: error,
     refetch,

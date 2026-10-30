@@ -1,9 +1,4 @@
-import {
-  useInfiniteQuery,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { keepPreviousData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { DEFAULT_REFETCH_INTERVAL } from "@app/Constants";
 import {
@@ -70,14 +65,13 @@ const calculateSyntheticTaskDashboardState = (
 };
 
 export const useFetchTaskDashboard = (refetchDisabled: boolean = false) => {
-  const { isLoading, error, refetch, data } = useQuery({
+  const { isPending, isFetching, error, refetch, data } = useQuery({
     queryKey: [TasksQueryKey, "/report/dashboard"],
     queryFn: getTasksDashboard,
     select: (tasks) =>
       tasks
         .map(calculateSyntheticTaskDashboardState)
         .sort((a, b) => -1 * universalComparator(a.createTime, b.createTime)),
-    onError: (err) => console.log(err),
     refetchInterval: !refetchDisabled ? DEFAULT_REFETCH_INTERVAL : false,
   });
 
@@ -86,7 +80,7 @@ export const useFetchTaskDashboard = (refetchDisabled: boolean = false) => {
 
   return {
     tasks: data || [],
-    isFetching: isLoading,
+    isFetching,
     fetchError: error,
     refetch,
     hasActiveTasks,
@@ -102,8 +96,10 @@ export const useInfiniteServerTasks = (
   // eslint-disable-next-line @tanstack/query/exhaustive-deps
   return useInfiniteQuery({
     queryKey: [TasksQueryKey],
+
     queryFn: async ({ pageParam = initialParams }) =>
       await getServerTasks(pageParam),
+
     getNextPageParam: (lastPage) => {
       const pageNumber = lastPage?.params.page?.pageNumber ?? 0;
       const itemsPerPage = lastPage?.params.page?.itemsPerPage ?? 20;
@@ -120,6 +116,7 @@ export const useInfiniteServerTasks = (
         },
       };
     },
+
     select: (infiniteData) => {
       infiniteData?.pages?.forEach((page) => {
         if (page.data?.length > 0) {
@@ -128,9 +125,9 @@ export const useInfiniteServerTasks = (
       });
       return infiniteData;
     },
-    onError: (error: Error) => console.log("error, ", error),
-    keepPreviousData: true,
+
     refetchInterval,
+    placeholderData: keepPreviousData
   });
 };
 
@@ -138,18 +135,19 @@ export const useServerTasks = <D, TaskType extends Task<D> = Task<D>>(
   params: HubRequestParams,
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, isPending, error, refetch, isFetching } = useQuery({
     queryKey: [TasksQueryKey, params],
     queryFn: async () => await getServerTasks(params),
+
     select: (data) => {
       if (data?.data?.length > 0) {
         data.data = data.data.map(calculateSyntheticTaskState);
       }
       return data;
     },
-    onError: (error: Error) => console.log("error, ", error),
-    keepPreviousData: true,
+
     refetchInterval,
+    placeholderData: keepPreviousData
   });
 
   return {
@@ -158,7 +156,7 @@ export const useServerTasks = <D, TaskType extends Task<D> = Task<D>>(
       total: data?.total ?? 0,
       params: data?.params ?? params,
     } as HubPaginatedResult<TaskType>,
-    isFetching: isLoading,
+    isFetching,
     fetchError: error,
     refetch,
   };
@@ -231,7 +229,7 @@ export const useFetchTaskByIdAndFormat = ({
   merged?: boolean;
   enabled?: boolean;
 }) => {
-  const { isLoading, error, data, refetch } = useQuery({
+  const { isPending, isFetching, error, data, refetch } = useQuery({
     queryKey: [TaskByIDQueryKey, taskId, format, merged],
     queryFn: () =>
       taskId ? getTaskByIdAndFormat(taskId, format, merged) : undefined,
@@ -240,7 +238,7 @@ export const useFetchTaskByIdAndFormat = ({
 
   return {
     task: data,
-    isFetching: isLoading,
+    isFetching,
     fetchError: error,
     refetch,
   };
@@ -253,7 +251,7 @@ export const useFetchTaskAttachmentById = ({
   attachmentId?: number;
   enabled?: boolean;
 }) => {
-  const { isLoading, error, data, refetch } = useQuery({
+  const { isPending, isFetching, error, data, refetch } = useQuery({
     queryKey: [TaskAttachmentByIDQueryKey, attachmentId],
     queryFn: () => (attachmentId ? getTextFileById(attachmentId) : undefined),
     enabled,
@@ -261,7 +259,7 @@ export const useFetchTaskAttachmentById = ({
 
   return {
     attachment: data,
-    isFetching: isLoading,
+    isFetching,
     fetchError: error,
     refetch,
   };
@@ -271,7 +269,7 @@ export const useFetchTaskByID = (
   taskId?: number,
   refetchInterval: number | false = false
 ) => {
-  const { isLoading, error, data, refetch } = useQuery({
+  const { isPending, isFetching, error, data, refetch } = useQuery({
     queryKey: [TaskByIDQueryKey, taskId],
     queryFn: () => (taskId ? getTaskById(taskId) : null),
     select: (task: Task<object> | null) =>
@@ -282,7 +280,7 @@ export const useFetchTaskByID = (
 
   return {
     task: data,
-    isFetching: isLoading,
+    isFetching,
     fetchError: error,
     refetch,
   };

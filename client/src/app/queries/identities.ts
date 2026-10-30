@@ -29,6 +29,7 @@ export const useUpdateIdentityMutation = (
   return {
     mutate,
     mutateAsync,
+    isLoading: isPending,
     isPending,
     error,
   };
@@ -49,6 +50,7 @@ export const useCreateIdentityMutation = (
   });
   return {
     mutate,
+    isLoading: isPending,
     isPending,
     error,
   };
@@ -59,7 +61,7 @@ export const useFetchIdentities = (
   refetchInterval: number | false = false,
   enabled: boolean = true
 ) => {
-  const { data, isLoading, isSuccess, error, refetch } = useQuery({
+  const { data, isPending, isSuccess, error, refetch, isFetching } = useQuery({
     queryKey: [IdentitiesQueryKey],
     queryFn: getIdentities,
     refetchInterval,
@@ -73,7 +75,7 @@ export const useFetchIdentities = (
   return {
     identities: data || [],
     identitiesByKind,
-    isFetching: isLoading,
+    isFetching,
     isSuccess,
     fetchError: error,
     refetch,
@@ -99,6 +101,7 @@ export const useDeleteIdentityMutation = (
   });
   return {
     mutate,
+    isLoading: isPending,
     isPending,
     error,
   };

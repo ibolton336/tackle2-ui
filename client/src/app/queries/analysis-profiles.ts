@@ -25,10 +25,9 @@ const CUSTOM_RULES_FILES_QUERY_KEY = "custom-rules-files";
 export const useFetchAnalysisProfiles = (
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
-  const { data, isLoading, isSuccess, error, refetch } = useQuery({
+  const { data, isPending, isSuccess, error, refetch, isFetching } = useQuery({
     queryKey: [ANALYSIS_PROFILES_QUERY_KEY],
     queryFn: getAnalysisProfiles,
-    onError: (error: AxiosError) => console.log(error),
     refetchInterval,
   });
 
@@ -39,7 +38,7 @@ export const useFetchAnalysisProfiles = (
   return {
     analysisProfiles: data || [],
     analysisProfilesById,
-    isFetching: isLoading,
+    isFetching,
     isSuccess,
     error,
     refetch,

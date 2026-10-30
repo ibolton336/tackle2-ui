@@ -58,7 +58,10 @@ export const useFormChangeHandler = <
 
   const defaultMapper = useCallback(
     (values: DeepPartialSkipArrayKey<TFormValues>, isFormValid: boolean) =>
-      ({ ...values, isValid: isFormValid }) as TState,
+      (({
+        ...values,
+        isValid: isFormValid
+      }) as TState),
     []
   );
 
