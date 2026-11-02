@@ -34,7 +34,7 @@ export const assessmentsByItemIdQueryKey = "assessmentsByItemId";
 export const useFetchAssessments = (
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
-  const { _isPending, isFetching, data, error } = useQuery({
+  const { isFetching, data, error } = useQuery({
     queryKey: [assessmentsQueryKey],
     queryFn: getAssessments,
     refetchInterval,
@@ -170,7 +170,7 @@ export const useDeleteAssessmentMutation = (
 };
 
 export const useFetchAssessmentById = (id?: number | string) => {
-  const { data, _isPending, error, isFetching } = useQuery({
+  const { data, isPending, error, isFetching } = useQuery({
     queryKey: [assessmentQueryKey, id],
     queryFn: () => (id ? getAssessmentById(id) : undefined),
     enabled: !!id,
@@ -187,7 +187,7 @@ export const useFetchAssessmentsByItemId = (
   isArchetype: boolean,
   itemId?: number | string
 ) => {
-  const { data, _isPending, isFetching, error } = useQuery({
+  const { data, isFetching, error } = useQuery({
     queryKey: [assessmentsByItemIdQueryKey, itemId, isArchetype],
     queryFn: () => getAssessmentsByItemId(isArchetype, itemId),
     enabled: !!itemId,

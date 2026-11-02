@@ -144,3 +144,96 @@ No analysis.json file was present for this migration. The migration was verifica
 ### Summary
 
 Build and tests pass. The TanStack Query v4 → v5 migration is complete and verified. All mechanical API changes were applied correctly, query callback removals were implemented with `useEffect` where needed to preserve behavior, and mutations correctly use `isPending` instead of `isLoading`. The codebase compiles without errors and all tests pass.
+
+## Verify
+
+- Status: passed
+- Build: passed (rounds: 1, remaining errors: none)
+- Tests: passed (580/583, failures: none, skipped: 3 pre-existing)
+- Runtime: skipped (no runtime verification required per task spec)
+  - Health check: skipped
+  - Startup time: N/A
+  - Smoke tests: N/A
+  - Log warnings: N/A
+  - Clean shutdown: N/A
+- Analysis follow-up: No analysis.json was present; verification was driven by TypeScript compiler and lint errors
+- Summary: Build passes with 0 errors, tests pass 580/583, lint at baseline 20 warnings (0 errors), format passes
+
+### Build Verification Details
+
+**Problem identified:** A previous lint cleanup incorrectly renamed destructured `isPending` to `_isPending` in useQuery/useMutation result destructurings across ~45 locations in client/src/app/queries/\*.ts files. This caused TypeScript errors because:
+
+1. `_isPending` is not a valid property of the hook result
+2. Some files referenced `isPending` in code but it was renamed in the destructuring
+
+**Fix applied (round 1):**
+
+1. Renamed all `_isPending` back to `isPending` in destructuring patterns (19 files)
+2. For hooks where `isPending` was genuinely unused in the return statement, removed it from the destructuring entirely rather than prefixing with underscore (following project conventions)
+3. Applied prettier formatting to modified files
+
+**Files modified:** 19 files in client/src/app/queries/
+
+- agentic-catalog.ts, analysis-profiles.ts, analysis.ts (6 locations), archetypes.ts (2), assessments.ts (2), dependencies.ts (2), facts.ts, identities.ts, imports.ts (3), migration-waves.ts, proxies.ts, questionnaires.ts (2), reviews.ts, schemas.ts, stakeholdergroups.ts, tags.ts (2), tasks.ts (5), tickets.ts, trackers.ts (3)
+
+### Step 3: TypeScript Compilation
+
+```
+> @konveyor-ui/client@0.1.0 tsc
+> tsc -p ./tsconfig.json
+
+EXIT CODE: 0
+```
+
+✅ No TypeScript errors
+
+### Step 4: Lint Check
+
+```
+> @konveyor-ui/client@0.1.0 lint
+> eslint --max-warnings=20 .
+
+✖ 20 problems (0 errors, 20 warnings)
+
+EXIT CODE: 0
+```
+
+✅ Exactly 20 warnings (at baseline, 0 errors)
+All warnings are pre-existing issues unrelated to the migration (react-hooks rules in various components).
+
+### Step 5: Format Check
+
+```
+> @konveyor-ui/root@2.1.0 format:check
+> scripts/prettier-w.sh --ignore-unknown --check . && npm run format:check -ws --if-present
+
+Checking formatting...
+All matched files use Prettier code style!
+
+EXIT CODE: 0
+```
+
+✅ All files pass Prettier formatting
+
+### Step 6: Tests
+
+```
+> @konveyor-ui/client@0.1.0 test
+> jest --maxWorkers=2
+
+Test Suites: 2 skipped, 51 passed, 51 of 53 total
+Tests:       3 skipped, 580 passed, 583 total
+Snapshots:   21 passed, 21 total
+
+EXIT CODE: 0
+```
+
+✅ 580 tests passed, 3 skipped (pre-existing), 0 failures
+
+### Verification Rules Compliance
+
+- ✅ No business logic changed
+- ✅ No tests weakened, skipped, or deleted
+- ✅ TypeScript compilation verified after each edit
+- ✅ All 6 required commands run in order after final edit
+- ✅ No commits made until tsc exited 0

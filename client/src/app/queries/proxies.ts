@@ -9,7 +9,7 @@ const ProxiesTasksQueryKey = "proxies";
 export const useFetchProxies = (
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
-  const { _isPending, isFetching, data, error } = useQuery({
+  const { isFetching, data, error } = useQuery({
     queryKey: [ProxiesTasksQueryKey],
     queryFn: getProxies,
     refetchInterval,

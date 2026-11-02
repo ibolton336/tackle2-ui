@@ -14,7 +14,7 @@ export const GATEWAYS_QUERY_KEY = "gateways";
 export const useFetchGateways = (
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
-  const { _isPending, error, data, refetch } = useQuery({
+  const { isPending, error, data, refetch } = useQuery({
     queryKey: [GATEWAYS_QUERY_KEY],
     queryFn: getGateways,
     // Verification flips Ready on its own schedule — keep the page live.
@@ -24,7 +24,7 @@ export const useFetchGateways = (
   return {
     gateways: data || [],
     isLoading: isPending,
-    _isPending,
+    isPending,
     fetchError: error,
     refetch,
   };

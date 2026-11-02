@@ -71,7 +71,7 @@ const calculateSyntheticTaskDashboardState = (
 };
 
 export const useFetchTaskDashboard = (refetchDisabled: boolean = false) => {
-  const { _isPending, isFetching, error, refetch, data } = useQuery({
+  const { isFetching, error, refetch, data } = useQuery({
     queryKey: [TasksQueryKey, "/report/dashboard"],
     queryFn: getTasksDashboard,
     select: (tasks) =>
@@ -142,7 +142,7 @@ export const useServerTasks = <D, TaskType extends Task<D> = Task<D>>(
   params: HubRequestParams,
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
-  const { data, _isPending, error, refetch, isFetching } = useQuery({
+  const { data, error, refetch, isFetching } = useQuery({
     queryKey: [TasksQueryKey, params],
     queryFn: async () => await getServerTasks(params),
 
@@ -236,7 +236,7 @@ export const useFetchTaskByIdAndFormat = ({
   merged?: boolean;
   enabled?: boolean;
 }) => {
-  const { _isPending, isFetching, error, data, refetch } = useQuery({
+  const { isFetching, error, data, refetch } = useQuery({
     queryKey: [TaskByIDQueryKey, taskId, format, merged],
     queryFn: () =>
       taskId ? getTaskByIdAndFormat(taskId, format, merged) : undefined,
@@ -258,7 +258,7 @@ export const useFetchTaskAttachmentById = ({
   attachmentId?: number;
   enabled?: boolean;
 }) => {
-  const { _isPending, isFetching, error, data, refetch } = useQuery({
+  const { isFetching, error, data, refetch } = useQuery({
     queryKey: [TaskAttachmentByIDQueryKey, attachmentId],
     queryFn: () => (attachmentId ? getTextFileById(attachmentId) : undefined),
     enabled,
@@ -276,7 +276,7 @@ export const useFetchTaskByID = (
   taskId?: number,
   refetchInterval: number | false = false
 ) => {
-  const { _isPending, isFetching, error, data, refetch } = useQuery({
+  const { isFetching, error, data, refetch } = useQuery({
     queryKey: [TaskByIDQueryKey, taskId],
     queryFn: () => (taskId ? getTaskById(taskId) : null),
     select: (task: Task<object> | null) =>

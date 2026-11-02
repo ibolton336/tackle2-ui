@@ -19,7 +19,6 @@ export const useFetchDependencies = (
 ) => {
   const {
     data: dependencies,
-    isPending: _isPending,
     error,
     refetch,
     isFetching,
@@ -50,7 +49,7 @@ export const useFetchAppDependencies = (
   params: HubRequestParams = {},
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
-  const { data, _isPending, error, refetch, isFetching } = useQuery({
+  const { data, error, refetch, isFetching } = useQuery({
     queryKey: [AppDependenciesQueryKey, params],
     queryFn: async () => await getAppDependencies(params),
     refetchInterval,

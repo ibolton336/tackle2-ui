@@ -44,7 +44,7 @@ export const useFetchMigrationWaves = (
   const { data: applications } = useFetchApplications();
 
   const queryClient = useQueryClient();
-  const { _isPending, isFetching, isSuccess, error, refetch, data } = useQuery({
+  const { isFetching, isSuccess, error, refetch, data } = useQuery({
     queryKey: [MigrationWavesQueryKey],
     queryFn: getMigrationWaves,
     refetchInterval,

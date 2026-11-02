@@ -22,7 +22,7 @@ export const useFetchArchetypes = (
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
   const queryClient = useQueryClient();
-  const { data, _isPending, isFetching, isSuccess, error, refetch } = useQuery({
+  const { data, isFetching, isSuccess, error, refetch } = useQuery({
     queryKey: [ARCHETYPES_QUERY_KEY],
     queryFn: getArchetypes,
     refetchInterval,
@@ -55,7 +55,7 @@ export const useFetchArchetypeById = (
   id?: number | string,
   refetchInterval: number | false = DEFAULT_REFETCH_INTERVAL
 ) => {
-  const { data, _isPending, isFetching, error } = useQuery({
+  const { data, isFetching, error } = useQuery({
     queryKey: [ARCHETYPE_QUERY_KEY, String(id)],
     queryFn: () =>
       id === undefined ? Promise.resolve(undefined) : getArchetypeById(id),
